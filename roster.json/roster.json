@@ -1,0 +1,322 @@
+{
+  "activeId": "mu24jyeyb715a7",
+  "players": [
+    {
+      "id": "mtwew832092e55",
+      "name": "plyr 1",
+      "handle": "@DarkFud420",
+      "created": 1789098233582,
+      "scores": [
+        {
+          "id": "178930049641733db573f415468",
+          "name": "Fuzzled Raccoon",
+          "fighter": "Fuzzled Raccoon",
+          "score": 209,
+          "xp": 196,
+          "wins": 3,
+          "record": "3-0  L7  Trailer Park",
+          "when": 1789300496417
+        },
+        {
+          "id": "1789307590768ec540115b690d",
+          "name": "Fuzzled Raccoon",
+          "fighter": "Fuzzled Raccoon",
+          "score": 204,
+          "xp": 196,
+          "wins": 3,
+          "record": "3-0  L7  Trailer Park",
+          "when": 1789307590768
+        },
+        {
+          "id": "1789368429377",
+          "name": "Fuzzled Raccoon",
+          "fighter": "Fuzzled Raccoon",
+          "score": 178,
+          "xp": 154,
+          "wins": 2,
+          "record": "2-0  L7",
+          "when": 1789368429377
+        },
+        {
+          "id": "1789368903579",
+          "name": "Bioweapon Bulldog",
+          "fighter": "Bioweapon Bulldog",
+          "score": 164,
+          "xp": 154,
+          "wins": 2,
+          "record": "2-0  L7",
+          "when": 1789368903579
+        },
+        {
+          "id": "1789267434261370d4a4ae53488",
+          "name": "Fuzzled Raccoon",
+          "fighter": "Fuzzled Raccoon",
+          "score": 161,
+          "xp": 152,
+          "wins": 2,
+          "record": "2-0  L6  Trailer Park",
+          "when": 1789267434261
+        },
+        {
+          "id": "1789410772224",
+          "name": "Fuzzled Raccoon",
+          "fighter": "Fuzzled Raccoon",
+          "score": 156,
+          "xp": 154,
+          "wins": 2,
+          "record": "2-0  L7",
+          "when": 1789410772224
+        },
+        {
+          "id": "1789363601853",
+          "name": "Fuzzled Raccoon",
+          "fighter": "Fuzzled Raccoon",
+          "score": 155,
+          "xp": 154,
+          "wins": 2,
+          "record": "2-0  L7",
+          "when": 1789363601853
+        },
+        {
+          "id": "17892464700738a0d00e43b9a5",
+          "name": "Fuzzled Raccoon",
+          "fighter": "Fuzzled Raccoon",
+          "score": 154,
+          "xp": 152,
+          "wins": 2,
+          "record": "2-0  L6  Trailer Park",
+          "when": 1789246470073
+        },
+        {
+          "id": "1789437875284",
+          "name": "Fuzzled Raccoon",
+          "fighter": "Fuzzled Raccoon",
+          "score": 148,
+          "xp": 154,
+          "wins": 2,
+          "record": "2-0  L7",
+          "when": 1789437875284
+        },
+        {
+          "id": "1789368829903",
+          "name": "Bioweapon Bulldog",
+          "fighter": "Bioweapon Bulldog",
+          "score": 147,
+          "xp": 154,
+          "wins": 2,
+          "record": "2-0  L7",
+          "when": 1789368829903
+        }
+      ],
+      "invites": [],
+      "xp": 12009,
+      "fights": 81,
+      "wins": 75,
+      "losses": 6,
+      "points": 8136,
+      "fighters": {
+        "Bioweapon Bulldog": {
+          "fights": 9,
+          "wins": 7,
+          "losses": 2,
+          "points": 929,
+          "xp": 1122
+        },
+        "Stunna Runna": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        },
+        "Dr Davinstigator": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        },
+        "Fud Daddy 420": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        },
+        "Fuzzled Raccoon": {
+          "fights": 71,
+          "wins": 67,
+          "losses": 4,
+          "points": 7101,
+          "xp": 10751
+        },
+        "Captn Jack Hashtag": {
+          "fights": 1,
+          "wins": 1,
+          "losses": 0,
+          "points": 106,
+          "xp": 136
+        },
+        "Dark Market Maker": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        },
+        "KING TROLL": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        },
+        "WHITE CASSEL": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        },
+        "LIL OJ": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        },
+        "IN THE WEEDS": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        },
+        "WHOLLY MAC": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        },
+        "Proxy Bot": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        }
+      }
+    },
+    {
+      "id": "mu24jyeyb715a7",
+      "name": "plyr 1",
+      "handle": "@Spcegoose",
+      "created": 1789443662074,
+      "scores": [
+        {
+          "id": "1789443747167",
+          "name": "Fuzzled Raccoon",
+          "fighter": "Fuzzled Raccoon",
+          "score": 145,
+          "xp": 154,
+          "wins": 2,
+          "record": "2-0  L7",
+          "when": 1789443747167
+        }
+      ],
+      "invites": [],
+      "xp": 154,
+      "fights": 1,
+      "wins": 1,
+      "losses": 0,
+      "points": 145,
+      "fighters": {
+        "Bioweapon Bulldog": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        },
+        "Stunna Runna": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        },
+        "Dr Davinstigator": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        },
+        "Fud Daddy 420": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        },
+        "Fuzzled Raccoon": {
+          "fights": 1,
+          "wins": 1,
+          "losses": 0,
+          "points": 145,
+          "xp": 154
+        },
+        "Captn Jack Hashtag": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        },
+        "Dark Market Maker": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        },
+        "KING TROLL": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        },
+        "WHITE CASSEL": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        },
+        "LIL OJ": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        },
+        "IN THE WEEDS": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        },
+        "WHOLLY MAC": {
+          "fights": 0,
+          "wins": 0,
+          "losses": 0,
+          "points": 0,
+          "xp": 0
+        }
+      }
+    }
+  ]
+}
