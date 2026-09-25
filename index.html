@@ -8,7 +8,29 @@
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
 html,body{margin:0;width:100%;height:100%;height:100dvh;overflow:hidden;font-family:"Segoe UI",system-ui,sans-serif;background:#000;color:#e8f0ff;touch-action:manipulation;display:flex;align-items:center;justify-content:center}
-#app{position:relative;width:min(100vw,calc(100dvh * 9 / 16));height:min(100dvh,calc(100vw * 16 / 9));max-width:100vw;max-height:100dvh;overflow:hidden;background:#05070d;display:flex;flex-direction:column;aspect-ratio:9/16}
+#app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: min(100vw, calc(100dvh * 9 / 16));
+  max-height: min(100dvh, calc(100vw * 16 / 9));
+  overflow: hidden;
+  background: #05070d;
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 9 / 16;
+  min-height: 0;
+}
+
+@media (orientation: landscape), (min-aspect-ratio: 4/3) {
+  #app {
+    aspect-ratio: auto;
+    width: min(100vw, 1100px);
+    height: 100dvh;
+    max-width: 100vw;
+    max-height: 100dvh;
+  }
+}
 .screen{position:absolute;inset:0;display:none;flex-direction:column}.screen.active{display:flex}
 .menu{background:radial-gradient(ellipse at top,rgba(80,20,0,.35),transparent 55%),#071018}
 .brand{text-align:center;padding:calc(8px + env(safe-area-inset-top)) 10px 4px}
@@ -82,13 +104,57 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .opp-cell .panel{flex:1;min-height:0}
 .liquid-cell .panel{flex:none;height:auto;aspect-ratio:1/1}
 .hidden-cell img,.opp-cell img,.liquid-cell img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block}
-.hidden-cell b,.opp-cell b,.liquid-cell b{width:100%;min-height:11px;font-size:8px;color:#ffe082;font-weight:900;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;flex:none;order:-1}
+.hidden-cell b,
+.opp-cell b,
+.liquid-cell b {
+  width: 100%;
+  min-height: 11px;
+  font-size: 8px;
+  color: #ffe082;
+  font-weight: 900;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  flex: none;
+  order: -1;
+  padding: 0 2px;
+}
 .opp-cell.locked img,.liquid-cell.dead img{filter:grayscale(1) brightness(.38)}
 .hidden-cell.locked .panel img,.liquid-cell.locked img{filter:grayscale(1) brightness(.42) blur(2.5px)}
 .hidden-cell.picked .panel,.opp-cell.picked .panel{border-color:#ffd54f}
 .hidden-cell .need,.opp-cell .need,.liquid-cell .need{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.8);color:#ffd54f;border:1px solid #886;font-size:8px;font-weight:900;padding:4px 5px;border-radius:6px;white-space:nowrap}
-.opp-grid{width:100%;max-width:720px;flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(0,1fr);gap:6px}
-.liquid-grid{width:100%;max-width:720px;flex:0 1 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.opp-grid {
+  width: 100%;
+  max-width: 720px;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.liquid-grid {
+  width: 100%;
+  max-width: 720px;
+  flex: 0 1 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.hidden-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  gap: 6px;
+  overflow-x: auto;
+}
 .liquid-cell.mine .panel{border-color:#ffd54f}.liquid-cell.next .panel{border-color:#ff1744}
 .liquid-stamp{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%) rotate(-18deg);border:3px solid #ff1744;color:#ff1744;font-weight:900;font-size:10px;padding:3px 4px;background:rgba(0,0,0,.62)}
 .nav-row{display:flex;gap:10px;width:88%}
@@ -137,10 +203,17 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .power-wrap.p2 .power-bar{display:flex;justify-content:flex-end}.power-wrap.p2 .power-bar>span{flex:0 0 auto}
 .power-wrap.ready .power-bar{border-color:#ffe082}
 #winFlashName{font-family:Impact,"Arial Black",system-ui,sans-serif;font-size:clamp(26px,8vw,46px);font-weight:900;color:#ffd54f;text-shadow:0 0 24px #ffb300;letter-spacing:3px;text-transform:uppercase}
-#controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:6px 8px calc(8px + env(safe-area-inset-bottom));background:#0b101b;z-index:6}
-.atk{height:46px;border:0;border-radius:10px;font-weight:900;font-size:11px;color:#fff}
-#lp{background:#1565c0}#rp{background:#0d47a1}#th{background:#3a1458;opacity:.48}#th.armed{opacity:1;background:linear-gradient(#9c27b0,#6a1b9a)}
-#lk{background:#2e7d32}#rk{background:#c62828}#bk{background:#455a64}#bk.held{background:#0277bd}
+#controls{position:relative;width:100%;height:180px;padding:8px 8px calc(12px + env(safe-area-inset-bottom));background:#000;z-index:6;display:flex;align-items:center;justify-content:center}
+.atk{position:absolute;width:64px;height:64px;border:0;border-radius:50%;padding:0;background:transparent;background-size:contain;background-repeat:no-repeat;background-position:center;cursor:pointer;transition:transform .1s ease,filter .1s ease}
+.atk:active{transform:scale(.92);filter:brightness(.85)}
+#lp{background-image:url(./buttons/lp.gif);left:22%;top:8%}
+#rp{background-image:url(./buttons/rp.gif);right:22%;top:8%}
+#lk{background-image:url(./buttons/lk.gif);left:8%;top:38%}
+#rk{background-image:url(./buttons/rk.gif);right:8%;top:38%}
+#th{background-image:url(./buttons/th.gif);left:22%;bottom:8%;opacity:.55}
+#th.armed{opacity:1;filter:drop-shadow(0 0 10px #9c27b0)}
+#bk{background-image:url(./buttons/bk.gif);right:22%;bottom:8%}
+#bk.held{filter:brightness(1.3) drop-shadow(0 0 8px #0277bd)}
 .overlay{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;padding:10px 16px 0;z-index:20;background:linear-gradient(180deg,rgba(0,0,0,.72),rgba(0,0,0,.22) 36%,transparent 66%);pointer-events:none;text-align:center}
 .overlay.show{display:flex}.overlay .btn{pointer-events:auto;width:min(100%,280px)}
 .overlay h2{color:#ffd54f}.ko{font-size:clamp(22px,7vw,36px);color:#ff1744;text-shadow:0 0 20px #f00}
@@ -482,4 +555,3 @@ runIntro();
 </script>
 </body>
 </html>
-
