@@ -181,7 +181,7 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 #cpu.punchL{transform:translateX(-52px) rotate(5deg)}#cpu.punchR{transform:translateX(-68px) rotate(-3deg)}
 #cpu.kickL{transform:translateX(-48px) rotate(-7deg)}#cpu.kickR{transform:translateX(-62px) translateY(-16px) rotate(8deg)}#cpu.throw{transform:translateX(-36px) rotate(8deg)}
 .toss,.cash{position:absolute;object-fit:contain;pointer-events:none;z-index:8;filter:drop-shadow(0 8px 12px #000)}
-.toss{width:min(42vw,168px);height:min(42vw,168px)}.cash{width:min(30.24vw,121px);height:min(30.24vw,121px);z-index:9}
+.toss{width:min(42vw,168px);height:min(42vw,168px)}.cash{width:min(42vw,170px);height:min(42vw,170px);z-index:9}
 .fx{position:absolute;font-weight:900;color:#ff5252;text-shadow:0 0 8px #000;pointer-events:none;animation:float 700ms ease-out forwards;z-index:10}
 .fx.heal{color:#69f0ae}.fx.miss{color:#ffe082}.fx.combo{color:#ea80fc}@keyframes float{to{transform:translateY(-40px);opacity:0}}
 .power-wrap{position:absolute;bottom:8px;width:30%;z-index:7;pointer-events:none}.power-wrap.p1{left:8px}.power-wrap.p2{right:8px;text-align:right}
@@ -294,7 +294,7 @@ const MAX=100,PUNCH_DMG=1,KICK_DMG=2,THROW_DMG=6,BLOCK_HEAL=1,HIT_GAP=86;
 const HS_STORE="ft_gains",SKILL_STORE="ft_skill",ROSTER_STORE="ft_roster",ROUNDS_STORE="ft_rounds";
 const POSE_MS=420,HS_LIMIT=10,ANNOUNCE_MS=800,WIN_FLASH_MS=4200,ROUND_WIN_HOLD_MS=4000,FINAL_KO_HOLD_MS=4000,FREE_LOCK_FROM=4;
 const THROW_MS=640,POWER_MAX=100,POWER_PUNCH=22,POWER_KICK=28,COMBO_WINDOW=900,COMBO_BONUS=12,THROWS_PER_POWER=3;
-const ROUND_SECS=120,YOU_HOME=2,YOU_MIN=0,YOU_MAX=36,TILT_DEAD=7,TILT_SCALE=28,ARCADE_ROUNDS=2,CASH_SIZE=121,TOSS_SIZE=168;
+const ROUND_SECS=120,YOU_HOME=2,YOU_MIN=0,YOU_MAX=36,TILT_DEAD=7,TILT_SCALE=28,ARCADE_ROUNDS=2,CASH_SIZE=170,TOSS_SIZE=168;
 const ROUND_CALLS=["3","2","1","READY","FIGHT!"],TITLE_MENUS={fighters:1,opponents:1,invite:1,scores:1,roster:1};
 const KEEP_ARENA_MUSIC={postfight:1,liquid:1,fight:1};
 const POSE_LABEL={punchL:"left punch",punchR:"right punch",kickL:"left kick",kickR:"right kick",throw:"throw",block:"block",victory:"victory",loser:"loser"};
