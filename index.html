@@ -83,11 +83,12 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .slot .arena-art{object-fit:cover}.slot.locked img,.slot.locked .arena-art{filter:grayscale(1) brightness(.38)}
 .lock-tag{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);background:rgba(0,0,0,.78);color:#ffd54f;border:1px solid #886;font-size:11px;font-weight:900;padding:7px 10px;border-radius:8px}
 .opp-wrap,.liquid-wrap{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:4px 8px}
-.liquid-main{width:100%;max-width:720px;display:flex;gap:10px;align-items:stretch;min-height:0;flex:1}
-.liquid-hero{flex:0 0 32%;max-width:160px;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:0}
-.liquid-hero b{font-size:10px;color:#ffd54f;font-weight:900;text-transform:uppercase;text-align:center}
-.liquid-hero .panel{flex:1;width:100%;min-height:0;background:#121826;border:2px solid #ffd54f;border-radius:12px;overflow:hidden;box-shadow:0 0 18px rgba(255,213,79,.35)}
-.liquid-hero img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block}
+.liquid-main{width:100%;max-width:720px;display:flex;gap:6px;align-items:stretch;min-height:0;flex:1}
+.liquid-hero{flex:0 0 34%;max-width:170px;display:flex;align-items:stretch;min-height:0}
+.liquid-hero .panel{flex:1;width:100%;min-height:0;background:transparent;border:0;border-radius:0;overflow:visible;box-shadow:none}
+.liquid-hero img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;filter:drop-shadow(0 8px 14px #000)}
+.liquid-grid{flex:1;min-width:0;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;align-content:stretch;padding-bottom:0}
+.liquid-cell .panel{flex:none;height:auto;aspect-ratio:1/1;min-height:0}
 .hidden-box{width:100%;max-width:720px;background:rgba(0,0,0,.35);border:1px solid #334;border-radius:12px;padding:6px 8px}
 .hidden-box label{display:block;text-align:center;font-size:10px;font-weight:900;color:#ffd54f;margin-bottom:6px}
 .hidden-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
@@ -440,7 +441,6 @@ function renderLiquidBoard(){
   if(hero){
     hero.innerHTML="";
     const mine=FIGHTERS[selectedFighter];
-    const name=document.createElement("b");name.textContent=mine.name;hero.appendChild(name);
     const panel=document.createElement("div");panel.className="panel";
     const img=document.createElement("img");img.alt=mine.name;bindSrcList(img,mine.select);
     panel.appendChild(img);hero.appendChild(panel);
