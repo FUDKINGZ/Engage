@@ -82,13 +82,16 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .slot img,.slot .arena-art{width:100%;flex:1;min-height:0;object-fit:contain;object-position:center bottom;display:block;background:transparent}
 .slot .arena-art{object-fit:cover}.slot.locked img,.slot.locked .arena-art{filter:grayscale(1) brightness(.38)}
 .lock-tag{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);background:rgba(0,0,0,.78);color:#ffd54f;border:1px solid #886;font-size:11px;font-weight:900;padding:7px 10px;border-radius:8px}
-.opp-wrap,.liquid-wrap{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:4px 8px}
-.liquid-main{width:100%;max-width:720px;display:flex;gap:6px;align-items:stretch;min-height:0;flex:1}
-.liquid-hero{flex:0 0 34%;max-width:170px;display:flex;align-items:stretch;min-height:0}
-.liquid-hero .panel{flex:1;width:100%;min-height:0;background:transparent;border:0;border-radius:0;overflow:visible;box-shadow:none}
-.liquid-hero img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;filter:drop-shadow(0 8px 14px #000)}
-.liquid-grid{flex:1;min-width:0;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;align-content:stretch;padding-bottom:0}
-.liquid-cell .panel{flex:none;height:auto;aspect-ratio:1/1;min-height:0}
+.opp-wrap,.liquid-wrap{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;padding:2px 6px;overflow:hidden}
+.liquid-stage{position:relative;width:100%;max-width:100%;flex:1 1 auto;min-height:0;display:flex;align-items:stretch;overflow:hidden}
+.liquid-hero{position:absolute;left:0;top:0;bottom:0;width:48%;z-index:1;pointer-events:none;display:flex;align-items:flex-end;justify-content:flex-start}
+.liquid-hero .panel{width:100%;height:100%;background:transparent;border:0;overflow:visible}
+.liquid-hero img{width:100%;height:100%;object-fit:cover;object-position:center 18%;display:block;filter:drop-shadow(0 12px 18px #000);opacity:.95;transform:scale(1.08);transform-origin:center bottom}
+.liquid-main{width:100%;max-width:720px;display:flex;gap:10px;align-items:stretch;min-height:0;flex:1}
+.liquid-hero{flex:0 0 32%;max-width:160px;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:0}
+.liquid-hero b{font-size:10px;color:#ffd54f;font-weight:900;text-transform:uppercase;text-align:center}
+.liquid-hero .panel{flex:1;width:100%;min-height:0;background:#121826;border:2px solid #ffd54f;border-radius:12px;overflow:hidden;box-shadow:0 0 18px rgba(255,213,79,.35)}
+.liquid-hero img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block}
 .hidden-box{width:100%;max-width:720px;background:rgba(0,0,0,.35);border:1px solid #334;border-radius:12px;padding:6px 8px}
 .hidden-box label{display:block;text-align:center;font-size:10px;font-weight:900;color:#ffd54f;margin-bottom:6px}
 .hidden-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
@@ -97,7 +100,7 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .hidden-cell .panel,.opp-cell .panel,.liquid-cell .panel{width:100%;background:#121826;border:2px solid #2a3344;border-radius:10px;overflow:hidden;position:relative}
 .hidden-cell .panel{height:72px}
 .opp-cell .panel{flex:1;min-height:0}
-.liquid-cell .panel{flex:none;height:auto;aspect-ratio:1/1}
+.liquid-cell .panel{flex:1;min-height:0;height:100%}
 .hidden-cell img,.opp-cell img,.liquid-cell img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block}
 .hidden-cell b,
 .opp-cell b,
@@ -133,15 +136,25 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
   padding-bottom: 4px;
 }
 
-.liquid-grid {
-  flex: 1;
-  min-width: 0;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-  align-content: start;
-  padding-bottom: 4px;
+.liquid-grid{
+  position:relative;z-index:2;
+  margin-left:auto;
+  width:58%;
+  max-width:58%;
+  min-width:0;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-rows:repeat(2,minmax(0,1fr));
+  gap:4px;
+  align-content:center;
+  padding:4px 2px 4px 0;
+  overflow:hidden;
 }
+.liquid-cell{min-width:0;min-height:0}
+.liquid-cell b{font-size:7px;min-height:9px;padding:0 1px}
+.liquid-cell.mirror .panel{border-color:#ea80fc}
+.liquid-cell.mirror.next .panel{border-color:#ff1744}
+.liquid-cell.boss .panel{border-color:#ffb300}
 .liquid-cell.mirror .panel{border-color:#ea80fc;box-shadow:0 0 12px rgba(234,128,252,.35)}
 .liquid-cell.mirror.next .panel{border-color:#ff1744}
 .liquid-cell.boss .panel{border-color:#ffb300}
@@ -276,7 +289,7 @@ input[type=file].hidden-file{display:none}
 <section id="opponents" class="screen menu"><div class="brand"><h1>FINTWITS FUD KINGZ</h1><p>CHOOSE NEXT OPPONENT</p></div><div class="opp-wrap"><div class="opp-grid" id="opponentGrid"></div><div class="hidden-box"><label>HIDDEN CHARACTERS</label><div class="hidden-row" id="hiddenRow"></div></div></div><div class="menu-btns"><button class="btn btn-gold" onclick="goMatchup()">NEXT: MATCH UP</button><button class="btn btn-dark" onclick="show('fighters')">BACK</button></div></section>
 <section id="matchup" class="screen menu"><div class="brand"><h1>FINTWITS FUD KINGZ</h1><p>MATCH UP</p></div><div class="matchup-body"><div class="match-arena-name" id="matchArenaName"></div><div class="vs-row"><b class="vs-name p1" id="matchP1Name">P1</b><b class="vs-name p2" id="matchP2Name">P2</b><div class="vs-card p1"><img id="matchP1" alt=""></div><div class="vs-mark">VS</div><div class="vs-card p2"><img id="matchP2" alt=""></div></div><div class="skill-box" id="matchSkillBox"><label>CPU LEVEL</label><div class="skill-row" id="skillRow"></div><div class="round-box" id="matchRoundBox"><label>ROUNDS</label><div class="round-pick" id="roundPick"></div></div></div></div><div class="menu-btns"><button class="btn btn-gold" id="matchNext" onclick="fromMatchupNext()">NEXT</button><button class="btn btn-dark" onclick="backFromMatchup()">BACK</button></div></section>
 <section id="postfight" class="screen menu"><div class="brand"><h1>FINTWITS FUD KINGZ</h1><p id="postHint">CHALLENGER DOWN</p></div><div class="post-body"><div class="vs-row"><b class="vs-name p1" id="postP1Name">YOU</b><b class="vs-name p2" id="postP2Name">CPU</b><div class="vs-card p1"><img id="postP1" alt=""></div><div class="vs-mark" id="postMark">WIN</div><div class="vs-card p2"><img id="postP2" alt=""></div></div><p class="post-sub" id="postSub"></p></div><div class="menu-btns"><button class="btn btn-gold" onclick="afterPostFight()">CONTINUE</button></div></section>
-<section id="liquid" class="screen menu"><div class="brand"><h1>FINTWITS FUD KINGZ</h1><p id="liquidHint">LIQUIDATION BOARD</p></div><div class="liquid-wrap"><div class="liquid-main"><div class="liquid-hero" id="liquidHero"></div><div class="liquid-grid" id="liquidGrid"></div></div><div class="hidden-box" id="liquidHiddenBox"><label>HIDDEN CHARACTERS</label><div class="hidden-row" id="liquidHiddenRow"></div></div></div><div class="menu-btns"><button class="btn btn-gold" id="liquidNext" onclick="afterLiquidation()">NEXT CHALLENGER</button></div></section>
+<section id="liquid" class="screen menu"><div class="brand"><h1>FINTWITS FUD KINGZ</h1><p id="liquidHint">LIQUIDATION BOARD</p></div><div class="liquid-wrap"><div class="liquid-stage"><div class="liquid-hero" id="liquidHero"></div><div class="liquid-grid" id="liquidGrid"></div></div><div class="hidden-box" id="liquidHiddenBox"><label>HIDDEN CHARACTERS</label><div class="hidden-row" id="liquidHiddenRow"></div></div></div><div class="menu-btns"><button class="btn btn-gold" id="liquidNext" onclick="afterLiquidation()">NEXT CHALLENGER</button></div></section>
 <section id="arenas" class="screen menu"><div class="brand"><h1>FINTWITS FUD KINGZ</h1><p>CHOOSE ARENA</p></div><div class="carousel-wrap"><div class="carousel" id="arenaCarousel"></div><div class="nav-row"><button type="button" onclick="shiftArena(-1)">◀</button><button type="button" onclick="shiftArena(1)">▶</button></div><div class="dots" id="arenaDots"></div></div><div class="menu-btns"><button class="btn btn-gold" id="arenaNext" onclick="afterArena()">NEXT: ENTER ARENA</button><button class="btn btn-dark" onclick="backFromArenas()">BACK</button></div></section>
 <section id="fight" class="screen">
   <div id="titlebar"><h1>FINTWITS FUD KINGZ</h1><button class="tiny-mute" id="muteMusic" onclick="toggleMuteMusic()">MUSIC</button><button class="tiny-mute" id="muteFx" onclick="toggleMuteFx()">F/X</button><button id="pauseBtn" onclick="togglePause()">PAUSE</button></div>
@@ -413,9 +426,9 @@ function makeLiquidCell(i,opts){
   opts=opts||{};
   const f=FIGHTERS[i],dead=!!arcadeBeaten[i],nextIdx=(!arcadeKing&&arcadeIndex<arcadeQueue.length)?arcadeQueue[arcadeIndex]:-1;
   const isMirror=!!opts.mirror,isBoss=i===FINAL_INDEX&&!isMirror;
-  const isNext=isMirror?(nextIdx===selectedFighter):(!isMirror&&i===nextIdx);
+  const isNext=isMirror?(nextIdx===selectedFighter):(i===nextIdx);
   const cell=document.createElement("div");
-  cell.className="liquid-cell"+(dead?" dead":"")+(isNext?" next":"")+(fighterLocked(i)?" locked":"")+(isMirror?" mirror":"")+(isBoss?" boss":"");
+  cell.className="liquid-cell"+(dead&&!isMirror?" dead":"")+(isNext?" next":"")+(fighterLocked(i)&&!isMirror?" locked":"")+(isMirror?" mirror":"")+(isBoss?" boss":"");
   if(!(isHiddenFighter(i)&&fighterLocked(i))){
     const b=document.createElement("b");
     b.textContent=isMirror?"MIRROR MATCH":f.name;
@@ -427,8 +440,6 @@ function makeLiquidCell(i,opts){
   panel.appendChild(img);
   if(dead&&!isMirror){
     const stamp=document.createElement("div");stamp.className="liquid-stamp";stamp.textContent="LIQUIDATED";panel.appendChild(stamp);
-  }else if(isMirror&&arcadeBeaten[selectedFighter]&&arcadeIndex>0){
-    /* mirror uses same fighter index when beaten mid-run — only stamp if truly past mirror in queue */
   }else if(fighterLocked(i)&&!isMirror){
     const need=document.createElement("div");need.className="need";
     need.textContent=isHiddenFighter(i)?("LOCKED  "+hiddenCost(i)+" XP"):"LOCKED";
@@ -445,7 +456,7 @@ function renderLiquidBoard(){
     const img=document.createElement("img");img.alt=mine.name;bindSrcList(img,mine.select);
     panel.appendChild(img);hero.appendChild(panel);
   }
-  const box=document.getElementById("liquidGrid");box.innerHTML="";
+  const box=document.getElementById("liquidGrid");if(!box)return;box.innerHTML="";
   const order=[1,2,6,5,4,3,0];
   order.forEach(function(i){if(i!==selectedFighter&&i!==FINAL_INDEX)box.appendChild(makeLiquidCell(i));});
   box.appendChild(makeLiquidCell(selectedFighter,{mirror:true}));
