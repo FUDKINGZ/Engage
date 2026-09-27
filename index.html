@@ -406,11 +406,6 @@ function makeLiquidCell(i,opts){
   const isNext=isMirror?(nextIdx===selectedFighter):(i===nextIdx);
   const cell=document.createElement("div");
   cell.className="liquid-cell"+(dead&&!isMirror?" dead":"")+(isNext?" next":"")+(fighterLocked(i)&&!isMirror?" locked":"")+(isMirror?" mirror":"")+(isBoss?" boss":"");
-  if(!(isHiddenFighter(i)&&fighterLocked(i))){
-    const b=document.createElement("b");
-    b.textContent=isMirror?"MIRROR MATCH":f.name;
-    cell.appendChild(b);
-  }
   const panel=document.createElement("div");panel.className="panel";
   const img=document.createElement("img");img.alt=isMirror?"Mirror Match":f.name;
   bindSrcList(img,isMirror?selectUrls(FIGHTERS[selectedFighter].name):selectUrls(f.name));
