@@ -414,7 +414,7 @@ function makeLiquidCell(i,opts){
   }
   const panel=document.createElement("div");panel.className="panel";
   const img=document.createElement("img");img.alt=isMirror?"Mirror Match":f.name;
-  bindSrcList(img,isMirror?shadowboxUrls(FIGHTERS[selectedFighter].name):shadowboxUrls(f.name));
+  bindSrcList(img,isMirror?selectUrls(FIGHTERS[selectedFighter].name):selectUrls(f.name));
   panel.appendChild(img);
   if(dead&&!isMirror){
     const stamp=document.createElement("div");stamp.className="liquid-stamp";stamp.textContent="LIQUIDATED";panel.appendChild(stamp);
