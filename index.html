@@ -314,6 +314,7 @@ const INTRO_PAGES=["W.F.U.D. STUDIOS","PRESENTS","FINTWITS FUD KINGZ"],LOAD_HOLD
 function unique(list){const seen={};return(list||[]).filter(function(u){if(!u||seen[u])return false;seen[u]=true;return true;});}
 const MONEY_URLS=unique([OBJECT_DIR+"money.gif",OBJECT_DIR+"money.gif",ROOT+"money.gif",FIGHTER_DIR+"money.gif"]);
 function selectUrls(name){const n=String(name||"").trim().toLowerCase();return unique([FIGHTER_DIR+n+" title.gif"]);}
+function shadowboxUrls(name){const n=String(name||"").trim().toLowerCase();return unique([FIGHTER_DIR+n+" shadowbox.png",FIGHTER_DIR+n+" title.gif"]);}
 function poseUrls(name,pose){const n=String(name||"").trim().toLowerCase();let list=[];if(pose==="idle")list=[FIGHTER_DIR+n+" idle.gif"];else if(pose==="throw")list=[FIGHTER_DIR+n+" throw.gif"];else{const label=String(POSE_LABEL[pose]||"idle").toLowerCase();list=[FIGHTER_DIR+n+" "+label+".gif"];}return unique(list.concat(selectUrls(name)));}
 function objectUrls(name){const n=String(name||"").trim().toLowerCase();return unique([OBJECT_DIR+n+" object.gif",FIGHTER_DIR+n+" object.gif"].concat(THROW_OBJECTS.map(function(f){return OBJECT_DIR+String(f).toLowerCase();})));}
 function decorateFighter(f){f.select=selectUrls(f.name);f.idle=poseUrls(f.name,"idle");f.punchL=poseUrls(f.name,"punchL");f.punchR=poseUrls(f.name,"punchR");f.kickL=poseUrls(f.name,"kickL");f.kickR=poseUrls(f.name,"kickR");f.throw=poseUrls(f.name,"throw");f.block=poseUrls(f.name,"block");f.victory=poseUrls(f.name,"victory");f.loser=poseUrls(f.name,"loser");f.objects=objectUrls(f.name);return f;}
@@ -443,7 +444,7 @@ function renderLiquidBoard(){
     hero.innerHTML="";
     const mine=FIGHTERS[selectedFighter];
     const panel=document.createElement("div");panel.className="panel";
-    const img=document.createElement("img");img.alt=mine.name;bindSrcList(img,mine.select);
+    const img=document.createElement("img");img.alt=mine.name;bindSrcList(img,shadowboxUrls(mine.name));
     panel.appendChild(img);hero.appendChild(panel);
   }
   const box=document.getElementById("liquidGrid");if(!box)return;box.innerHTML="";
