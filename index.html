@@ -254,10 +254,24 @@ input[type=file].hidden-file{display:none}
 .crt::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent 0 2px,rgba(0,0,0,.28) 3px);pointer-events:none;z-index:2}
 .crt::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 48%,rgba(0,0,0,.62));pointer-events:none;z-index:3;animation:crtFlicker 3.4s infinite}
 @keyframes crtFlicker{0%,100%{opacity:1}47%{opacity:.86}}
-#introText{position:relative;z-index:4;margin:0;padding:0 18px;font-family:"Courier New",Courier,monospace;font-size:clamp(16px,5.4vw,28px);line-height:1.45;letter-spacing:3px;color:#39ff14;text-shadow:0 0 6px #39ff14;text-align:center;white-space:pre-wrap;min-height:4.4em}
+#introText{position:relative;z-index:4;margin:0;padding:0 18px;font-family:"Courier New",Courier,monospace;font-size:clamp(16px,5.4vw,28px);line-height:1.45;letter-spacing:3px;color:#39ff14;text-shadow:0 0 6px #39ff14;text-align:center;white-space:pre-wrap;min-height:4.4em;display:none}
 #introText .cursor{display:inline-block;width:.65ch;background:#39ff14;animation:blinkCur .7s step-end infinite}
 @keyframes blinkCur{50%{opacity:0}}
 .intro-skip{display:none}
+.coin-panel{position:relative;z-index:6;width:min(92vw,340px);padding:22px 18px 18px;border-radius:16px;background:linear-gradient(180deg,#2a3140,#121826 55%,#0a0e16);border:2px solid #445;box-shadow:0 0 0 3px #1a2030,0 18px 40px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.08);text-align:center}
+.coin-panel h2{margin:0 0 6px;font-size:clamp(14px,4.2vw,18px);letter-spacing:2px;color:#ffd54f;text-shadow:0 0 12px rgba(255,179,0,.45)}
+.coin-panel p{margin:0 0 16px;font-size:11px;color:#9ad7b2;letter-spacing:1px}
+.coin-slot-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:14px}
+.coin-slot{position:relative;width:54px;height:78px;border-radius:8px;background:linear-gradient(90deg,#0a0c10,#1a1f2a 40%,#0a0c10);border:2px solid #334;box-shadow:inset 0 0 12px #000}
+.coin-slot::before{content:"";position:absolute;left:50%;top:10px;transform:translateX(-50%);width:10px;height:52px;border-radius:4px;background:#050608;box-shadow:inset 0 0 6px #000,0 0 0 1px #222}
+.coin-slot.fed::after{content:"";position:absolute;left:50%;top:18px;transform:translateX(-50%);width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#ffe082,#ffb300 55%,#c68400);box-shadow:0 0 10px rgba(255,179,0,.55);animation:coinDrop .55s ease-in forwards}
+@keyframes coinDrop{0%{opacity:0;transform:translateX(-50%) translateY(-18px) scale(.7)}40%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}100%{opacity:0;transform:translateX(-50%) translateY(28px) scale(.85)}}
+.coin-hint{font-family:"Courier New",Courier,monospace;font-size:10px;letter-spacing:2px;color:#39ff14;text-shadow:0 0 6px #39ff14;animation:coinBlink 1.2s step-end infinite}
+@keyframes coinBlink{50%{opacity:.35}}
+.coin-panel .btn-enter{width:100%;border:0;border-radius:12px;padding:14px 12px;font-weight:900;font-size:14px;letter-spacing:1.5px;background:linear-gradient(#ffe082,#ffb300);color:#1a1200;cursor:pointer;box-shadow:0 0 18px rgba(255,213,79,.35)}
+.coin-panel .btn-enter:active{transform:translateY(1px) scale(.98);filter:brightness(.92)}
+.coin-panel.hidden{display:none}
+#introText.show{display:block}
 </style>
 </head>
 <body>
@@ -268,7 +282,7 @@ input[type=file].hidden-file{display:none}
 <audio id="sfxKick" src="./audio/sound fx/sfx-kick.wav" preload="auto" playsinline></audio>
 <audio id="sfxThrow" src="./audio/sound fx/sfx-throw.wav" preload="auto" playsinline></audio>
 <input type="file" id="rosterFile" accept="application/json,.json" class="hidden-file"/>
-<section id="intro" class="screen active"><div class="crt" id="introCrt"><pre id="introText"></pre><div class="intro-skip">PRESS ANY KEY / TAP TO SKIP</div></div></section>
+<section id="intro" class="screen active"><div class="crt" id="introCrt"><div class="coin-panel" id="coinPanel"><h2>FINTWITS FUD KINGZ</h2><p>ARCADE READY</p><div class="coin-slot-wrap"><div class="coin-slot" id="coinSlot"></div><div class="coin-hint">INSERT COIN</div></div><button type="button" class="btn-enter" id="enterArenaBtn">ENTER THE ARENA</button></div><pre id="introText"></pre><div class="intro-skip">PRESS ANY KEY / TAP TO SKIP</div></div></section>
 <section id="title" class="screen menu">
   <div class="brand"><h1>FINTWITS FUD KINGZ</h1><p>CUT THROUGH THE FINFLUENCERS</p></div>
   <div class="menu-art"><img class="roster" id="rosterArt" alt="Title"></div>
@@ -358,7 +372,7 @@ let currentRound=1,matchScore=0,matchXp=0,lastScoreId="",roundWins={you:0,cpu:0}
 let readyTimer=null,announceIdx=0,winFlashTimer=null,quakeTimer=null,audioCtx=null;
 let roundTimeLeft=ROUND_SECS,roundTimer=null,suddenDeath=false;
 let rosterData={activeId:"",players:[]},rosterFileHandle=null;
-let introTimer=null,introDone=false,introLocked="",introWanted=true;
+let introTimer=null,introDone=false,introLocked="",introWanted=true,introStarted=false;
 let youPos=YOU_HOME,tiltOn=false,tiltCenter=0,tiltReady=false,keysDown={};
 let walkTimer=null,readyToFight=false;
 const bgm=document.getElementById("bgm"),introSfx=document.getElementById("introSfx");
@@ -484,8 +498,28 @@ function startTitleSong(){if(!introDone)return;stopIntroBed();const playing=/mai
 function finishIntro(){if(introDone)return;introDone=true;introWanted=false;if(introTimer){clearTimeout(introTimer);introTimer=null;}stopIntroBed();lastScreen="title";document.querySelectorAll(".screen").forEach(function(s){s.classList.remove("active");});document.getElementById("title").classList.add("active");startTitleSong();}
 function typeIntroLine(prefix,text,onChar,done){let i=0;function tick(){if(introDone)return;if(i>=text.length){if(done)done();return;}const ch=text.charAt(i);setIntroText(prefix+text.slice(0,i+1));if(onChar)onChar(ch);i+=1;introTimer=setTimeout(tick,ch===" "?90:70);}tick();}
 function startIntroPages(){introLocked="";setIntroText("");let page=0;function nextPage(){if(introDone)return;if(page>=INTRO_PAGES.length){setIntroText(introLocked);introTimer=setTimeout(finishIntro,1400);return;}const line=INTRO_PAGES[page],prefix=introLocked;typeIntroLine(prefix,line,null,function(){introLocked=prefix+line;page+=1;if(page<INTRO_PAGES.length)introLocked+="\n\n";introTimer=setTimeout(nextPage,420);});}nextPage();}
-function runIntro(){introDone=false;introWanted=true;introLocked="";if(introTimer){clearTimeout(introTimer);introTimer=null;}setIntroText("");startIntroBed();typeIntroLine("","LOADING",null,function(){setIntroText("LOADING");introTimer=setTimeout(function(){if(introDone)return;setIntroText("");startIntroPages();},LOAD_HOLD_MS);});}
-function onIntroInput(){}
+function runIntroSequence(){introDone=false;introWanted=true;introLocked="";if(introTimer){clearTimeout(introTimer);introTimer=null;}setIntroText("");typeIntroLine("","LOADING",null,function(){setIntroText("LOADING");introTimer=setTimeout(function(){if(introDone)return;setIntroText("");startIntroPages();},LOAD_HOLD_MS);});}
+function runIntro(){introDone=false;introWanted=true;introStarted=false;introLocked="";if(introTimer){clearTimeout(introTimer);introTimer=null;}setIntroText("");const panel=document.getElementById("coinPanel");const t=document.getElementById("introText");if(panel)panel.classList.remove("hidden");if(t)t.classList.remove("show");const slot=document.getElementById("coinSlot");if(slot)slot.classList.remove("fed");}
+function onIntroInput(){
+  if(introDone)return;
+  if(!introStarted){enterArena();return;}
+  finishIntro();
+}
+function enterArena(){
+  if(introStarted||introDone)return;
+  introStarted=true;
+  const panel=document.getElementById("coinPanel");
+  const slot=document.getElementById("coinSlot");
+  if(slot)slot.classList.add("fed");
+  ensureAudio();
+  startIntroBed();
+  setTimeout(function(){
+    if(panel)panel.classList.add("hidden");
+    const t=document.getElementById("introText");
+    if(t)t.classList.add("show");
+    runIntroSequence();
+  },520);
+}
 function applyYouPos(){document.getElementById("you").style.left=youPos+"%";}
 function resetWalk(){youPos=YOU_HOME;tiltReady=false;applyYouPos();}
 function nudgeYou(dir){if(paused||over||announcing||lastScreen!=="fight")return;youPos=Math.max(YOU_MIN,Math.min(YOU_MAX,youPos+dir));applyYouPos();}
@@ -614,7 +648,9 @@ bk.addEventListener("pointerdown",function(e){e.preventDefault();if(!paused&&!ov
 bk.addEventListener("pointerup",function(){setBlock("you",false);});
 bk.addEventListener("pointerleave",function(){setBlock("you",false);});
 bk.addEventListener("pointercancel",function(){setBlock("you",false);});
-document.getElementById("introCrt").addEventListener("pointerdown",onIntroInput);
+document.getElementById("enterArenaBtn").addEventListener("click",function(e){e.stopPropagation();enterArena();});
+document.getElementById("coinPanel").addEventListener("click",function(e){if(e.target&&e.target.id==="enterArenaBtn")return;enterArena();});
+document.getElementById("introCrt").addEventListener("pointerdown",function(e){if(!introStarted)return;onIntroInput();});
 window.addEventListener("keydown",function(e){if(!introDone&&document.getElementById("intro").classList.contains("active")){e.preventDefault();onIntroInput();return;}if(e.target&&(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA"))return;});
 window.addEventListener("keyup",function(e){keysDown[e.code]=false;});
 rosterData=loadRosterLocal();
