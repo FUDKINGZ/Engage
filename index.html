@@ -83,9 +83,9 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .slot .arena-art{object-fit:cover}.slot.locked img,.slot.locked .arena-art{filter:grayscale(1) brightness(.38)}
 .lock-tag{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);background:rgba(0,0,0,.78);color:#ffd54f;border:1px solid #886;font-size:11px;font-weight:900;padding:7px 10px;border-radius:8px}
 .opp-wrap,.liquid-wrap{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px;padding:2px 6px;overflow:hidden}
-.liquid-stage{position:relative;width:100%;max-width:720px;flex:1 1 auto;min-height:0;display:flex;align-items:stretch;gap:6px;overflow:hidden}
+.liquid-hero{position:relative;flex:0 0 26%;max-width:130px;min-width:0;z-index:1;pointer-events:none;display:flex;align-items:flex-end;justify-content:center}
 .liquid-hero{position:relative;flex:0 0 28%;max-width:140px;min-width:0;z-index:1;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:0}
-.liquid-hero .panel{width:100%;height:100%;min-height:0;background:transparent;border:0;overflow:visible;box-shadow:none;border-radius:0}
+.liquid-hero .panel{width:100%;flex:1;min-height:0;aspect-ratio:3/4;background:#121826;border:2px solid #ffd54f;border-radius:14px;overflow:hidden;box-shadow:0 0 22px rgba(255,213,79,.45)}
 .liquid-hero img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;filter:drop-shadow(0 12px 18px #000);opacity:.98;transform:scale(1.06);transform-origin:center bottom}
 .liquid-main{width:100%;max-width:720px;display:flex;gap:10px;align-items:stretch;min-height:0;flex:1}
 .hidden-box{display:none!important}
@@ -96,24 +96,10 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .hidden-cell .panel,.opp-cell .panel,.liquid-cell .panel{width:100%;background:#121826;border:2px solid #2a3344;border-radius:10px;overflow:hidden;position:relative;flex:1;min-height:0;height:100%}
 .opp-cell .panel{flex:1;min-height:0}
 .liquid-cell .panel{flex:1;min-height:0;height:100%}
-.hidden-cell img,.opp-cell img,.liquid-cell img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block}
-.hidden-cell b,
-.opp-cell b,
-.liquid-cell b {
-  width: 100%;
-  min-height: 11px;
-  font-size: 8px;
-  color: #ffe082;
-  font-weight: 900;
-  text-transform: uppercase;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: center;
-  flex: none;
-  order: -1;
-  padding: 0 2px;
-}
+.hidden-cell img,.opp-cell img,.liquid-cell img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;background:transparent}
+.liquid-cell.dead img{opacity:.55}
+.hidden-cell b,.opp-cell b,.liquid-cell b{width:100%;min-height:12px;font-size:9px;color:#ffe082;font-weight:900;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;flex:none;order:-1;padding:0 2px;letter-spacing:.4px}
+.liquid-cell.next b,.liquid-cell.boss b{color:#ffd54f}
 .opp-cell.locked img,.liquid-cell.dead img{filter:grayscale(1) brightness(.38)}
 .hidden-cell.locked .panel img,.liquid-cell.locked img{filter:grayscale(1) brightness(.42) blur(2.5px)}
 .hidden-cell.picked .panel,.opp-cell.picked .panel{border-color:#ffd54f}
@@ -134,10 +120,10 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .liquid-grid{position:relative;z-index:2;flex:1 1 auto;width:auto;max-width:none;min-width:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));gap:4px;align-content:stretch;padding:2px 0;overflow:hidden}
 .liquid-cell{min-width:0;min-height:0}
 .liquid-cell b{font-size:6.5px;min-height:10px;line-height:1.1;padding:0 1px}
-.liquid-cell .panel{width:100%;height:100%;min-height:0;aspect-ratio:auto;border-width:1.5px}
+.liquid-cell .panel{width:100%;flex:1;min-height:0;aspect-ratio:3/4;border:2px solid #2a3344;border-radius:14px}
 .hidden-row{display:none}
 .liquid-cell.mine .panel{border-color:#ffd54f}.liquid-cell.next .panel{border-color:#ff1744}
-.liquid-hero,.liquid-hero .panel{border:0!important;box-shadow:none!important;background:transparent!important;border-radius:0!important}
+.liquid-hero b{width:100%;font-size:10px;color:#ffd54f;font-weight:900;text-transform:uppercase;text-align:center;letter-spacing:.4px}
 .liquid-hero img{filter:drop-shadow(0 12px 20px #000);transform:scale(1.06);transform-origin:center bottom;object-fit:contain;object-position:center bottom}
 .liquid-cell.mirror .panel{border-color:#ea80fc}
 .liquid-cell.mirror.next .panel{border-color:#ff1744}
