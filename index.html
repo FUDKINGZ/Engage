@@ -82,23 +82,18 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .slot img,.slot .arena-art{width:100%;flex:1;min-height:0;object-fit:contain;object-position:center bottom;display:block;background:transparent}
 .slot .arena-art{object-fit:cover}.slot.locked img,.slot.locked .arena-art{filter:grayscale(1) brightness(.38)}
 .lock-tag{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);background:rgba(0,0,0,.78);color:#ffd54f;border:1px solid #886;font-size:11px;font-weight:900;padding:7px 10px;border-radius:8px}
-.opp-wrap,.liquid-wrap{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;padding:2px 6px;overflow:hidden}
-.liquid-stage{position:relative;width:100%;max-width:100%;flex:1 1 auto;min-height:0;display:flex;align-items:stretch;overflow:hidden}
-.liquid-hero{position:absolute;left:0;top:0;bottom:0;width:48%;z-index:1;pointer-events:none;display:flex;align-items:flex-end;justify-content:flex-start}
-.liquid-hero .panel{width:100%;height:100%;background:transparent;border:0;overflow:visible}
-.liquid-hero img{width:100%;height:100%;object-fit:cover;object-position:center 18%;display:block;filter:drop-shadow(0 12px 18px #000);opacity:.95;transform:scale(1.08);transform-origin:center bottom}
+.opp-wrap,.liquid-wrap{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px;padding:2px 6px;overflow:hidden}
+.liquid-stage{position:relative;width:100%;max-width:720px;flex:1 1 auto;min-height:0;display:flex;align-items:stretch;gap:6px;overflow:hidden}
+.liquid-hero{position:relative;flex:0 0 28%;max-width:140px;min-width:0;z-index:1;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:0}
+.liquid-hero .panel{width:100%;height:100%;min-height:0;background:transparent;border:0;overflow:visible;box-shadow:none;border-radius:0}
+.liquid-hero img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;filter:drop-shadow(0 12px 18px #000);opacity:.98;transform:scale(1.06);transform-origin:center bottom}
 .liquid-main{width:100%;max-width:720px;display:flex;gap:10px;align-items:stretch;min-height:0;flex:1}
-.liquid-hero{flex:0 0 32%;max-width:160px;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:0}
-.liquid-hero b{font-size:10px;color:#ffd54f;font-weight:900;text-transform:uppercase;text-align:center}
-.liquid-hero .panel{flex:1;width:100%;min-height:0;background:#121826;border:2px solid #ffd54f;border-radius:12px;overflow:hidden;box-shadow:0 0 18px rgba(255,213,79,.35)}
-.liquid-hero img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block}
-.hidden-box{width:100%;max-width:720px;background:rgba(0,0,0,.35);border:1px solid #334;border-radius:12px;padding:6px 8px}
-.hidden-box label{display:block;text-align:center;font-size:10px;font-weight:900;color:#ffd54f;margin-bottom:6px}
-.hidden-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-#liquidHiddenRow{grid-template-columns:repeat(4,1fr)}
-.hidden-cell,.opp-cell,.liquid-cell{min-height:0;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative}
-.hidden-cell .panel,.opp-cell .panel,.liquid-cell .panel{width:100%;background:#121826;border:2px solid #2a3344;border-radius:10px;overflow:hidden;position:relative}
-.hidden-cell .panel{height:72px}
+.hidden-box{display:none!important}
+.hidden-box label{display:none}
+.hidden-row{display:none}
+#liquidHiddenRow{display:none}
+.hidden-cell,.opp-cell,.liquid-cell{min-height:0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;position:relative}
+.hidden-cell .panel,.opp-cell .panel,.liquid-cell .panel{width:100%;background:#121826;border:2px solid #2a3344;border-radius:10px;overflow:hidden;position:relative;flex:1;min-height:0;height:100%}
 .opp-cell .panel{flex:1;min-height:0}
 .liquid-cell .panel{flex:1;min-height:0;height:100%}
 .hidden-cell img,.opp-cell img,.liquid-cell img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block}
@@ -136,33 +131,14 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
   padding-bottom: 4px;
 }
 
-.liquid-grid{
-  position:relative;z-index:2;
-  margin-left:auto;
-  width:56%;
-  max-width:56%;
-  min-width:0;
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  grid-template-rows:repeat(2,minmax(0,1fr));
-  gap:5px 4px;
-  align-content:center;
-  padding:2px 2px 2px 0;
-  overflow:hidden;
-}
+.liquid-grid{position:relative;z-index:2;flex:1 1 auto;width:auto;max-width:none;min-width:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));gap:4px;align-content:stretch;padding:2px 0;overflow:hidden}
 .liquid-cell{min-width:0;min-height:0}
 .liquid-cell b{font-size:6.5px;min-height:10px;line-height:1.1;padding:0 1px}
 .liquid-cell .panel{width:100%;height:100%;min-height:0;aspect-ratio:auto;border-width:1.5px}
-
-.hidden-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-  gap: 6px;
-  overflow-x: auto;
-}
+.hidden-row{display:none}
 .liquid-cell.mine .panel{border-color:#ffd54f}.liquid-cell.next .panel{border-color:#ff1744}
 .liquid-hero,.liquid-hero .panel{border:0!important;box-shadow:none!important;background:transparent!important;border-radius:0!important}
-.liquid-hero img{filter:drop-shadow(0 12px 20px #000);transform:scale(1.12);transform-origin:center bottom;object-fit:cover;object-position:center 15%}
+.liquid-hero img{filter:drop-shadow(0 12px 20px #000);transform:scale(1.06);transform-origin:center bottom;object-fit:contain;object-position:center bottom}
 .liquid-cell.mirror .panel{border-color:#ea80fc}
 .liquid-cell.mirror.next .panel{border-color:#ff1744}
 .liquid-cell.boss .panel{border-color:#ffb300}
@@ -303,7 +279,7 @@ input[type=file].hidden-file{display:none}
 <section id="opponents" class="screen menu"><div class="brand"><h1>FINTWITS FUD KINGZ</h1><p>CHOOSE NEXT OPPONENT</p></div><div class="opp-wrap"><div class="opp-grid" id="opponentGrid"></div><div class="hidden-box"><label>HIDDEN CHARACTERS</label><div class="hidden-row" id="hiddenRow"></div></div></div><div class="menu-btns"><button class="btn btn-gold" onclick="goMatchup()">NEXT: MATCH UP</button><button class="btn btn-dark" onclick="show('fighters')">BACK</button></div></section>
 <section id="matchup" class="screen menu"><div class="brand"><h1>FINTWITS FUD KINGZ</h1><p>MATCH UP</p></div><div class="matchup-body"><div class="match-arena-name" id="matchArenaName"></div><div class="vs-row"><b class="vs-name p1" id="matchP1Name">P1</b><b class="vs-name p2" id="matchP2Name">P2</b><div class="vs-card p1"><img id="matchP1" alt=""></div><div class="vs-mark">VS</div><div class="vs-card p2"><img id="matchP2" alt=""></div></div><div class="skill-box" id="matchSkillBox"><label>CPU LEVEL</label><div class="skill-row" id="skillRow"></div><div class="round-box" id="matchRoundBox"><label>ROUNDS</label><div class="round-pick" id="roundPick"></div></div></div></div><div class="menu-btns"><button class="btn btn-gold" id="matchNext" onclick="fromMatchupNext()">NEXT</button><button class="btn btn-dark" onclick="backFromMatchup()">BACK</button></div></section>
 <section id="postfight" class="screen menu"><div class="brand"><h1>FINTWITS FUD KINGZ</h1><p id="postHint">CHALLENGER DOWN</p></div><div class="post-body"><div class="vs-row"><b class="vs-name p1" id="postP1Name">YOU</b><b class="vs-name p2" id="postP2Name">CPU</b><div class="vs-card p1"><img id="postP1" alt=""></div><div class="vs-mark" id="postMark">WIN</div><div class="vs-card p2"><img id="postP2" alt=""></div></div><p class="post-sub" id="postSub"></p></div><div class="menu-btns"><button class="btn btn-gold" onclick="afterPostFight()">CONTINUE</button></div></section>
-<section id="liquid" class="screen menu"><div class="brand"><h1>FINTWITS FUD KINGZ</h1><p id="liquidHint">LIQUIDATION BOARD</p></div><div class="liquid-wrap"><div class="liquid-stage"><div class="liquid-hero" id="liquidHero"></div><div class="liquid-grid" id="liquidGrid"></div></div><div class="hidden-box" id="liquidHiddenBox"><label>HIDDEN CHARACTERS</label><div class="hidden-row" id="liquidHiddenRow"></div></div></div><div class="menu-btns"><button class="btn btn-gold" id="liquidNext" onclick="afterLiquidation()">NEXT CHALLENGER</button></div></section>
+<section id="liquid" class="screen menu"><div class="brand"><h1>FINTWITS FUD KINGZ</h1><p id="liquidHint">LIQUIDATION BOARD</p></div><div class="liquid-wrap"><div class="liquid-stage"><div class="liquid-hero" id="liquidHero"></div><div class="liquid-grid" id="liquidGrid"></div></div></div><div class="menu-btns"><button class="btn btn-gold" id="liquidNext" onclick="afterLiquidation()">NEXT CHALLENGER</button></div></section>
 <section id="arenas" class="screen menu"><div class="brand"><h1>FINTWITS FUD KINGZ</h1><p>CHOOSE ARENA</p></div><div class="carousel-wrap"><div class="carousel" id="arenaCarousel"></div><div class="nav-row"><button type="button" onclick="shiftArena(-1)">◀</button><button type="button" onclick="shiftArena(1)">▶</button></div><div class="dots" id="arenaDots"></div></div><div class="menu-btns"><button class="btn btn-gold" id="arenaNext" onclick="afterArena()">NEXT: ENTER ARENA</button><button class="btn btn-dark" onclick="backFromArenas()">BACK</button></div></section>
 <section id="fight" class="screen">
   <div id="titlebar"><h1>FINTWITS FUD KINGZ</h1><button class="tiny-mute" id="muteMusic" onclick="toggleMuteMusic()">MUSIC</button><button class="tiny-mute" id="muteFx" onclick="toggleMuteFx()">F/X</button><button id="pauseBtn" onclick="togglePause()">PAUSE</button></div>
@@ -475,8 +451,7 @@ function renderLiquidBoard(){
   order.forEach(function(i){if(i!==selectedFighter&&i!==FINAL_INDEX)box.appendChild(makeLiquidCell(i));});
   box.appendChild(makeLiquidCell(selectedFighter,{mirror:true}));
   if(FINAL_INDEX!==selectedFighter)box.appendChild(makeLiquidCell(FINAL_INDEX));
-  const hidden=document.getElementById("liquidHiddenRow");
-  if(hidden){hidden.innerHTML="";HIDDEN_INDEXES.forEach(function(idx){hidden.appendChild(makeLiquidCell(idx));});}
+  HIDDEN_INDEXES.forEach(function(idx){box.appendChild(makeLiquidCell(idx));});
 }
 function showLiquidationBoard(beatenName){renderLiquidBoard();const next=(!arcadeKing&&arcadeIndex<arcadeQueue.length)?FIGHTERS[arcadeQueue[arcadeIndex]]:null;document.getElementById("liquidHint").textContent=arcadeKing?"ROSTER LIQUIDATED":((beatenName||"CHALLENGER")+" LIQUIDATED"+(next?"  •  NEXT "+next.name:""));document.getElementById("liquidNext").textContent=arcadeKing?"CLAIM THE CROWN":"NEXT CHALLENGER";show("liquid");}
 function afterLiquidation(){if(arcadeKing||arcadeIndex>=arcadeQueue.length){show("fight");showFinalStats(true,lastArcadeRecord||"ARCADE",true);return;}selectedOpponent=arcadeQueue[arcadeIndex];cpuFighter=selectedOpponent;selectedArena=arcadeArenaIndex();readyToFight=true;renderMatchup();show("matchup");}
