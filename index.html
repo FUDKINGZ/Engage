@@ -388,7 +388,7 @@ function paintSkillRow(rowId){const row=document.getElementById(rowId);if(!row)r
 function renderRoundPick(){const row=document.getElementById("roundPick");if(!row)return;row.innerHTML="";[3,4].forEach(function(n){const b=document.createElement("button");b.type="button";b.textContent=String(n);if(matchRounds===n)b.className="on";b.onclick=function(){setRounds(n);};row.appendChild(b);});}
 function renderSkillRow(){paintSkillRow("skillRow");paintSkillRow("fighterSkillRow");renderRoundPick();}
 function arcadeArenaIndex(){
-  const map=[1,2,7,8,6,4,0,3,5,9,10,11,12];
+  const map=[1,2,7,8,6,4,0,3,10,12,11,9];
   return map[Math.min(arcadeIndex,map.length-1)]||0;
 }
 function playArenaMusic(forceNew){const a=ARENAS[selectedArena];if(!a||!a.music)return;stopIntroBed();setTrack(a.music,true,!!forceNew||currentTrack!==a.music);}
@@ -555,7 +555,7 @@ function buildArcadeQueue(){
   order.forEach(function(i){if(i!==selectedFighter&&i!==FINAL_INDEX)arcadeQueue.push(i);});
   arcadeQueue.push(selectedFighter);
   if(FINAL_INDEX!==selectedFighter)arcadeQueue.push(FINAL_INDEX);
-  [11,8,10,9].forEach(function(i){if(i!==selectedFighter)arcadeQueue.push(i);});
+  [8,9,10,11].forEach(function(i){if(i!==selectedFighter)arcadeQueue.push(i);});
   arcadeIndex=0;arcadeKing=false;
   selectedArena=arcadeArenaIndex();
   if(arcadeQueue.length){selectedOpponent=arcadeQueue[0];cpuFighter=selectedOpponent;}
