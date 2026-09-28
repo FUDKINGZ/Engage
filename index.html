@@ -298,7 +298,7 @@ const POSE_LABEL={punchL:"left punch",punchR:"right punch",kickL:"left kick",kic
 const THROW_OBJECTS=["phone.gif","laptop.gif","coffee.gif","chart.gif","newspaper.gif","megaphone.gif","bag.gif","keyboard.gif","coin.gif","contract.gif"];
 const INTRO_PAGES=["W.F.U.D. STUDIOS","PRESENTS","FINTWITS FUD KINGZ"],LOAD_HOLD_MS=3000;
 function unique(list){const seen={};return(list||[]).filter(function(u){if(!u||seen[u])return false;seen[u]=true;return true;});}
-const MONEY_URLS=unique([OBJECT_DIR+"money.gif",ROOT+"money.gif",FIGHTER_DIR+"money.gif"]);
+const MONEY_URLS=unique([OBJECT_DIR+"money.png",ROOT+"money.png",OBJECT_DIR+"money.gif",ROOT+"money.gif"]);
 function selectUrls(name){const n=String(name||"").trim().toLowerCase();return unique([TITLECARD_DIR+n+" title.gif"]);}
 function shadowboxUrls(name){const n=String(name||"").trim().toLowerCase();return unique([TITLECARD_DIR+n+" shadowbox.png"]);}
 function poseUrls(name,pose){const n=String(name||"").trim().toLowerCase();let list=[];if(pose==="idle")list=[FIGHTER_DIR+n+" idle.gif"];else if(pose==="throw")list=[FIGHTER_DIR+n+" throw.gif"];else{const label=String(POSE_LABEL[pose]||"idle").toLowerCase();list=[FIGHTER_DIR+n+" "+label+".gif"];}return unique(list.concat(selectUrls(name)));}
