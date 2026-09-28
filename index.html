@@ -299,7 +299,8 @@ const THROW_OBJECTS=["phone.png","laptop.png","coffee.png","chart.png","newspape
 const INTRO_PAGES=["W.F.U.D. STUDIOS","PRESENTS","FINTWITS FUD KINGZ"],LOAD_HOLD_MS=3000;
 function unique(list){const seen={};return(list||[]).filter(function(u){if(!u||seen[u])return false;seen[u]=true;return true;});}
 const MONEY_URLS=unique([OBJECT_DIR+"money.png",ROOT+"money.png"]);
-function selectUrls(name){const n=String(name||"").trim().toLowerCase();return unique([TITLECARD_DIR+n+" title.gif"]);}
+function selectUrls(name){const n=String(name||"").trim().toLowerCase();return unique([FIGHTER_DIR+n+" title.gif"]);}
+function titlecardUrls(name){const n=String(name||"").trim().toLowerCase();return unique([TITLECARD_DIR+n+" titlecard.png"]);}
 function shadowboxUrls(name){const n=String(name||"").trim().toLowerCase();return unique([TITLECARD_DIR+n+" shadowbox.png"]);}
 function poseUrls(name,pose){const n=String(name||"").trim().toLowerCase();let list=[];if(pose==="idle")list=[FIGHTER_DIR+n+" idle.gif"];else if(pose==="throw")list=[FIGHTER_DIR+n+" throw.gif"];else{const label=String(POSE_LABEL[pose]||"idle").toLowerCase();list=[FIGHTER_DIR+n+" "+label+".gif"];}return unique(list.concat(selectUrls(name)));}
 function objectUrls(name){const n=String(name||"").trim().toLowerCase();return unique([OBJECT_DIR+n+" object.png",FIGHTER_DIR+n+" object.png"].concat(THROW_OBJECTS.map(function(f){return OBJECT_DIR+String(f).toLowerCase();})));}
@@ -409,7 +410,7 @@ function makeLiquidCell(i,opts){
   cell.className="liquid-cell"+(dead&&!isMirror?" dead":"")+(isNext?" next":"")+(fighterLocked(i)&&!isMirror?" locked":"")+(isMirror?" mirror":"")+(isBoss?" boss":"");
   const panel=document.createElement("div");panel.className="panel";
   const img=document.createElement("img");img.alt=isMirror?"Mirror Match":f.name;
-  bindSrcList(img,isMirror?selectUrls(FIGHTERS[selectedFighter].name):selectUrls(f.name));
+  bindSrcList(img,isMirror?titlecardUrls(FIGHTERS[selectedFighter].name):titlecardUrls(f.name));
   panel.appendChild(img);
   if(dead&&!isMirror){
     const stamp=document.createElement("div");stamp.className="liquid-stamp";stamp.textContent="LIQUIDATED";panel.appendChild(stamp);
