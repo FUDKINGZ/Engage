@@ -434,7 +434,15 @@ if(mode==="arcade"){
 function goMatchup(){if(mode!=="arcade"&&fighterLocked(selectedOpponent))return;if(mode==="pvc"||mode==="arcade")cpuFighter=selectedOpponent;if(mode==="arcade"){selectedArena=arcadeArenaIndex();readyToFight=true;}else readyToFight=false;renderMatchup();show("matchup");}
 function fromMatchupNext(){if(mode==="arcade"||readyToFight){startFight(true);return;}goArenas();}
 function backFromMatchup(){if(mode==="arcade"){readyToFight=false;show("fighters");}else if(readyToFight){readyToFight=false;renderArenaCarousel();show("arenas");}else if(mode==="pvc"){renderOpponentScreen();show("opponents");}else show("fighters");}
-function showPostFight(beatenName,record){const mine=FIGHTERS[selectedFighter],theirs=FIGHTERS[cpuFighter];document.getElementById("postP1Name").textContent=mine.name;document.getElementById("postP2Name").textContent=theirs.name;bindSrcList(document.getElementById("postP1"),(mine.victory&&mine.victory.length)?mine.victory:mine.select);bindSrcList(document.getElementById("postP2"),(theirs.loser&&theirs.loser.length)?theirs.loser:theirs.select);document.getElementById("postHint").textContent=arcadeKing?"FUD KING":((beatenName||"CHALLENGER").toUpperCase()+"  •  LIQUIDATED");document.getElementById("postMark").textContent=arcadeKing?"CROWN":"WIN";document.getElementById("postSub").textContent="";show("postfight");}
+function showPostFight(beatenName,record){const mine=FIGHTERS[selectedFighter],theirs=FIGHTERS[cpuFighter];document.getElementById("postP1Name").textContent=mine.name;document.getElementById("postP2Name").textContent=theirs.name;bindSrcList(document.getElementById("postP1"),(mine.victory&&mine.victory.length)?mine.victory:mine.select);bindSrcList(document.getElementById("postP2"),(theirs.loser&&theirs.loser.length)?theirs.loser:theirs.select);document.getElementById("postHint").textContent=arcadeKing?"FUD KING":((beatenName||"CHALLENGER").toUpperCase()+"  •  LIQUIDATED");document.getElementById("postMark").textContent=arcadeKing?"CROWN":"WIN";document.getElementById("postSub").textContent="";preloadLiquidation();show("postfight");}
+function preloadUrl(url){if(!url)return;const im=new Image();im.decoding="async";im.src=url;}
+function preloadLiquidation(){
+  const seen={};
+  function addList(list){(list||[]).forEach(function(u){if(!u||seen[u])return;seen[u]=true;preloadUrl(u);});}
+  const mine=FIGHTERS[selectedFighter];
+  if(mine)addList(shadowboxUrls(mine.name));
+  FIGHTERS.forEach(function(f){addList(titlecardUrls(f.name));});
+}
 function afterPostFight(){showLiquidationBoard(lastBeatenName||"CHALLENGER");}
 function makeLiquidCell(i,opts){
   opts=opts||{};
