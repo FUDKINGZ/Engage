@@ -104,7 +104,8 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .opp-cell.locked img,.liquid-cell.dead img{filter:grayscale(1) brightness(.38)}
 .hidden-cell.locked .panel img,.liquid-cell.locked img{filter:grayscale(1) brightness(.42) blur(2.5px)}
 .hidden-cell.picked .panel,.opp-cell.picked .panel{border-color:#ffd54f}
-.hidden-cell .need,.opp-cell .need,.liquid-cell .need{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.8);color:#ffd54f;border:1px solid #886;font-size:8px;font-weight:900;padding:4px 5px;border-radius:6px;white-space:nowrap}
+.hidden-cell .need,.opp-cell .need{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.8);color:#ffd54f;border:1px solid #886;font-size:8px;font-weight:900;padding:4px 5px;border-radius:6px;white-space:nowrap}
+.liquid-cell .need{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-32deg);background:rgba(0,0,0,.8);color:#ffd54f;border:1px solid #886;font-size:8px;font-weight:900;padding:6px 0;width:130%;text-align:center;border-radius:0;white-space:nowrap;z-index:3;pointer-events:none}
 .opp-grid {
   width: 100%;
   max-width: 720px;
@@ -129,7 +130,7 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .liquid-cell.mirror .panel{}
 .liquid-cell.mirror.next .panel{border-color:#ff1744}
 .liquid-cell.boss .panel{}
-.liquid-stamp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-90deg);border:2px solid #ff1744;color:#ff1744;font-weight:900;font-size:9px;letter-spacing:1px;padding:4px 6px;background:rgba(0,0,0,.72);white-space:nowrap;z-index:3}
+.liquid-stamp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-32deg);border:2px solid #ff1744;color:#ff1744;font-weight:900;font-size:9px;letter-spacing:1px;padding:6px 0;width:130%;text-align:center;background:rgba(0,0,0,.72);white-space:nowrap;z-index:3;pointer-events:none}
 .nav-row{display:flex;gap:10px;width:88%}
 .nav-row button{flex:1;border:0;border-radius:10px;padding:10px;background:#1b2436;color:#ffd54f;font-weight:900;font-size:18px}
 .dots{display:flex;gap:5px}.dots i{width:7px;height:7px;border-radius:50%;background:#445;display:block}.dots i.on{background:#ffd54f}.dots i.lock{background:#664}
