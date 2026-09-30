@@ -248,6 +248,11 @@ input[type=file].hidden-file{display:none}
 .coin-panel .btn-enter:active{transform:translateY(1px) scale(.98);filter:brightness(.92)}
 .coin-panel.hidden{display:none}
 #introText.show{display:block}
+.credits-mask{flex:1;min-height:0;overflow:hidden;position:relative;mask-image:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent)}
+.credits-roll{position:absolute;left:0;right:0;padding:20px 16px 80px;text-align:center;animation:creditsUp 28s linear forwards}
+.credits-roll h3{margin:18px 0 6px;color:#ffd54f;letter-spacing:2px;font-size:13px}
+.credits-roll p{margin:0 0 8px;color:#9ad7b2;font-size:12px;letter-spacing:1px}
+@keyframes creditsUp{from{transform:translateY(70%)}to{transform:translateY(-80%)}}
 </style>
 </head>
 <body>
@@ -281,6 +286,8 @@ input[type=file].hidden-file{display:none}
 <section id="postfight" class="screen menu"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p id="postHint">CHALLENGER DOWN</p></div><div class="post-body"><div class="vs-row"><b class="vs-name p1" id="postP1Name">YOU</b><b class="vs-name p2" id="postP2Name">CPU</b><div class="vs-card p1"><img id="postP1" alt=""></div><div class="vs-mark" id="postMark">WIN</div><div class="vs-card p2"><img id="postP2" alt=""></div></div><p class="post-sub" id="postSub"></p></div><div class="menu-btns"><button class="btn btn-gold" onclick="afterPostFight()">CONTINUE</button></div></section>
 <section id="liquid" class="screen menu"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p id="liquidHint">LIQUIDATION BOARD</p></div><div class="liquid-wrap"><div class="liquid-stage"><div class="liquid-hero" id="liquidHero"></div><div class="liquid-grid" id="liquidGrid"></div></div></div><div class="menu-btns"><button class="btn btn-gold" id="liquidNext" onclick="afterLiquidation()">NEXT CHALLENGER</button></div></section>
 <section id="arenas" class="screen menu"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>CHOOSE ARENA</p></div><div class="carousel-wrap"><div class="carousel" id="arenaCarousel"></div><div class="nav-row"><button type="button" onclick="shiftArena(-1)">◀</button><button type="button" onclick="shiftArena(1)">▶</button></div><div class="dots" id="arenaDots"></div></div><div class="menu-btns"><button class="btn btn-gold" id="arenaNext" onclick="afterArena()">NEXT: ENTER ARENA</button><button class="btn btn-dark" onclick="backFromArenas()">BACK</button></div></section>
+<section id="crown" class="screen menu"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>CROWNING THE KING</p></div><div class="post-body"><div class="match-arena-name">CROWNING THE KING</div><div class="vs-card p1" style="width:min(70vw,280px)"><img id="crownHero" alt=""></div><p class="post-sub" id="crownSub"></p></div><div class="menu-btns"><button class="btn btn-gold" onclick="afterCrown()">CONTINUE</button></div></section>
+<section id="credits" class="screen menu"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"></div><div class="credits-mask"><div class="credits-roll" id="creditsRoll"></div></div><div class="menu-btns"><button class="btn btn-gold" onclick="afterCredits()">CONTINUE</button></div></section>
 <section id="fight" class="screen">
   <div id="titlebar"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"></div>
   <div class="hud"><div class="meter p1"><label><span class="char-name" id="p1Name">YOU</span></label><div class="bar"><span id="p1Bar"></span><em class="bar-cash" id="p1Dollar">$100</em></div><div class="pip-row"><div class="round-pips" id="p1Pips"></div><span class="char-handle" id="p1Profile"></span></div></div><div class="clock-wrap"><span id="roundClock">2:00</span></div><div class="meter p2"><label><span class="char-name" id="p2Name">CPU</span></label><div class="bar"><span id="p2Bar"></span><em class="bar-cash" id="p2Dollar">$100</em></div><div class="pip-row"><div class="round-pips" id="p2Pips"></div><span class="char-handle" id="p2Profile"></span></div></div></div>
@@ -318,7 +325,7 @@ const HS_STORE="ft_gains",SKILL_STORE="ft_skill",ARCADE_SKILL_STORE="ft_arcade_s
 const POSE_MS=420,HS_LIMIT=10,ANNOUNCE_MS=800,WIN_FLASH_MS=4200,ROUND_WIN_HOLD_MS=4000,FINAL_KO_HOLD_MS=4000,FREE_LOCK_FROM=4;
 const THROW_MS=640,POWER_MAX=100,POWER_PUNCH=22,POWER_KICK=28,COMBO_WINDOW=900,COMBO_BONUS=12,THROWS_PER_POWER=3;
 const ROUND_SECS=120,YOU_HOME=2,YOU_MIN=0,YOU_MAX=36,CPU_HOME=2,CPU_MIN=0,CPU_MAX=36,TILT_DEAD=7,TILT_SCALE=28,ARCADE_ROUNDS=2,CASH_W=29,CASH_H=26,TOSS_SIZE=55;
-const ROUND_CALLS=["3","2","1","READY","FIGHT!"],TITLE_MENUS={fighters:1,opponents:1,invite:1,scores:1,roster:1};
+const ROUND_CALLS=["3","2","1","READY","FIGHT!"],TITLE_MENUS={fighters:1,opponents:1,invite:1,scores:1,roster:1,crown:1,credits:1};
 const KEEP_ARENA_MUSIC={postfight:1,liquid:1,fight:1};
 const POSE_LABEL={punchL:"left punch",punchR:"right punch",kickL:"left kick",kickR:"right kick",throw:"throw",block:"block",victory:"victory",loser:"loser"};
 const THROW_OBJECTS=["phone.png","laptop.png","coffee.png","chart.png","newspaper.png","megaphone.png","bag.png","keyboard.png","coin.png","contract.png"];
@@ -490,7 +497,12 @@ function renderLiquidBoard(){
   if(FINAL_INDEX!==selectedFighter)box.appendChild(makeLiquidCell(FINAL_INDEX));
 }
 function showLiquidationBoard(beatenName){renderLiquidBoard();const next=(!arcadeKing&&arcadeIndex<arcadeQueue.length)?FIGHTERS[arcadeQueue[arcadeIndex]]:null;document.getElementById("liquidHint").textContent=arcadeKing?"ROSTER LIQUIDATED":((beatenName||"CHALLENGER")+" LIQUIDATED"+(next?"  •  NEXT "+next.name:""));document.getElementById("liquidNext").textContent=arcadeKing?"CLAIM THE CROWN":"NEXT CHALLENGER";show("liquid");}
-function afterLiquidation(){if(arcadeKing||arcadeIndex>=arcadeQueue.length){show("fight");showFinalStats(true,lastArcadeRecord||"ARCADE",true);return;}selectedOpponent=arcadeQueue[arcadeIndex];cpuFighter=selectedOpponent;selectedArena=arcadeArenaIndex();readyToFight=true;renderMatchup();show("matchup");}
+function afterLiquidation(){if(arcadeKing||arcadeIndex>=arcadeQueue.length){showCrownScene();return;}selectedOpponent=arcadeQueue[arcadeIndex];cpuFighter=selectedOpponent;selectedArena=arcadeArenaIndex();readyToFight=true;renderMatchup();show("matchup");}
+function showCrownScene(){const mine=FIGHTERS[selectedFighter];const img=document.getElementById("crownHero");if(img)bindSrcList(img,(mine.victory&&mine.victory.length)?mine.victory:mine.select);const sub=document.getElementById("crownSub");if(sub)sub.textContent="YOU ARE THE FUD KING  •  "+profileCrowns(activePlayer())+" CROWNS  •  "+(lastArcadeRecord||"");show("crown");}
+function afterCrown(){showCredits();}
+function creditLines(){const mine=FIGHTERS[selectedFighter],tag=activePlayer()?activePlayer().handle:"";return[["W.F.U.D. STUDIOS","PRESENTS"],["FINTWITS FUD KINGZ","PIT WIRED BY GROK"],["FUD KING",mine.name+(tag?"  "+tag:"")],["CROWNS",String(profileCrowns(activePlayer()))],["RECORD",lastArcadeRecord||""],["THE BOARD","WHITE CASSEL  •  LIL OJ  •  BIG DADDY TURK  •  WHOLLY MAC"],["MAIN 8","BIOWEAPON BULLDOG  •  VENTIFA  •  DAVINSTIGATOR  •  FUD DADDY 420"],["","FUZZLED RACCOON  •  CAPTN JACK HASHTAG  •  STONKS 6-7  •  KING TROLL"],["THANKS FOR PLAYING","INSERT TOKEN TO REIGN AGAIN"]];}
+function showCredits(){const box=document.getElementById("creditsRoll");if(box){box.style.animation="none";void box.offsetWidth;box.style.animation="";box.innerHTML=creditLines().map(function(p){return"<h3>"+p[0]+"</h3><p>"+p[1]+"</p>";}).join("");}show("credits");}
+function afterCredits(){arcadeKing=false;readyToFight=false;arcadeQueue=[];arcadeIndex=0;arcadeBeaten={};renderFighterCarousel();show("fighters");}
 function playFile(el){if(mutedFx||!el)return;try{el.currentTime=0;}catch(e){}el.play().catch(function(){});}
 function sfxPunch(){playFile(sfxPunchEl);}
 function sfxKick(){playFile(sfxKickEl);}
