@@ -329,7 +329,7 @@ function shadowboxUrls(name){const n=String(name||"").trim().toLowerCase(),dir=f
 function poseUrls(name,pose){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);let file="idle.gif";if(pose==="idle")file="idle.gif";else if(pose==="throw")file="throw.gif";else file=String(POSE_LABEL[pose]||"idle").toLowerCase()+".gif";return unique([dir+n+" "+file,dir+file,FIGHTER_DIR+n+" "+file].concat(selectUrls(name)));}
 function objectUrls(name){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);return unique([dir+n+" object.png",dir+"object.png",OBJECT_DIR+n+" object.png",FIGHTER_DIR+n+" object.png"].concat(THROW_OBJECTS.map(function(f){return OBJECT_DIR+String(f).toLowerCase();})));}
 function decorateFighter(f){f.select=selectUrls(f.name);f.idle=poseUrls(f.name,"idle");f.punchL=poseUrls(f.name,"punchL");f.punchR=poseUrls(f.name,"punchR");f.kickL=poseUrls(f.name,"kickL");f.kickR=poseUrls(f.name,"kickR");f.throw=poseUrls(f.name,"throw");f.block=poseUrls(f.name,"block");f.victory=poseUrls(f.name,"victory");f.loser=poseUrls(f.name,"loser");f.objects=objectUrls(f.name);return f;}
-const FIGHTERS=[{name:"Bioweapon Bulldog",handle:"@BioBulldog",tint:"#6a1b9a"},{name:"Ventifa",handle:"@Ventifa",tint:"#0d7377"},{name:"Dr Davinstigator",handle:"@DrDavinsky",tint:"#37474f"},{name:"Fud Daddy 420",handle:"@FudDaddy420",tint:"#2b6cb0"},{name:"Fuzzled Raccoon",handle:"@FuzzledRacc",tint:"#4e342e"},{name:"Captn Jack Hashtag",handle:"@CaptnJack",tint:"#e65100"},{name:"Stonks 6-7",handle:"@Stonks67",tint:"#1a2333"},{name:"KING TROLL",handle:"@KingTroll",tint:"#b71c1c"},{name:"WHITE CASSEL",handle:"@WhiteCassel",tint:"#90a4ae",hidden:true,unlockCrowns:1},{name:"LIL OJ",handle:"@LilOJ",tint:"#ef6c00",hidden:true,unlockCrowns:2},{name:"Ventifa",handle:"@Ventifa",tint:"#1b5e20",hidden:true,unlockCrowns:3},{name:"WHOLLY MAC",handle:"@WhollyMac",tint:"#6d4c41",hidden:true,unlockCrowns:4}].map(decorateFighter);
+const FIGHTERS=[{name:"Bioweapon Bulldog",handle:"@BioBulldog",tint:"#6a1b9a"},{name:"Ventifa",handle:"@Ventifa",tint:"#0d7377"},{name:"Dr Davinstigator",handle:"@DrDavinsky",tint:"#37474f"},{name:"Fud Daddy 420",handle:"@FudDaddy420",tint:"#2b6cb0"},{name:"Fuzzled Raccoon",handle:"@FuzzledRacc",tint:"#4e342e"},{name:"Captn Jack Hashtag",handle:"@CaptnJack",tint:"#e65100"},{name:"Stonks 6-7",handle:"@Stonks67",tint:"#1a2333"},{name:"KING TROLL",handle:"@KingTroll",tint:"#b71c1c"},{name:"WHITE CASSEL",handle:"@WhiteCassel",tint:"#90a4ae",hidden:true,unlockCrowns:1},{name:"LIL OJ",handle:"@LilOJ",tint:"#ef6c00",hidden:true,unlockCrowns:2},{name:"Big Daddy Turk",handle:"@BigDaddyTurk",tint:"#1b5e20",hidden:true,unlockCrowns:3},{name:"WHOLLY MAC",handle:"@WhollyMac",tint:"#6d4c41",hidden:true,unlockCrowns:4}].map(decorateFighter);
 const MAIN_COUNT=8,HIDDEN_INDEXES=[8,9,10,11],FINAL_INDEX=7;
 const MEMBERS=FIGHTERS.filter(function(f){return!f.hidden;}).map(function(f,i){return{handle:f.handle,name:f.name,fighter:i,color:f.tint};});
 const ARENAS=[
@@ -345,7 +345,8 @@ const ARENAS=[
   {name:"Crime Scene",file:ARENA_DIR+"Crime Scene.png",pos:"center",color:"#1a0a0a",music:AUDIO+"arena/savage-reality-alley.mp3"},
   {name:"Back Yard Party",file:ARENA_DIR+"Back Yard Party.png",pos:"center",color:"#1a2a10",music:AUDIO+"arena/trailer-park.mp3"},
   {name:"WFUD Parliament",file:ARENA_DIR+"WFUD Parlament.png",pos:"center",color:"#101820",music:AUDIO+"arena/wfud-studios-rooftop.mp3"},
-  {name:"WFUD Press Room",file:ARENA_DIR+"WFUD Press Room.png",pos:"center",color:"#121820",music:AUDIO+"arena/nasdaq-trading-floor.mp3"}
+  {name:"WFUD Press Room",file:ARENA_DIR+"WFUD Press Room.png",pos:"center",color:"#121820",music:AUDIO+"arena/nasdaq-trading-floor.mp3"},
+{name:"Hospital Fight",file:ARENA_DIR+"Hospital Fight.jpg",pos:"center",color:"#1a242c",music:AUDIO+"arena/savage-reality-alley.mp3"}
 ];
 let mode="pvc",hp={you:MAX,cpu:MAX},power={you:0,cpu:0},throwAmmo={you:0,cpu:0};
 let comboCount={you:0,cpu:0},comboAt={you:0,cpu:0},lastSide={you:"",cpu:""},lastKind={you:"",cpu:""};
@@ -377,7 +378,7 @@ function hiddenCost(i){return(FIGHTERS[i]&&FIGHTERS[i].unlockCrowns)||1;}
 function crownLabel(n){return n===1?"1 CROWN":(n+" CROWNS");}
 function currentCrowns(){return profileCrowns(activePlayer());}
 function xpLocked(i){return isHiddenFighter(i)&&currentCrowns()<hiddenCost(i);}
-function freeLocked(i){if(isHiddenFighter(i))return xpLocked(i);return skipPay&&i>=FREE_LOCK_FROM&&i<MAIN_COUNT;}
+function freeLocked(i){if(isHiddenFighter(i))return xpLocked(i);return false;}
 function fighterLocked(i){return freeLocked(i)||xpLocked(i);}
 function firstFree(){return 0;}
 function dollarsLeft(who){return Math.max(0,hp[who]||0);}
