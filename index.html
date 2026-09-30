@@ -351,7 +351,7 @@ const ARENAS=[
 let mode="pvc",hp={you:MAX,cpu:MAX},power={you:0,cpu:0},throwAmmo={you:0,cpu:0};
 let comboCount={you:0,cpu:0},comboAt={you:0,cpu:0},lastSide={you:"",cpu:""},lastKind={you:"",cpu:""};
 let paused=false,over=false,announcing=false,paid=false,skipPay=false,lastTap=0,aiTimer=null;
-let mutedMusic=false,mutedFx=false,selectedFighter=0,selectedOpponent=1,cpuFighter=1,selectedArena=0;
+let mutedMusic=false,mutedFx=false,musicStage=0,selectedFighter=0,selectedOpponent=1,cpuFighter=1,selectedArena=0;
 let arcadeQueue=[],arcadeIndex=0,arcadeKing=false,arcadeBeaten={},lastLiquidIdx=-1,lastArcadeRecord="",lastBeatenName="";
 let cpuSkill=Math.max(1,Math.min(10,parseInt(localStorage.getItem(SKILL_STORE)||"5",10)||5));
 let arcadeSkill=Math.max(7,Math.min(10,parseInt(localStorage.getItem(ARCADE_SKILL_STORE)||"7",10)||7));
@@ -502,7 +502,7 @@ function setIntroText(t){document.getElementById("introText").innerHTML=t+'<span
 function stopTitleSong(){bgm.pause();}
 function stopIntroBed(){introSfx.pause();try{introSfx.currentTime=0;}catch(e){}}
 function startIntroBed(){stopTitleSong();bgm.muted=true;bgm.volume=0;introSfx.loop=false;introSfx.muted=mutedFx;introSfx.volume=mutedFx?0:0.85;introSfx.src=INTRO_BED;try{introSfx.currentTime=0;}catch(e){}introSfx.play().catch(function(){});}
-function startTitleSong(){if(!introDone)return;stopIntroBed();const playing=/maintitle\.mp3/i.test(bgm.currentSrc||bgm.src||"")&&!bgm.paused;currentTrack=TITLE_TRACK;bgm.loop=true;if(!/maintitle\.mp3/i.test(bgm.currentSrc||bgm.src||""))bgm.src=TITLE_TRACK;bgm.muted=mutedMusic;bgm.volume=mutedMusic?0:0.55;if(playing)return;if(!mutedMusic)bgm.play().catch(function(){});}
+function startTitleSong(){if(!introDone)return;stopIntroBed();const playing=/maintitle\.mp3/i.test(bgm.currentSrc||bgm.src||"")&&!bgm.paused;currentTrack=TITLE_TRACK;bgm.loop=true;if(!/maintitle\.mp3/i.test(bgm.currentSrc||bgm.src||""))bgm.src=TITLE_TRACK;bgm.muted=mutedMusic;bgm.volume=mutedMusic?0:bgmVolume();if(playing)return;if(!mutedMusic)bgm.play().catch(function(){});}
 function finishIntro(){if(introDone)return;introDone=true;introWanted=false;if(introTimer){clearTimeout(introTimer);introTimer=null;}stopIntroBed();lastScreen="title";document.querySelectorAll(".screen").forEach(function(s){s.classList.remove("active");});document.getElementById("title").classList.add("active");startTitleSong();}
 function typeIntroLine(prefix,text,onChar,done){let i=0;function tick(){if(introDone)return;if(i>=text.length){if(done)done();return;}const ch=text.charAt(i);setIntroText(prefix+text.slice(0,i+1));if(onChar)onChar(ch);i+=1;introTimer=setTimeout(tick,ch===" "?90:70);}tick();}
 function startIntroPages(){introLocked="";setIntroText("");let page=0;function nextPage(){if(introDone)return;if(page>=INTRO_PAGES.length){setIntroText(introLocked);introTimer=setTimeout(finishIntro,1400);return;}const line=INTRO_PAGES[page],prefix=introLocked;typeIntroLine(prefix,line,null,function(){introLocked=prefix+line;page+=1;if(page<INTRO_PAGES.length)introLocked+="\n\n";introTimer=setTimeout(nextPage,420);});}nextPage();}
@@ -577,10 +577,11 @@ function bindSrcList(img,list){const urls=unique(list);let i=0;img.onerror=funct
 function playPose(who,pose){const fighter=FIGHTERS[who==="you"?selectedFighter:cpuFighter];const img=document.getElementById(who==="you"?"youFile":"cpuFile");const list=(fighter[pose]&&fighter[pose].length)?fighter[pose]:fighter.select;const hold=pose==="idle"||pose==="block"||pose==="victory"||pose==="loser";clearTimeout(poseTimer[who]);if(img.dataset.pose===pose&&img.src){if(!hold)poseTimer[who]=setTimeout(function(){playPose(who,"idle");},POSE_MS);return;}img.dataset.pose=pose;bindSrcList(img,hold?list:list.concat(fighter.idle||[]));img.style.display="block";if(!hold)poseTimer[who]=setTimeout(function(){playPose(who,"idle");},POSE_MS);}
 function stopTitleMusic(){currentTrack="";bgm.pause();try{bgm.currentTime=0;}catch(e){}}
 function setTrack(src,playNow,restart){if(!src){stopTitleMusic();return;}const same=currentTrack===src;if(!restart&&same&&!bgm.paused){if(playNow)playBgm();return;}currentTrack=src;if(!same)bgm.src=src;else if(restart){try{bgm.currentTime=0;}catch(e){}}if(playNow)playBgm();}
-function playBgm(){if(mutedMusic||paused||lastScreen==="intro")return;stopIntroBed();bgm.muted=false;bgm.volume=0.55;bgm.play().catch(function(){});}
+function bgmVolume(){return musicStage===1?0.14:0.55;}
+function playBgm(){if(mutedMusic||paused||lastScreen==="intro")return;stopIntroBed();bgm.muted=false;bgm.volume=bgmVolume();bgm.play().catch(function(){});}
 function pauseBgm(){bgm.pause();}
-function refreshMuteButtons(){document.getElementById("muteMusic").classList.toggle("off",mutedMusic);document.getElementById("muteFx").classList.toggle("off",mutedFx);}
-function toggleMuteMusic(){mutedMusic=!mutedMusic;bgm.muted=mutedMusic;bgm.volume=mutedMusic?0:0.55;if(mutedMusic)bgm.pause();else if(lastScreen!=="intro")playBgm();refreshMuteButtons();}
+function refreshMuteButtons(){const m=document.getElementById("muteMusic");m.classList.toggle("off",mutedMusic||musicStage===1);m.textContent=musicStage===0?"MUSIC":(musicStage===1?"MUSIC 25%":"MUSIC OFF");document.getElementById("muteFx").classList.toggle("off",mutedFx);}
+function toggleMuteMusic(){musicStage=(musicStage+1)%3;mutedMusic=musicStage===2;bgm.muted=mutedMusic;bgm.volume=mutedMusic?0:bgmVolume();if(mutedMusic)bgm.pause();else if(lastScreen!=="intro")playBgm();refreshMuteButtons();}
 function toggleMuteFx(){mutedFx=!mutedFx;introSfx.muted=mutedFx;if(mutedFx)stopIntroBed();else if(!introDone)startIntroBed();refreshMuteButtons();}
 function show(id){document.querySelectorAll(".screen").forEach(function(s){s.classList.remove("active");});document.getElementById(id).classList.add("active");lastScreen=id;if(id==="intro"){startIntroBed();return;}if(id==="title"){startTitleSong();return;}if(id==="matchup"){renderMatchup();startTitleSong();return;}if(KEEP_ARENA_MUSIC[id]){playBgm();return;}if(TITLE_MENUS[id])startTitleSong();if(id==="arenas"){document.getElementById("arenaNext").textContent="NEXT: ENTER ARENA";startTitleSong();}if(id==="fighters"){document.getElementById("fighterHint").textContent=mode==="arcade"?"CHOOSE YOUR FIGHTER":(skipPay?"CHOOSE FIGHTER  •  LAST 4 LOCKED":"CHOOSE FIGHTER");renderSkillRow();renderFighterCarousel();}if(id==="opponents")renderOpponentScreen();}
 function makeCode(){const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let s="";for(let i=0;i<6;i++)s+=chars[Math.floor(Math.random()*chars.length)];return s;}
