@@ -77,7 +77,7 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .slot-wrap.center{width:46%;height:96%;left:50%;z-index:3}
 .slot-name{width:100%;font-size:10px;color:#ffe082;font-weight:900;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
 .slot-wrap.center .slot-name{font-size:12px;color:#ffd54f}
-.slot{width:100%;flex:1;min-height:0;border:2px solid #2a3344;border-radius:14px;background:#121826;overflow:hidden;display:flex;flex-direction:column}
+.slot{position:relative;width:100%;flex:1;min-height:0;border:2px solid #2a3344;border-radius:14px;background:#121826;overflow:hidden;display:flex;flex-direction:column}
 .slot-wrap.side .slot{opacity:.28;filter:grayscale(.8) brightness(.55)}
 .slot-wrap.center .slot{border-color:#ffd54f;box-shadow:0 0 22px rgba(255,213,79,.45)}
 .slot img,.slot .arena-art{width:100%;flex:1;min-height:0;object-fit:contain;object-position:center bottom;display:block;background:transparent}
@@ -98,11 +98,11 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .opp-cell .panel{flex:1;min-height:0}
 .liquid-cell .panel{flex:1;min-height:0;height:100%}
 .hidden-cell img,.opp-cell img,.liquid-cell img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;background:transparent}
-.liquid-cell.dead img{opacity:.55}
+.liquid-cell.dead img{opacity:1}
 .hidden-cell b,.opp-cell b,.liquid-cell b{width:100%;min-height:12px;font-size:9px;color:#ffe082;font-weight:900;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;flex:none;order:-1;padding:0 2px;letter-spacing:.4px}
 .liquid-cell.next b,.liquid-cell.boss b{color:#ffd54f}
 .opp-cell.locked img,.hidden-cell.locked .panel img,.liquid-cell.locked img{filter:none}
-.liquid-cell.dead img{filter:grayscale(1) brightness(.38);opacity:.55}
+.liquid-cell.dead img{filter:none;opacity:1}
 .hidden-cell.picked .panel,.opp-cell.picked .panel{border-color:#ffd54f}
 .hidden-cell .need,.opp-cell .need{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.8);color:#ffd54f;border:1px solid #886;font-size:8px;font-weight:900;padding:4px 5px;border-radius:6px;white-space:nowrap}
 .liquid-cell .need{position:absolute;left:0;right:0;top:auto;bottom:0;transform:none;background:rgba(0,0,0,.82);color:#ffd54f;border:0;border-top:1px solid #886;font-size:7px;font-weight:900;padding:4px 2px;width:100%;text-align:center;border-radius:0;white-space:nowrap;z-index:3;pointer-events:none}
@@ -397,7 +397,7 @@ function xpLocked(i){return isHiddenFighter(i)&&currentCrowns()<hiddenCost(i);}
 function freeLocked(i){if(isHiddenFighter(i))return xpLocked(i);return false;}
 function fighterLocked(i){return freeLocked(i)||xpLocked(i);}
 const ARCADE_ORDER=[6,2,1,10,11,5,0,9,4,3,8];
-function playableIndexes(){const list=[];for(let i=0;i<MAIN_COUNT;i++)list.push(i);HIDDEN_INDEXES.forEach(function(i){if(!xpLocked(i))list.push(i);});return list;}
+function playableIndexes(){const list=[];for(let i=0;i<FIGHTERS.length;i++)list.push(i);return list;}
 function firstFree(){return 0;}
 function dollarsLeft(who){return Math.max(0,hp[who]||0);}
 function matchOver(){return roundWins.you>=winsNeeded()||roundWins.cpu>=winsNeeded()||currentRound>=maxRounds();}
@@ -495,18 +495,13 @@ function makeLiquidCell(i,opts){
   const isMirror=!!opts.mirror,isBoss=i===FINAL_INDEX&&!isMirror;
   const isNext=isMirror?(nextIdx===selectedFighter):(i===nextIdx);
   const cell=document.createElement("div");
-  cell.className="liquid-cell"+(dead&&!isMirror?" dead":"")+(isNext?" next":"")+(fighterLocked(i)&&!isMirror?" locked":"")+(isMirror?" mirror":"")+(isBoss?" boss":"");
+ cell.className="liquid-cell"+(dead&&!isMirror?" dead":"")+(isNext?" next":"")+(isMirror?" mirror":"")+(isBoss?" boss":"");
   const panel=document.createElement("div");panel.className="panel";
-  const img=document.createElement("img");img.alt=isMirror?"Mirror Match":f.name;
-  bindSrcList(img,isMirror?titlecardUrls(FIGHTERS[selectedFighter].name):titlecardUrls(f.name));
+    const img=document.createElement("img");img.alt=isMirror?"Mirror Match":f.name;
+  const artName=isMirror?FIGHTERS[selectedFighter].name:f.name;
+  bindSrcList(img,dead?liquidatedUrls(artName):titlecardUrls(artName));
   panel.appendChild(img);
-  if(dead&&!isMirror){
-    const stamp=document.createElement("div");stamp.className="liquid-stamp";stamp.textContent="LIQUIDATED";panel.appendChild(stamp);
-  }else if(fighterLocked(i)&&!isMirror){
-    const need=document.createElement("div");need.className="need";
-    need.textContent=isHiddenFighter(i)?("LOCKED  "+crownLabel(hiddenCost(i))):"LOCKED";
-    panel.appendChild(need);
-  }
+
   cell.appendChild(panel);return cell;
 }
 function renderLiquidBoard(){
@@ -639,7 +634,7 @@ function shareInvite(){if(navigator.share)navigator.share({title:"FINTWITS FUD K
 function joinRoom(){const code=(document.getElementById("joinCode").value||"").trim().toUpperCase();if(code.length<4){setInviteNote("Enter a valid code.");return;}roomCode=code;document.getElementById("roomCode").textContent=roomCode;if(!invitedMember)invitedMember={handle:"@Challenger",name:"Challenger",fighter:wrap(selectedFighter+1,MAIN_COUNT),color:"#80d8ff"};setInviteNote("Joined "+roomCode);afterInvite();}
 function afterInvite(){if(!invitedMember&&mode==="one"){setInviteNote("Invite someone first.");return;}renderFighterCarousel();show("fighters");}
 function decorateSlot(el,locked,label){if(!locked)return el;el.classList.add("locked");const tag=document.createElement("div");tag.className="lock-tag";tag.textContent=label||"LOCKED";el.appendChild(tag);return el;}
-function makeFighterSlot(f,cls,idx,onClick){const wrapEl=document.createElement("div");wrapEl.className="slot-wrap "+cls;const name=document.createElement("b");name.className="slot-name";name.textContent=f.name;wrapEl.appendChild(name);const el=document.createElement("div");el.className="slot "+cls;const img=document.createElement("img");img.alt=f.name;bindSrcList(img,f.select);el.appendChild(img);decorateSlot(el,fighterLocked(idx),"LOCKED");wrapEl.appendChild(el);if(onClick)wrapEl.onclick=onClick;return wrapEl;}
+function makeFighterSlot(f,cls,idx,onClick){const wrapEl=document.createElement("div");wrapEl.className="slot-wrap "+cls;const locked=fighterLocked(idx);const name=document.createElement("b");name.className="slot-name";name.textContent=locked?(hiddenCost(idx)+" CROWNS TO UNLOCK"):f.name;wrapEl.appendChild(name);const el=document.createElement("div");el.className="slot "+cls;const img=document.createElement("img");img.alt=f.name;bindSrcList(img,f.select);el.appendChild(img);decorateSlot(el,locked,hiddenCost(idx)+" CROWNS TO UNLOCK");wrapEl.appendChild(el);if(onClick)wrapEl.onclick=onClick;return wrapEl;}
 function makeArenaSlot(a,cls,idx,onClick){const wrapEl=document.createElement("div");wrapEl.className="slot-wrap "+cls;const name=document.createElement("b");name.className="slot-name";name.textContent=a.name;wrapEl.appendChild(name);const el=document.createElement("div");el.className="slot "+cls;const art=document.createElement("div");art.className="arena-art";art.style.background=a.color;art.style.backgroundImage="url('"+a.file+"')";art.style.backgroundSize="cover";art.style.backgroundPosition=a.pos;el.appendChild(art);decorateSlot(el,freeLocked(idx));wrapEl.appendChild(el);if(onClick)wrapEl.onclick=onClick;return wrapEl;}
 function renderFighterCarousel(){const box=document.getElementById("fighterCarousel"),dots=document.getElementById("fighterDots");box.innerHTML="";dots.innerHTML="";const list=playableIndexes();if(list.indexOf(selectedFighter)<0)selectedFighter=list[0]||0;const n=list.length,at=Math.max(0,list.indexOf(selectedFighter)),L=list[wrap(at-1,n)],R=list[wrap(at+1,n)];box.appendChild(makeFighterSlot(FIGHTERS[L],"side left",L,function(){shiftFighter(-1);}));box.appendChild(makeFighterSlot(FIGHTERS[selectedFighter],"center",selectedFighter));box.appendChild(makeFighterSlot(FIGHTERS[R],"side right",R,function(){shiftFighter(1);}));list.forEach(function(i){const d=document.createElement("i");if(i===selectedFighter)d.className="on";dots.appendChild(d);});}
 function pickOpponent(idx){if(fighterLocked(idx))return;selectedOpponent=idx;renderOpponentScreen();}
