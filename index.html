@@ -146,7 +146,8 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .meter.p1 label .char-name{text-align:left}
 .meter.p2 label .char-name{text-align:right}.pip-row{display:flex;align-items:center;gap:6px;margin-top:4px;min-height:12px}
 .meter.p1 .pip-row{justify-content:flex-start}
-.meter.p2 .pip-row{justify-content:flex-end;flex-direction:row-reverse}
+.meter.p2 .pip-row{width:100%;display:flex;justify-content:flex-end;align-items:center;flex-direction:row;gap:6px}
+.meter.p2 .pip-row .char-handle,.meter.p2 .pip-row .round-pips{flex:none}
 .char-handle{color:#9ad7b2;font-size:9px;font-weight:700;white-space:nowrap;flex:none}
 .bar{position:relative;height:14px;background:#1a2233;border-radius:3px;overflow:hidden;border:1px solid #2c3a55;margin-top:3px}
 .bar>span{display:block;height:100%;width:100%}
@@ -291,7 +292,7 @@ input[type=file].hidden-file{display:none}
 <section id="credits" class="screen menu"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"></div><div class="credits-mask"><div class="credits-roll" id="creditsRoll"></div></div><div class="menu-btns"><button class="btn btn-gold" onclick="afterCredits()">CONTINUE</button></div></section>
 <section id="fight" class="screen">
   <div id="titlebar"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"></div>
-  <div class="hud"><div class="meter p1"><label><span class="char-name" id="p1Name">YOU</span></label><div class="bar"><span id="p1Bar"></span><em class="bar-cash" id="p1Dollar">$100</em></div><div class="pip-row"><div class="round-pips" id="p1Pips"></div><span class="char-handle" id="p1Profile"></span></div></div><div class="clock-wrap"><span id="roundClock">2:00</span></div><div class="meter p2"><label><span class="char-name" id="p2Name">CPU</span></label><div class="bar"><span id="p2Bar"></span><em class="bar-cash" id="p2Dollar">$100</em></div><div class="pip-row"><div class="round-pips" id="p2Pips"></div><span class="char-handle" id="p2Profile"></span></div></div></div>
+  <div class="hud"><div class="meter p1"><label><span class="char-name" id="p1Name">YOU</span></label><div class="bar"><span id="p1Bar"></span><em class="bar-cash" id="p1Dollar">$100</em></div><div class="pip-row"><div class="round-pips" id="p1Pips"></div><span class="char-handle" id="p1Profile"></span></div></div><div class="clock-wrap"><span id="roundClock">2:00</span></div><div class="meter p2"><label><span class="char-name" id="p2Name">CPU</span></label><div class="bar"><span id="p2Bar"></span><em class="bar-cash" id="p2Dollar">$100</em></div><div class="pip-row"><span class="char-handle" id="p2Profile"></span><div class="round-pips" id="p2Pips"></div></div></div></div>
   <div id="stage">
     <div class="fighter" id="you"><img class="fighter-img" id="youFile" alt=""></div>
     <div class="fighter" id="cpu"><img class="fighter-img" id="cpuFile" alt=""></div>
@@ -357,7 +358,8 @@ const ARENAS=[
   {name:"Back Yard Party",file:ARENA_DIR+"Back Yard Party.png",pos:"center",color:"#1a2a10",music:AUDIO+"arena/trailer-park.mp3"},
   {name:"WFUD Parliament",file:ARENA_DIR+"WFUD Parlament.png",pos:"center",color:"#101820",music:AUDIO+"arena/wfud-studios-rooftop.mp3"},
   {name:"WFUD Press Room",file:ARENA_DIR+"WFUD Press Room.png",pos:"center",color:"#121820",music:AUDIO+"arena/nasdaq-trading-floor.mp3"},
-{name:"Hospital Fight",file:ARENA_DIR+"Hospital Fight.jpg",pos:"center",color:"#1a242c",music:AUDIO+"arena/savage-reality-alley.mp3"}
+{name:"Hospital Fight",file:ARENA_DIR+"Hospital Fight.jpg",pos:"center",color:"#1a242c",music:AUDIO+"arena/savage-reality-alley.mp3"},
+{name:"Hormuz Strait",file:ARENA_DIR+"Hormuz Strait.jpg",pos:"center",color:"#0a1a22",music:AUDIO+"arena/private-beach-party.mp3"}
 ];
 let mode="pvc",hp={you:MAX,cpu:MAX},power={you:0,cpu:0},throwAmmo={you:0,cpu:0};
 let comboCount={you:0,cpu:0},comboAt={you:0,cpu:0},lastSide={you:"",cpu:""},lastKind={you:"",cpu:""};
