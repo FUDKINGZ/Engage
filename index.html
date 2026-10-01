@@ -143,9 +143,10 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .meter{min-width:0}
 .meter label{font-size:11px;display:block;font-weight:700;min-width:0;height:14px}
 .meter label .char-name{display:block;color:#e8f0ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pip-row{display:flex;align-items:center;gap:6px;margin-top:4px;min-height:12px}
+.meter.p1 label .char-name{text-align:left}
+.meter.p2 label .char-name{text-align:right}.pip-row{display:flex;align-items:center;gap:6px;margin-top:4px;min-height:12px}
 .meter.p1 .pip-row{justify-content:flex-start}
-.meter.p2 .pip-row{justify-content:flex-end}
+.meter.p2 .pip-row{justify-content:flex-end;flex-direction:row-reverse}
 .char-handle{color:#9ad7b2;font-size:9px;font-weight:700;white-space:nowrap;flex:none}
 .bar{position:relative;height:14px;background:#1a2233;border-radius:3px;overflow:hidden;border:1px solid #2c3a55;margin-top:3px}
 .bar>span{display:block;height:100%;width:100%}
@@ -432,9 +433,30 @@ function paintSkillRow(rowId){const row=document.getElementById(rowId);if(!row)r
 function renderRoundPick(){const row=document.getElementById("roundPick");if(!row)return;row.innerHTML="";[3,4].forEach(function(n){const b=document.createElement("button");b.type="button";b.textContent=String(n);if(matchRounds===n)b.className="on";b.onclick=function(){setRounds(n);};row.appendChild(b);});}
 function renderSkillRow(){paintSkillRow("skillRow");renderRoundPick();}
 function arcadeArenaIndex(){
-  const home=[0,13,2,4,6,8,7,5,10,12,11,9];
-  const who=(mode==="arcade")?selectedOpponent:selectedArena;
-  return home[who]!=null?home[who]:0;
+  const homes={
+    "Ventifa":"Hospital Fight",
+    "Davinstigator":"Airport Terminal",
+    "Dr Davinstigator":"Airport Terminal",
+    "Wholly Mac":"Crime Scene",
+    "WHOLLY MAC":"Crime Scene",
+    "WHITE CASSEL":"Back Yard Party",
+    "White Cassel":"Back Yard Party",
+    "Captn Jack Hashtag":"Deck Of Ship",
+    "Capt Jack Hashtag":"Deck Of Ship",
+    "Stonks 6-7":"Street Fight",
+    "Lil OJ":"WFUD Press Room",
+    "LIL OJ":"WFUD Press Room",
+    "Bioweapon Bulldog":"Trailer Park",
+    "Fuzzled Raccoon":"Savage Reality Alley",
+    "KING TROLL":"Dumpster Fire",
+    "King Troll":"Dumpster Fire",
+    "Fud Daddy 420":"WFUD Studios Rooftop",
+    "Big Daddy Turk":"Hormuz Strait"
+  };
+  const who=FIGHTERS[(mode==="arcade")?selectedOpponent:selectedFighter];
+  const want=who&&homes[who.name];
+  const i=want?ARENAS.findIndex(function(a){return a.name===want;}):-1;
+  return i>=0?i:0;
 }
 function playArenaMusic(forceNew){const a=ARENAS[selectedArena];if(!a||!a.music)return;stopIntroBed();setTrack(a.music,true,!!forceNew||currentTrack!==a.music);}
 function paintMatchupBg(arena){const el=document.getElementById("matchup");if(!arena){el.style.backgroundImage="";return;}el.style.backgroundColor=arena.color;el.style.backgroundImage="url('"+arena.file+"')";el.style.backgroundPosition=arena.pos||"center";}
