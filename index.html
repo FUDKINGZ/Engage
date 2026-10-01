@@ -41,7 +41,7 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .btn:hover,.nav-row button:hover,.invite-row button:hover,.join-card button:hover,.form-card button:hover,.member button:hover{filter:brightness(1.12);transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,.45)}
 .btn-gold:hover{box-shadow:0 0 16px rgba(255,213,79,.45),0 6px 16px rgba(0,0,0,.45)}
 .btn-green:hover{box-shadow:0 0 16px rgba(0,230,118,.35),0 6px 16px rgba(0,0,0,.45)}
-.btn:active,.nav-row button:active,.atk:active{transform:translateY(1px) scale(.98);filter:brightness(.92)}
+.btn:active,.nav-row button:active{transform:translateY(1px) scale(.98);filter:brightness(.92)}
 .atk:hover{filter:brightness(1.15)}
 #th.armed:hover{box-shadow:0 0 14px rgba(156,39,176,.55)}
 .skill-row button:hover,.round-pick button:hover{border-color:#ffd54f;color:#ffd54f}
@@ -190,8 +190,8 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 #controls{-ms-touch-action:none;overscroll-behavior:none}
 #controls .util-row,#controls .util-row *{touch-action:manipulation;pointer-events:auto}
 .atk{position:absolute;width:52px;height:52px;border:0;border-radius:50%;padding:0;background:transparent;background-size:contain;background-repeat:no-repeat;background-position:center;cursor:pointer;transition:transform .1s ease,filter .1s ease}
-.atk,.move-btn{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-moz-user-select:none}
-.atk:active{transform:scale(.92);filter:brightness(.85)}
+.atk,.move-btn{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-moz-user-select:none;-webkit-user-drag:none;user-drag:none;-webkit-tap-highlight-color:transparent}
+.atk:active,.move-btn:active{transform:scale(.92);filter:brightness(.85)}
 #lp{background-image:url(./buttons/lp.gif);left:20%;top:2%}
 #rp{background-image:url(./buttons/rp.gif);right:20%;top:2%}
 #bk{background-image:url(./buttons/bk.gif);left:34%;top:32%;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none}
@@ -710,7 +710,7 @@ bindAtk("lk","kickL");
 bindAtk("rk","kickR");
 bindAtk("th","throw");
 const bk=document.getElementById("bk");
-function lockControl(el){if(!el)return;el.setAttribute("unselectable","on");el.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});["selectstart","dragstart","contextmenu","gesturestart"].forEach(function(ev){el.addEventListener(ev,function(e){e.preventDefault();});});}
+function lockControl(el){if(!el)return;el.setAttribute("unselectable","on");el.style.webkitUserSelect="none";el.style.userSelect="none";el.style.webkitTouchCallout="none";el.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});["selectstart","dragstart","contextmenu","gesturestart"].forEach(function(ev){el.addEventListener(ev,function(e){e.preventDefault();});});}
 bk.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});
 bk.addEventListener("pointerdown",function(e){e.preventDefault();if(!paused&&!over&&!announcing)setBlock("you",true);});
 bk.addEventListener("pointerup",function(){setBlock("you",false);});
