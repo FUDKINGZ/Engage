@@ -75,7 +75,7 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .slot-wrap{position:absolute;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
 .slot-wrap.side{width:28%;height:68%;pointer-events:auto}.slot-wrap.left{left:18%}.slot-wrap.right{left:82%}
 .slot-wrap.center{width:46%;height:96%;left:50%;z-index:3}
-.slot-name{width:100%;font-size:10px;color:#ffe082;font-weight:900;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
+.slot-name{width:100%;font-size:10px;color:#ffe082;font-weight:900;text-transform:uppercase;white-space:normal;overflow:hidden;text-align:center;line-height:1.15}
 .slot-wrap.center .slot-name{font-size:12px;color:#ffd54f}
 .slot{position:relative;width:100%;flex:1;min-height:0;border:2px solid #2a3344;border-radius:14px;background:#121826;overflow:hidden;display:flex;flex-direction:column}
 .slot-wrap.side .slot{opacity:.28;filter:grayscale(.8) brightness(.55)}
@@ -486,7 +486,7 @@ function preloadLiquidation(){
   function addList(list){(list||[]).forEach(function(u){if(!u||seen[u])return;seen[u]=true;preloadUrl(u);});}
   const mine=FIGHTERS[selectedFighter];
   if(mine)addList(shadowboxUrls(mine.name));
-  FIGHTERS.forEach(function(f){addList(titlecardUrls(f.name));});
+  FIGHTERS.forEach(function(f){addList(titlecardUrls(f.name));addList(liquidatedUrls(f.name));});
 }
 function afterPostFight(){showLiquidationBoard(lastBeatenName||"CHALLENGER");}
 function makeLiquidCell(i,opts){
@@ -653,7 +653,7 @@ function applyArena(){const a=ARENAS[selectedArena],stage=document.getElementByI
 function pickRandomCpu(){const pool=[];for(let i=0;i<MAIN_COUNT;i++)if(i!==selectedFighter&&!fighterLocked(i))pool.push(i);if(!pool.length)return wrap(Math.min(selectedFighter,MAIN_COUNT-1)+1,MAIN_COUNT);return pool[Math.floor(Math.random()*pool.length)];}
 function buildArcadeQueue(){
   arcadeQueue=[];arcadeBeaten={};lastLiquidIdx=-1;lastBeatenName="";
-  ARCADE_ORDER.forEach(function(i){if(i!==selectedFighter&&i!==FINAL_INDEX)arcadeQueue.push(i);});
+ARCADE_ORDER.forEach(function(i){if(i!==selectedFighter&&i!==FINAL_INDEX&&!fighterLocked(i))arcadeQueue.push(i);});
   arcadeQueue.push(selectedFighter);
   if(FINAL_INDEX!==selectedFighter)arcadeQueue.push(FINAL_INDEX);
   arcadeIndex=0;arcadeKing=false;
