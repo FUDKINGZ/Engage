@@ -602,7 +602,7 @@ function paintPips(id,wins){const box=document.getElementById(id);if(!box)return
 function updateRoundHud(){paintPips("p1Pips",roundWins.you);paintPips("p2Pips",roundWins.cpu);updateTimerHud();}
 function canThrow(who){return(throwAmmo[who]||0)>0;}
 function powerDisplay(who){if(throwAmmo[who]>0)return Math.round((throwAmmo[who]/THROWS_PER_POWER)*100);return Math.max(0,Math.min(100,(power[who]/POWER_MAX)*100));}
-function refreshThrowButton(){const th=document.getElementById("th"),ammo=throwAmmo.you||0;th.classList.toggle("armed",ammo>0);th.textContent=ammo>0?"throw x"+ammo:"throw";}
+function refreshThrowButton(){const th=document.getElementById("th"),ammo=throwAmmo.you||0;th.classList.toggle("armed",ammo>0);th.textContent="";th.setAttribute("aria-label",ammo>0?"throw x"+ammo:"throw");}
 function updatePowerMeters(){const p1=powerDisplay("you"),p2=powerDisplay("cpu");document.getElementById("p1Power").style.width=p1+"%";document.getElementById("p2Power").style.width=p2+"%";document.getElementById("p1PowerTxt").textContent=throwAmmo.you>0?throwAmmo.you+"x":Math.round(p1)+"%";document.getElementById("p2PowerTxt").textContent=throwAmmo.cpu>0?throwAmmo.cpu+"x":Math.round(p2)+"%";document.getElementById("p1PowerWrap").classList.toggle("ready",canThrow("you"));document.getElementById("p2PowerWrap").classList.toggle("ready",canThrow("cpu"));refreshThrowButton();}
 function resetPower(){power.you=power.cpu=0;throwAmmo.you=throwAmmo.cpu=0;comboCount.you=comboCount.cpu=0;comboAt.you=comboAt.cpu=0;lastSide.you=lastSide.cpu="";lastKind.you=lastKind.cpu="";updatePowerMeters();}
 function attackSide(type){if(type==="punchL"||type==="kickL")return"L";if(type==="punchR"||type==="kickR")return"R";return"";}
