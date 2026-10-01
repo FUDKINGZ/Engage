@@ -147,7 +147,7 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .meter.p2 label .char-name{text-align:right}.pip-row{display:flex;align-items:center;gap:6px;margin-top:4px;min-height:12px}
 .meter.p1 .pip-row{justify-content:flex-start}
 .meter.p2 .pip-row{width:100%;display:flex;justify-content:flex-end;align-items:center;flex-direction:row;gap:6px}
-.meter.p2 .pip-row .char-handle,.meter.p2 .pip-row .round-pips{flex:none}
+.meter.p2 .pip-row .meter.p2 .round-pips,#p2Pips{direction:ltr;flex-direction:row;justify-content:flex-start}.char-handle,.meter.p2 .pip-row .round-pips{flex:none}
 .meter.p2 .round-pips{direction:ltr;flex-direction:row;justify-content:flex-start}
 .char-handle{color:#9ad7b2;font-size:9px;font-weight:700;white-space:nowrap;flex:none}
 .bar{position:relative;height:14px;background:#1a2233;border-radius:3px;overflow:hidden;border:1px solid #2c3a55;margin-top:3px}
@@ -600,7 +600,7 @@ function clearRoundTimer(){if(roundTimer){clearInterval(roundTimer);roundTimer=n
 function startRoundTimer(){clearRoundTimer();if(suddenDeath){updateTimerHud();return;}roundTimeLeft=ROUND_SECS;updateTimerHud();roundTimer=setInterval(function(){if(paused||over||announcing)return;roundTimeLeft-=1;updateTimerHud();if(roundTimeLeft<=0)onTimeExpired();},1000);}
 function onTimeExpired(){clearRoundTimer();if(over)return;if(hp.you===hp.cpu){enterSuddenDeath();return;}finish(hp.you>hp.cpu?"you":"cpu");}
 function enterSuddenDeath(){suddenDeath=true;updateTimerHud();document.getElementById("winFlashKo").textContent="TIME UP";document.getElementById("winFlashName").textContent="SUDDEN DEATH";document.getElementById("winFlashSub").textContent="";document.getElementById("winFlash").classList.add("show");announcing=true;if(winFlashTimer)clearTimeout(winFlashTimer);winFlashTimer=setTimeout(function(){winFlashTimer=null;document.getElementById("winFlash").classList.remove("show");announcing=false;},1600);}
-function paintPips(id,wins){const box=document.getElementById(id);if(!box)return;box.innerHTML="";for(let i=0;i<winsNeeded();i++){const d=document.createElement("i");if(i<wins)d.className="won";box.appendChild(d);}}
+function paintPips(id,wins){const box=document.getElementById(id);if(!box)return;box.innerHTML="";box.style.direction="ltr";box.style.flexDirection="row";box.style.justifyContent="flex-start";for(let i=0;i<winsNeeded();i++){const d=document.createElement("i");if(i<wins)d.className="won";box.appendChild(d);}}
 function updateRoundHud(){paintPips("p1Pips",roundWins.you);paintPips("p2Pips",roundWins.cpu);updateTimerHud();}
 function canThrow(who){return(throwAmmo[who]||0)>0;}
 function powerDisplay(who){if(throwAmmo[who]>0)return Math.round((throwAmmo[who]/THROWS_PER_POWER)*100);return Math.max(0,Math.min(100,(power[who]/POWER_MAX)*100));}
