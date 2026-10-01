@@ -188,6 +188,7 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .pad-wrap{position:relative;width:100%;flex:1;min-height:0}
 #controls,#controls *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-moz-user-select:none;-webkit-user-drag:none;user-drag:none;-webkit-tap-highlight-color:transparent;touch-action:none}
 #controls{-ms-touch-action:none;overscroll-behavior:none}
+.util-row,.util-row *{touch-action:manipulation;pointer-events:auto}
 .atk{position:absolute;width:64px;height:64px;border:0;border-radius:50%;padding:0;background:transparent;background-size:contain;background-repeat:no-repeat;background-position:center;cursor:pointer;transition:transform .1s ease,filter .1s ease}
 .atk,.move-btn{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-moz-user-select:none}
 .atk:active{transform:scale(.92);filter:brightness(.85)}
@@ -619,7 +620,7 @@ function stopTitleMusic(){currentTrack="";bgm.pause();try{bgm.currentTime=0;}cat
 function setTrack(src,playNow,restart){if(!src){stopTitleMusic();return;}const same=currentTrack===src;if(!restart&&same&&!bgm.paused){if(playNow)playBgm();return;}currentTrack=src;if(!same)bgm.src=src;else if(restart){try{bgm.currentTime=0;}catch(e){}}if(playNow)playBgm();}
 let musicGain=null;
 function bgmVolume(){return musicStage===1?0.25:1;}
-function musicBus(){const ctx=ensureAudio();if(!ctx)return null;if(!musicGain){musicGain=ctx.createGain();ctx.createMediaElementSource(bgm).connect(musicGain);musicGain.connect(ctx.destination);}return musicGain;}
+function musicBus(){const ctx=ensureAudio();if(!ctx)return null;if(!musicGain){try{musicGain=ctx.createGain();ctx.createMediaElementSource(bgm).connect(musicGain);musicGain.connect(ctx.destination);}catch(e){musicGain=null;return null;}}return musicGain;}
 function applyMusicLevel(){const level=mutedMusic?0:bgmVolume();const g=musicBus();if(g)g.gain.setValueAtTime(level,g.context.currentTime);bgm.muted=false;bgm.volume=1;}
 function playBgm(){if(mutedMusic||paused||lastScreen==="intro")return;stopIntroBed();applyMusicLevel();bgm.play().catch(function(){});}
 function pauseBgm(){bgm.pause();}
@@ -716,7 +717,6 @@ bk.addEventListener("pointerup",function(){setBlock("you",false);});
 bk.addEventListener("pointerleave",function(){setBlock("you",false);});
 bk.addEventListener("pointercancel",function(){setBlock("you",false);});
 lockControl(bk);
-lockControl(document.getElementById("controls"));
 ["lp","rp","lk","rk","th","moveL","moveR"].forEach(function(id){lockControl(document.getElementById(id));});
 function bindMoveBtn(id,side){const el=document.getElementById(id);if(!el)return;function down(e){e.preventDefault();moveHold[side]=true;el.classList.add("held");}function up(){moveHold[side]=false;el.classList.remove("held");}el.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});el.addEventListener("pointerdown",down);el.addEventListener("pointerup",up);el.addEventListener("pointerleave",up);el.addEventListener("pointercancel",up);}
 bindMoveBtn("moveL","left");
