@@ -188,7 +188,7 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .pad-wrap{position:relative;width:100%;flex:1;min-height:0}
 #controls,#controls *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-moz-user-select:none;-webkit-user-drag:none;user-drag:none;-webkit-tap-highlight-color:transparent;touch-action:none}
 #controls{-ms-touch-action:none;overscroll-behavior:none}
-.util-row,.util-row *{touch-action:manipulation;pointer-events:auto}
+#controls .util-row,#controls .util-row *{touch-action:manipulation;pointer-events:auto}
 .atk{position:absolute;width:64px;height:64px;border:0;border-radius:50%;padding:0;background:transparent;background-size:contain;background-repeat:no-repeat;background-position:center;cursor:pointer;transition:transform .1s ease,filter .1s ease}
 .atk,.move-btn{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-moz-user-select:none}
 .atk:active{transform:scale(.92);filter:brightness(.85)}
@@ -317,9 +317,9 @@ input[type=file].hidden-file{display:none}
        <button type="button" class="move-btn" id="moveR" aria-label="Right"></button>
      </div>
      <div class="util-row">
-       <button class="tiny-mute" id="muteMusic" onclick="toggleMuteMusic()">MUSIC</button>
-       <button class="tiny-mute" id="muteFx" onclick="toggleMuteFx()">F/X</button>
-       <button id="pauseBtn" onclick="togglePause()">PAUSE</button>
+       <button type="button" class="tiny-mute" id="muteMusic">MUSIC</button>
+       <button type="button" class="tiny-mute" id="muteFx">F/X</button>
+       <button type="button" id="pauseBtn">PAUSE</button>
      </div>
    </div>
   </section>
@@ -543,7 +543,7 @@ function setIntroText(t){document.getElementById("introText").innerHTML=t+'<span
 function stopTitleSong(){bgm.pause();}
 function stopIntroBed(){introSfx.pause();try{introSfx.currentTime=0;}catch(e){}}
 function startIntroBed(){stopTitleSong();bgm.muted=true;bgm.volume=0;introSfx.loop=false;introSfx.muted=mutedFx;introSfx.volume=mutedFx?0:0.85;introSfx.src=INTRO_BED;try{introSfx.currentTime=0;}catch(e){}introSfx.play().catch(function(){});}
-function startTitleSong(){if(!introDone)return;stopIntroBed();const playing=/maintitle\.mp3/i.test(bgm.currentSrc||bgm.src||"")&&!bgm.paused;currentTrack=TITLE_TRACK;bgm.loop=true;if(!/maintitle\.mp3/i.test(bgm.currentSrc||bgm.src||""))bgm.src=TITLE_TRACK;bgm.muted=mutedMusic;bgm.volume=mutedMusic?0:bgmVolume();if(playing)return;if(!mutedMusic)bgm.play().catch(function(){});}
+function startTitleSong(){if(!introDone)return;stopIntroBed();const playing=/maintitle\.mp3/i.test(bgm.currentSrc||bgm.src||"")&&!bgm.paused;currentTrack=TITLE_TRACK;bgm.loop=true;if(!/maintitle\.mp3/i.test(bgm.currentSrc||bgm.src||""))bgm.src=TITLE_TRACK;applyMusicLevel();if(playing||mutedMusic)return;bgm.play().catch(function(){});}
 function finishIntro(){if(introDone)return;introDone=true;introWanted=false;if(introTimer){clearTimeout(introTimer);introTimer=null;}stopIntroBed();lastScreen="title";document.querySelectorAll(".screen").forEach(function(s){s.classList.remove("active");});document.getElementById("title").classList.add("active");startTitleSong();}
 function typeIntroLine(prefix,text,onChar,done){let i=0;function tick(){if(introDone)return;if(i>=text.length){if(done)done();return;}const ch=text.charAt(i);setIntroText(prefix+text.slice(0,i+1));if(onChar)onChar(ch);i+=1;introTimer=setTimeout(tick,ch===" "?90:70);}tick();}
 function startIntroPages(){introLocked="";setIntroText("");let page=0;function nextPage(){if(introDone)return;if(page>=INTRO_PAGES.length){setIntroText(introLocked);introTimer=setTimeout(finishIntro,1400);return;}const line=INTRO_PAGES[page],prefix=introLocked;typeIntroLine(prefix,line,null,function(){introLocked=prefix+line;page+=1;if(page<INTRO_PAGES.length)introLocked+="\n\n";introTimer=setTimeout(nextPage,420);});}nextPage();}
@@ -721,6 +721,10 @@ lockControl(bk);
 function bindMoveBtn(id,side){const el=document.getElementById(id);if(!el)return;function down(e){e.preventDefault();moveHold[side]=true;el.classList.add("held");}function up(){moveHold[side]=false;el.classList.remove("held");}el.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});el.addEventListener("pointerdown",down);el.addEventListener("pointerup",up);el.addEventListener("pointerleave",up);el.addEventListener("pointercancel",up);}
 bindMoveBtn("moveL","left");
 bindMoveBtn("moveR","right");
+function bindUtil(id,fn){const el=document.getElementById(id);if(!el)return;el.addEventListener("pointerup",function(e){e.preventDefault();e.stopPropagation();fn();});}
+bindUtil("muteMusic",toggleMuteMusic);
+bindUtil("muteFx",toggleMuteFx);
+bindUtil("pauseBtn",togglePause);
 document.getElementById("enterArenaBtn").addEventListener("click",function(e){e.stopPropagation();enterArena();});
 document.getElementById("coinPanel").addEventListener("click",function(e){if(e.target&&e.target.id==="enterArenaBtn")return;enterArena();});
 document.getElementById("introCrt").addEventListener("pointerdown",function(e){if(!introStarted)return;onIntroInput();});
