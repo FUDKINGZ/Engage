@@ -332,7 +332,53 @@ const POSE_LABEL={punchL:"left punch",punchR:"right punch",kickL:"left kick",kic
 const THROW_OBJECTS=["phone.png","laptop.png","coffee.png","chart.png","newspaper.png","megaphone.png","bag.png","keyboard.png","coin.png","contract.png"];
 const INTRO_PAGES=["W.F.U.D. STUDIOS","PRESENTS","FINTWITS FUD KINGZ"],LOAD_HOLD_MS=3000;
 function unique(list){const seen={};return(list||[]).filter(function(u){if(!u||seen[u])return false;seen[u]=true;return true;});}
-const MONEY_URLS=unique([OBJECT_DIR+"money.png",ROOT+const FIGHTERS=[
+function slugName(name){return String(name||"").replace(/[^\w\s-]/g,"").trim();}
+function fighterBase(name){return FIGHTER_DIR+slugName(name)+"/";}
+function poseUrls(name,pose,label){
+  const base=fighterBase(name);
+  const lab=label||pose;
+  return unique([
+    base+pose+".png",base+pose+".gif",base+pose+".webp",
+    base+lab+".png",base+lab+".gif",
+    FIGHTER_DIR+slugName(name)+" "+pose+".png",
+    FIGHTER_DIR+slugName(name)+".png"
+  ]);
+}
+function titlecardUrls(name){
+  const n=slugName(name);
+  return unique([
+    TITLECARD_DIR+n+".png",TITLECARD_DIR+n+".jpg",TITLECARD_DIR+n+".webp",
+    TITLECARD_DIR+name+".png",TITLECARD_DIR+name+".jpg",
+    fighterBase(name)+"titlecard.png",fighterBase(name)+"select.png"
+  ]);
+}
+function shadowboxUrls(name){
+  const n=slugName(name);
+  return unique([
+    FIGHTER_DIR+"shadowbox/"+n+".png",
+    fighterBase(name)+"shadowbox.png",
+    fighterBase(name)+"select.png",
+    titlecardUrls(name)[0]
+  ]);
+}
+function decorateFighter(f){
+  const name=f.name;
+  f.select=f.select||poseUrls(name,"select").concat(titlecardUrls(name));
+  f.idle=f.idle||poseUrls(name,"idle");
+  f.punchL=f.punchL||poseUrls(name,"punchL",POSE_LABEL.punchL);
+  f.punchR=f.punchR||poseUrls(name,"punchR",POSE_LABEL.punchR);
+  f.kickL=f.kickL||poseUrls(name,"kickL",POSE_LABEL.kickL);
+  f.kickR=f.kickR||poseUrls(name,"kickR",POSE_LABEL.kickR);
+  f.throw=f.throw||poseUrls(name,"throw",POSE_LABEL.throw);
+  f.block=f.block||poseUrls(name,"block",POSE_LABEL.block);
+  f.victory=f.victory||poseUrls(name,"victory",POSE_LABEL.victory);
+  f.loser=f.loser||poseUrls(name,"loser",POSE_LABEL.loser);
+  f.objects=f.objects||THROW_OBJECTS.map(function(file){return OBJECT_DIR+file;});
+  return f;
+}
+const MEMBERS=[];
+const MONEY_URLS=unique([OBJECT_DIR+"money.png",ROOT+"objects/money.png"]);
+const FIGHTERS=[
   {name:"Stonks 6-7",handle:"@Stonks67",tint:"#1a2333"},
   {name:"Ventifa",handle:"@Ventifa",tint:"#0d7377"},
   {name:"Davinstigator",handle:"@Davinstigator",tint:"#37474f"},
@@ -350,7 +396,9 @@ const MONEY_URLS=unique([OBJECT_DIR+"money.png",ROOT+const FIGHTERS=[
   {name:"Fud Daddy 420",handle:"@FudDaddy420",tint:"#2b6cb0",hidden:true,unlockCrowns:4},
   {name:"KING TROLL",handle:"@KingTroll",tint:"#b71c1c",hidden:true,unlockCrowns:5}
 ].map(decorateFighter);
-const MAIN_COUNT=11,HIDDEN_INDEXES=[11,12,13,14,15],FINAL_INDEX=15;  {name:"Airport Terminal",file:ARENA_DIR+"Airport Terminal.jpg",pos:"center",color:"#2a1a08",music:AUDIO+"arena/gold-vault.mp3"},
+const MAIN_COUNT=11,HIDDEN_INDEXES=[11,12,13,14,15],FINAL_INDEX=15;
+const ARENAS=[
+  {name:"Airport Terminal",file:ARENA_DIR+"Airport Terminal.jpg",pos:"center",color:"#2a1a08",music:AUDIO+"arena/gold-vault.mp3"},
   {name:"NASDAQ Trading Floor",file:ARENA_DIR+"NASDAQ Trading Floor.jpg",pos:"center",color:"#0b1020",music:AUDIO+"arena/nasdaq-trading-floor.mp3"},
   {name:"Mullen Car Lot",file:ARENA_DIR+"Mullen Car Lot.jpg",pos:"center",color:"#1b140e",music:AUDIO+"arena/ev-van-warehouse.mp3"},
   {name:"WFUD Studios Rooftop",file:ARENA_DIR+"WFUD Studios Rooftop.jpg",pos:"center top",color:"#101820",music:AUDIO+"arena/wfud-studios-rooftop.mp3"},
