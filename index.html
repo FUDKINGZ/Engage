@@ -371,7 +371,7 @@ let paused=false,over=false,announcing=false,paid=false,skipPay=false,lastTap=0,
 let mutedMusic=false,mutedFx=false,musicStage=0,selectedFighter=0,selectedOpponent=1,cpuFighter=1,selectedArena=0;
 let arcadeQueue=[],arcadeIndex=0,arcadeKing=false,arcadeBeaten={},lastLiquidIdx=-1,lastArcadeRecord="",lastBeatenName="";
 let cpuSkill=Math.max(1,Math.min(10,parseInt(localStorage.getItem(SKILL_STORE)||"5",10)||5));
-let arcadeSkill=Math.max(7,Math.min(10,parseInt(localStorage.getItem(ARCADE_SKILL_STORE)||"7",10)||7));
+let arcadeSkill=Math.max(5,Math.min(10,parseInt(localStorage.getItem(ARCADE_SKILL_STORE)||"5",10)||5));
 let matchRounds=parseInt(localStorage.getItem(ROUNDS_STORE)||"3",10)===4?4:3;
 let youBlocking=false,cpuBlocking=false,currentTrack="",lastScreen="intro";
 let roomCode="",invitedMember=null,sentInvites={},poseTimer={you:null,cpu:null};
