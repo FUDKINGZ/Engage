@@ -131,7 +131,7 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .dots{display:flex;gap:5px}.dots i{width:7px;height:7px;border-radius:50%;background:#445;display:block}.dots i.on{background:#ffd54f}.dots i.lock{background:#664}
 #titlebar{display:flex;justify-content:center;align-items:center;flex:none;padding:calc(6px + env(safe-area-inset-top)) 10px 0;background:#070b14}
 #titlebar .brand-logo{display:block;width:min(92vw,420px);max-width:100%;height:auto;max-height:72px;margin:0 auto;object-fit:contain;object-position:center}
-#pauseBtn,.tiny-mute{position:static;background:#222c40;color:#fff;border:1px solid #445;border-radius:8px;padding:6px 10px;font-size:10px;font-weight:800}
+#pauseBtn,.tiny-mute{position:relative;background:#222c40;color:#fff;border:1px solid #445;border-radius:8px;padding:5px 9px;font-size:9px;font-weight:800}
 .tiny-mute.off{background:#3a2030;color:#ff8a80}
 .hud{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:end;padding:6px 10px 4px;background:#070b14}
 .meter{min-width:0}
@@ -179,17 +179,22 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .power-wrap.ready .power-bar{border-color:#ffe082}
 #winFlashName{font-family:Impact,"Arial Black",system-ui,sans-serif;font-size:clamp(26px,8vw,46px);font-weight:900;color:#ffd54f;text-shadow:0 0 24px #ffb300;letter-spacing:3px;text-transform:uppercase}
 #controls{position:relative;width:100%;height:188px;padding:4px 0 calc(6px + env(safe-area-inset-bottom));background:#000;z-index:6;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
-.pad-wrap{position:relative;width:100%;flex:1;min-height:0;display:flex;align-items:stretch;gap:2px}
-.pad-side{flex:0 0 14%;min-width:0;display:flex}
-.pad-side.left{justify-content:flex-start}
-.pad-side.right{justify-content:flex-end}
-.pad-cluster{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px}
-.pad-cluster.left{align-items:flex-start}
-.pad-cluster.right{align-items:flex-end}
+.pad-wrap{position:relative;width:100%;flex:1;min-height:0;display:grid;grid-template-columns:12% 1fr auto 1fr 12%;grid-template-rows:1fr 1fr 1fr;align-items:center;justify-items:center;column-gap:2px;row-gap:2px}
+#moveL{grid-column:1;grid-row:1/4;justify-self:stretch;align-self:stretch}
+#moveR{grid-column:5;grid-row:1/4;justify-self:stretch;align-self:stretch}
+#lp{grid-column:2;grid-row:1;justify-self:start}
+#lk{grid-column:2;grid-row:3;justify-self:start}
+#bk{grid-column:2;grid-row:2;justify-self:end}
+#rp{grid-column:4;grid-row:1;justify-self:end}
+#rk{grid-column:4;grid-row:3;justify-self:end}
+#th{grid-column:4;grid-row:2;justify-self:start}
+#muteMusic{grid-column:3;grid-row:1}
+#pauseBtn{grid-column:3;grid-row:2}
+#muteFx{grid-column:3;grid-row:3}
 #controls,#controls *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-moz-user-select:none;-webkit-user-drag:none;user-drag:none;-webkit-tap-highlight-color:transparent;touch-action:none}
 #controls{-ms-touch-action:none;overscroll-behavior:none}
 #controls .util-row,#controls .util-row *{touch-action:manipulation;pointer-events:auto}
-.atk{position:relative;width:min(22vw,64px);height:min(22vw,64px);flex:0 0 auto;border:0;border-radius:0;padding:0;background-color:transparent;background-size:contain;background-repeat:no-repeat;background-position:center;cursor:pointer;transition:transform .1s ease,filter .1s ease}
+.atk{position:relative;width:min(18vw,58px);height:min(18vw,58px);border:0;border-radius:0;padding:0;background-color:transparent;background-size:contain;background-repeat:no-repeat;background-position:center;cursor:pointer;transition:transform .1s ease,filter .1s ease}
 .atk,.move-btn{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-moz-user-select:none;-webkit-user-drag:none;user-drag:none;-webkit-tap-highlight-color:transparent}
 .atk:active,.move-btn:active{transform:scale(.92);filter:brightness(.85)}
 #lp{background-image:url(./buttons/lp.gif)}
@@ -205,8 +210,8 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .move-btn:active,.move-btn.held{filter:brightness(1.15)}
 #moveL{background-image:url(./buttons/left.gif);background-position:left center}
 #moveR{background-image:url(./buttons/right.gif);background-position:right center}
-.util-row{display:flex;gap:8px;width:100%;max-width:360px;justify-content:center;padding-top:4px;flex:none}
-.util-row .tiny-mute,.util-row #pauseBtn{flex:1}
+.util-row{display:contents}
+.util-row .tiny-mute,.util-row #pauseBtn{flex:none}
 .overlay{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;padding:10px 16px 0;z-index:20;background:linear-gradient(180deg,rgba(0,0,0,.72),rgba(0,0,0,.22) 36%,transparent 66%);pointer-events:none;text-align:center}
 .overlay.show{display:flex}.overlay .btn{pointer-events:auto;width:min(100%,280px)}
 .overlay h2{color:#ffd54f}.ko{font-size:clamp(22px,7vw,36px);color:#ff1744;text-shadow:0 0 20px #f00}
@@ -311,23 +316,19 @@ input[type=file].hidden-file{display:none}
   </div>
    <div id="controls">
      <div class="pad-wrap">
-       <div class="pad-side left"><button type="button" class="move-btn" id="moveL" aria-label="Left"></button></div>
-       <div class="pad-cluster left">
-         <button type="button" class="atk" id="lp" aria-label="Left punch"></button>
-         <button type="button" class="atk" id="lk" aria-label="Left kick"></button>
-         <button type="button" class="atk" id="bk" aria-label="Block"></button>
+       <button type="button" class="move-btn" id="moveL" aria-label="Left"></button>
+       <button type="button" class="atk" id="lp" aria-label="Left punch"></button>
+       <button type="button" class="atk" id="lk" aria-label="Left kick"></button>
+       <button type="button" class="atk" id="bk" aria-label="Block"></button>
+       <button type="button" class="atk" id="rp" aria-label="Right punch"></button>
+       <button type="button" class="atk" id="rk" aria-label="Right kick"></button>
+       <button type="button" class="atk" id="th" aria-label="Throw"></button>
+       <button type="button" class="move-btn" id="moveR" aria-label="Right"></button>
+       <div class="util-row">
+         <button type="button" class="tiny-mute" id="muteMusic">MUSIC</button>
+         <button type="button" id="pauseBtn">PAUSE</button>
+         <button type="button" class="tiny-mute" id="muteFx">S F/X</button>
        </div>
-       <div class="pad-cluster right">
-         <button type="button" class="atk" id="rp" aria-label="Right punch"></button>
-         <button type="button" class="atk" id="rk" aria-label="Right kick"></button>
-         <button type="button" class="atk" id="th" aria-label="Throw"></button>
-       </div>
-       <div class="pad-side right"><button type="button" class="move-btn" id="moveR" aria-label="Right"></button></div>
-     </div>
-     <div class="util-row">
-       <button type="button" class="tiny-mute" id="muteMusic">MUSIC</button>
-       <button type="button" class="tiny-mute" id="muteFx">F/X</button>
-       <button type="button" id="pauseBtn">PAUSE</button>
      </div>
    </div>
   </section>
