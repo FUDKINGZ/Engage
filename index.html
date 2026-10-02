@@ -567,7 +567,7 @@ function enterArena(){
 function applyYouPos(){document.getElementById("you").style.left=youPos+"%";}
 function applyCpuPos(){document.getElementById("cpu").style.right=cpuPos+"%";}
 function resetWalk(){youPos=YOU_HOME;cpuPos=CPU_HOME;tiltReady=false;applyYouPos();applyCpuPos();}
-function nudgeCpu(dir){if(paused||over||announcing||lastScreen!=="fight")return;cpuPos=Math.max(CPU_MIN,Math.min(CPU_MAX,cpuPos+dir));applyCpuPos();}
+function nudgeCpu(dir){if(paused||over||announcing||lastScreen!=="fight")return;cpuPos=Math.max(CPU_MIN,Math.min(CPU_MAX,cpuPos+dir));boxCache=null;applyCpuPos();}
 function cpuEngage(){
   if(paused||over||announcing||lastScreen!=="fight")return "stand";
   if(!inMeleeRange()){nudgeCpu(1.05);return "approach";}
@@ -576,7 +576,7 @@ function cpuEngage(){
   if(r<0.40){nudgeCpu(0.45);return "press";}
   return "stand";
 }
-function nudgeYou(dir){if(paused||over||announcing||lastScreen!=="fight")return;youPos=Math.max(YOU_MIN,Math.min(YOU_MAX,youPos+dir));applyYouPos();}
+function nudgeYou(dir){if(paused||over||announcing||lastScreen!=="fight")return;youPos=Math.max(YOU_MIN,Math.min(YOU_MAX,youPos+dir));boxCache=null;applyYouPos();}
 function tiltAxis(e){const type=(screen.orientation&&screen.orientation.type)||"";if(type.indexOf("landscape")===0){const b=e.beta;if(b==null||isNaN(b))return null;return type.indexOf("secondary")>=0?-b:b;}const g=e.gamma;if(g==null||isNaN(g))return null;return g;}
 function onTilt(e){if(paused||over||announcing||lastScreen!=="fight")return;const axis=tiltAxis(e);if(axis==null)return;if(!tiltReady){tiltCenter=axis;tiltReady=true;return;}const delta=axis-tiltCenter;if(Math.abs(delta)<TILT_DEAD)return;nudgeYou(Math.max(-1.15,Math.min(1.15,(delta-Math.sign(delta)*TILT_DEAD)/TILT_SCALE)));}
 async function enableTilt(){return false;}
@@ -602,7 +602,8 @@ function updateRoundHud(){paintPips("p1Pips",roundWins.you);paintPips("p2Pips",r
 function canThrow(who){return(throwAmmo[who]||0)>0;}
 function powerDisplay(who){if(throwAmmo[who]>0)return Math.round((throwAmmo[who]/THROWS_PER_POWER)*100);return Math.max(0,Math.min(100,(power[who]/POWER_MAX)*100));}
 function refreshThrowButton(){const th=document.getElementById("th"),ammo=throwAmmo.you||0;th.classList.toggle("armed",ammo>0);th.textContent="";th.setAttribute("aria-label",ammo>0?"throw x"+ammo:"throw");}
-function updatePowerMeters(){const p1=powerDisplay("you"),p2=powerDisplay("cpu");document.getElementById("p1Power").style.width=p1+"%";document.getElementById("p2Power").style.width=p2+"%";document.getElementById("p1PowerTxt").textContent=throwAmmo.you>0?throwAmmo.you+"x":Math.round(p1)+"%";document.getElementById("p2PowerTxt").textContent=throwAmmo.cpu>0?throwAmmo.cpu+"x":Math.round(p2)+"%";document.getElementById("p1PowerWrap").classList.toggle("ready",canThrow("you"));document.getElementById("p2PowerWrap").classList.toggle("ready",canThrow("cpu"));refreshThrowButton();}
+let powerSig="";
+function updatePowerMeters(){const p1=powerDisplay("you"),p2=powerDisplay("cpu"),sig=p1+"|"+p2+"|"+(throwAmmo.you||0)+"|"+(throwAmmo.cpu||0);if(sig===powerSig)return;powerSig=sig;document.getElementById("p1Power").style.width=p1+"%";document.getElementById("p2Power").style.width=p2+"%";document.getElementById("p1PowerTxt").textContent=throwAmmo.you>0?throwAmmo.you+"x":Math.round(p1)+"%";document.getElementById("p2PowerTxt").textContent=throwAmmo.cpu>0?throwAmmo.cpu+"x":Math.round(p2)+"%";document.getElementById("p1PowerWrap").classList.toggle("ready",canThrow("you"));document.getElementById("p2PowerWrap").classList.toggle("ready",canThrow("cpu"));refreshThrowButton();}
 function resetPower(){power.you=power.cpu=0;throwAmmo.you=throwAmmo.cpu=0;comboCount.you=comboCount.cpu=0;comboAt.you=comboAt.cpu=0;lastSide.you=lastSide.cpu="";lastKind.you=lastKind.cpu="";updatePowerMeters();}
 function attackSide(type){if(type==="punchL"||type==="kickL")return"L";if(type==="punchR"||type==="kickR")return"R";return"";}
 function attackKind(type){if(type==="punchL"||type==="punchR")return"P";if(type==="kickL"||type==="kickR")return"K";return"";}
