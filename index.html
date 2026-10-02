@@ -119,7 +119,7 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
   padding-bottom: 4px;
 }
 
-.liquid-grid{position:relative;z-index:2;flex:1 1 auto;width:auto;max-width:none;min-width:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(4,auto);gap:4px;align-content:start;align-self:start;padding:2px 0;overflow:hidden}
+.liquid-grid{position:relative;z-index:2;flex:1 1 auto;width:auto;max-width:none;min-width:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(3,auto);gap:4px;align-content:start;align-self:start;padding:2px 0;overflow:hidden}
 .liquid-cell{min-width:0;min-height:0}
 .liquid-cell b{font-size:6.5px;min-height:10px;line-height:1.1;padding:0 1px}
 .liquid-cell .panel{width:100%;height:auto;flex:none;aspect-ratio:3/4;border:2px solid #2a3344;border-radius:14px}
@@ -342,8 +342,8 @@ function liquidatedUrls(name){const n=String(name||"").trim().toLowerCase(),dir=
 function poseUrls(name,pose){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);let file="idle.gif";if(pose==="idle")file="idle.gif";else if(pose==="throw")file="throw.gif";else file=String(POSE_LABEL[pose]||"idle").toLowerCase()+".gif";return unique([dir+n+" "+file,dir+file,FIGHTER_DIR+n+" "+file].concat(selectUrls(name)));}
 function objectUrls(name){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);return unique([dir+n+" object.png",dir+"object.png",OBJECT_DIR+n+" object.png",FIGHTER_DIR+n+" object.png"].concat(THROW_OBJECTS.map(function(f){return OBJECT_DIR+String(f).toLowerCase();})));}
 function decorateFighter(f){f.select=selectUrls(f.name);f.idle=poseUrls(f.name,"idle");f.punchL=poseUrls(f.name,"punchL");f.punchR=poseUrls(f.name,"punchR");f.kickL=poseUrls(f.name,"kickL");f.kickR=poseUrls(f.name,"kickR");f.throw=poseUrls(f.name,"throw");f.block=poseUrls(f.name,"block");f.victory=poseUrls(f.name,"victory");f.loser=poseUrls(f.name,"loser");f.liquidated=liquidatedUrls(f.name);f.objects=objectUrls(f.name);return f;}
-const FIGHTERS=[{name:"Bioweapon Bulldog",handle:"@BioBulldog",tint:"#6a1b9a"},{name:"Ventifa",handle:"@Ventifa",tint:"#0d7377"},{name:"Davinstigator",handle:"@Davinstigator",tint:"#37474f"},{name:"Fud Daddy 420",handle:"@FudDaddy420",tint:"#2b6cb0"},{name:"Fuzzled Raccoon",handle:"@FuzzledRacc",tint:"#4e342e"},{name:"Captn Jack Hashtag",handle:"@CaptnJack",tint:"#e65100"},{name:"Stonks 6-7",handle:"@Stonks67",tint:"#1a2333"},{name:"KING TROLL",handle:"@KingTroll",tint:"#b71c1c"},{name:"Troll Bee",handle:"@TrollBee",tint:"#f9a825"},{name:"Dev Root X",handle:"@DevRootX",tint:"#00bcd4"},{name:"Jose Brownstein",handle:"@JoseBrownstein",tint:"#8d6e63"},{name:"WHITE CASSEL",handle:"@WhiteCassel",tint:"#90a4ae",hidden:true,unlockCrowns:1},{name:"LIL OJ",handle:"@LilOJ",tint:"#ef6c00",hidden:true,unlockCrowns:2},{name:"Big Daddy Turk",handle:"@BigDaddyTurk",tint:"#1b5e20",hidden:true,unlockCrowns:3},{name:"WHOLLY MAC",handle:"@WhollyMac",tint:"#6d4c41",hidden:true,unlockCrowns:4},{name:"Dragonfly Fairy",handle:"@DragonflyFairy",tint:"#e91e63",hidden:true,unlockCrowns:5}].map(decorateFighter);
-const MAIN_COUNT=11,HIDDEN_INDEXES=[11,12,13,14,15],FINAL_INDEX=7;
+const FIGHTERS=[{name:"Stonks 6-7",handle:"@Stonks67",tint:"#1a2333"},{name:"Ventifa",handle:"@Ventifa",tint:"#0d7377"},{name:"Davinstigator",handle:"@Davinstigator",tint:"#37474f"},{name:"Troll Bee",handle:"@TrollBee",tint:"#f9a825"},{name:"Jose Brownstein",handle:"@JoseBrownstein",tint:"#8d6e63"},{name:"Captn Jack Hashtag",handle:"@CaptnJack",tint:"#e65100"},{name:"WHOLLY MAC",handle:"@WhollyMac",tint:"#6d4c41"},{name:"Dev Root X",handle:"@DevRootX",tint:"#00bcd4"},{name:"WHITE CASSEL",handle:"@WhiteCassel",tint:"#90a4ae"},{name:"Fuzzled Raccoon",handle:"@FuzzledRacc",tint:"#4e342e"},{name:"Big Daddy Turk",handle:"@BigDaddyTurk",tint:"#1b5e20"},{name:"Dragonfly Fairy",handle:"@DragonflyFairy",tint:"#e91e63",hidden:true,unlockCrowns:1},{name:"Bioweapon Bulldog",handle:"@BioBulldog",tint:"#6a1b9a",hidden:true,unlockCrowns:2},{name:"LIL OJ",handle:"@LilOJ",tint:"#ef6c00",hidden:true,unlockCrowns:3},{name:"Fud Daddy 420",handle:"@FudDaddy420",tint:"#2b6cb0",hidden:true,unlockCrowns:4},{name:"KING TROLL",handle:"@KingTroll",tint:"#b71c1c",hidden:true,unlockCrowns:5}].map(decorateFighter);
+const MAIN_COUNT=11,HIDDEN_INDEXES=[11,12,13,14,15],FINAL_INDEX=15;
 const MEMBERS=FIGHTERS.filter(function(f){return!f.hidden;}).map(function(f,i){return{handle:f.handle,name:f.name,fighter:i,color:f.tint};});
 const ARENAS=[
   {name:"Trailer Park",file:ARENA_DIR+"Trailer Park.jpg",pos:"center",color:"#3a2a18",music:AUDIO+"arena/trailer-park.mp3"},
@@ -363,7 +363,6 @@ const ARENAS=[
 {name:"Hormuz Strait",file:ARENA_DIR+"Hormuz Strait.jpg",pos:"center",color:"#0a1a22",music:AUDIO+"arena/private-beach-party.mp3"},
 {name:"Gold Vault",file:ARENA_DIR+"Gold Vault.jpg",pos:"center",color:"#2a2008",music:AUDIO+"arena/gold-vault.mp3"},
 {name:"WFUD Satellite",file:ARENA_DIR+"WFUD Satellite.jpg",pos:"center",color:"#0a1520",music:AUDIO+"arena/wfud-studios-rooftop.mp3"},
-{name:"Mullen Car Lot",file:ARENA_DIR+"Mullen Car Lot.jpg",pos:"center",color:"#1b140e",music:AUDIO+"arena/ev-van-warehouse.mp3"},
 {name:"Joses Work Shop",file:ARENA_DIR+"Joses Work Shop.jpg",pos:"center",color:"#1a1210",music:AUDIO+"arena/trailer-park.mp3"}
 ];
 let mode="pvc",hp={you:MAX,cpu:MAX},power={you:0,cpu:0},throwAmmo={you:0,cpu:0};
@@ -398,7 +397,7 @@ function currentCrowns(){return profileCrowns(activePlayer());}
 function xpLocked(i){return isHiddenFighter(i)&&currentCrowns()<hiddenCost(i);}
 function freeLocked(i){if(isHiddenFighter(i))return xpLocked(i);return false;}
 function fighterLocked(i){return freeLocked(i)||xpLocked(i);}
-const ARCADE_ORDER=[6,2,1,8,11,10,5,4,0,9,3,12,13,14,15];
+const ARCADE_ORDER=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
 function playableIndexes(){const list=[];for(let i=0;i<FIGHTERS.length;i++)list.push(i);return list;}
 function firstFree(){return 0;}
 function dollarsLeft(who){return Math.max(0,hp[who]||0);}
@@ -441,24 +440,28 @@ function renderRoundPick(){const row=document.getElementById("roundPick");if(!ro
 function renderSkillRow(){paintSkillRow("skillRow");renderRoundPick();}
 function arcadeArenaIndex(){
   const homes={
+    "Stonks 6-7":"Street Fight",
     "Ventifa":"Hospital Fight",
     "Davinstigator":"Airport Terminal",
     "Dr Davinstigator":"Airport Terminal",
-    "Wholly Mac":"Crime Scene",
-    "WHOLLY MAC":"Crime Scene",
-    "WHITE CASSEL":"Back Yard Party",
-    "White Cassel":"Back Yard Party",
+    "Troll Bee":"Gold Vault",
+    "Jose Brownstein":"Joses Work Shop",
     "Captn Jack Hashtag":"Deck Of Ship",
     "Capt Jack Hashtag":"Deck Of Ship",
-    "Stonks 6-7":"Street Fight",
-    "Lil OJ":"WFUD Press Room",
-    "LIL OJ":"WFUD Press Room",
-    "Bioweapon Bulldog":"Trailer Park",
+    "WHOLLY MAC":"Crime Scene",
+    "Wholly Mac":"Crime Scene",
+    "Dev Root X":"WFUD Satellite",
+    "WHITE CASSEL":"Back Yard Party",
+    "White Cassel":"Back Yard Party",
     "Fuzzled Raccoon":"Savage Reality Alley",
-    "KING TROLL":"Dumpster Fire",
-    "King Troll":"Dumpster Fire",
+    "Big Daddy Turk":"Hormuz Strait",
+    "Dragonfly Fairy":"Mullen Car Lot",
+    "Bioweapon Bulldog":"Trailer Park",
+    "LIL OJ":"WFUD Press Room",
+    "Lil OJ":"WFUD Press Room",
     "Fud Daddy 420":"WFUD Studios Rooftop",
-    "Big Daddy Turk":"Hormuz Strait"
+    "KING TROLL":"Dumpster Fire",
+    "King Troll":"Dumpster Fire"
   };
   const who=FIGHTERS[(mode==="arcade")?selectedOpponent:selectedFighter];
   const want=who&&homes[who.name];
@@ -525,7 +528,7 @@ function showLiquidationBoard(beatenName){renderLiquidBoard();const next=(!arcad
 function afterLiquidation(){if(arcadeKing||arcadeIndex>=arcadeQueue.length){showCrownScene();return;}selectedOpponent=arcadeQueue[arcadeIndex];cpuFighter=selectedOpponent;selectedArena=arcadeArenaIndex();readyToFight=true;renderMatchup();show("matchup");}
 function showCrownScene(){const mine=FIGHTERS[selectedFighter];const img=document.getElementById("crownHero");if(img)bindSrcList(img,(mine.victory&&mine.victory.length)?mine.victory:mine.select);const sub=document.getElementById("crownSub");if(sub)sub.textContent="YOU ARE THE FUD KING  •  "+profileCrowns(activePlayer())+" CROWNS  •  "+(lastArcadeRecord||"");show("crown");}
 function afterCrown(){showCredits();}
-function creditLines(){const mine=FIGHTERS[selectedFighter],tag=activePlayer()?activePlayer().handle:"";return[["W.F.U.D. STUDIOS","PRESENTS"],["FINTWITS FUD KINGZ","PIT WIRED BY GROK"],["FUD KING",mine.name+(tag?"  "+tag:"")],["CROWNS",String(profileCrowns(activePlayer()))],["RECORD",lastArcadeRecord||""],["THE BOARD","WHITE CASSEL  •  LIL OJ  •  BIG DADDY TURK  •  WHOLLY MAC  •  DRAGONFLY FAIRY"],["MAIN ROSTER","BIOWEAPON BULLDOG  •  VENTIFA  •  DAVINSTIGATOR  •  FUD DADDY 420"],["","FUZZLED RACCOON  •  CAPTN JACK HASHTAG  •  STONKS 6-7  •  KING TROLL  •  TROLL BEE  •  DEV ROOT X  •  JOSE BROWNSTEIN"],["THANKS FOR PLAYING","INSERT TOKEN TO REIGN AGAIN"]];}
+function creditLines(){const mine=FIGHTERS[selectedFighter],tag=activePlayer()?activePlayer().handle:"";return[["W.F.U.D. STUDIOS","PRESENTS"],["FINTWITS FUD KINGZ","PIT WIRED BY GROK"],["FUD KING",mine.name+(tag?"  "+tag:"")],["CROWNS",String(profileCrowns(activePlayer()))],["RECORD",lastArcadeRecord||""],["OPEN 11","STONKS 6-7  •  VENTIFA  •  DAVINSTIGATOR  •  TROLL BEE  •  JOSE BROWNSTEIN"],["","CAPTN JACK HASHTAG  •  WHOLLY MAC  •  DEV ROOT X  •  WHITE CASSEL  •  FUZZLED RACCOON  •  BIG DADDY TURK"],["LOCKED","DRAGONFLY FAIRY  •  BIOWEAPON BULLDOG  •  LIL OJ  •  FUD DADDY 420  •  KING TROLL"],["THANKS FOR PLAYING","INSERT TOKEN TO REIGN AGAIN"]];}
 function showCredits(){const box=document.getElementById("creditsRoll");if(box){box.style.animation="none";void box.offsetWidth;box.style.animation="";box.innerHTML=creditLines().map(function(p){return"<h3>"+p[0]+"</h3><p>"+p[1]+"</p>";}).join("");}show("credits");}
 function afterCredits(){arcadeKing=false;readyToFight=false;arcadeQueue=[];arcadeIndex=0;arcadeBeaten={};renderFighterCarousel();show("fighters");}
 function playFile(el){if(mutedFx||!el)return;try{el.currentTime=0;}catch(e){}el.play().catch(function(){});}
