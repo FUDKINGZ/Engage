@@ -193,8 +193,8 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .power-wrap.p2 .power-bar{display:flex;justify-content:flex-end}.power-wrap.p2 .power-bar>span{flex:0 0 auto}
 .power-wrap.ready .power-bar{border-color:#ffe082}
 #winFlashName{font-family:Impact,"Arial Black",system-ui,sans-serif;font-size:clamp(26px,8vw,46px);font-weight:900;color:#ffd54f;text-shadow:0 0 24px #ffb300;letter-spacing:3px;text-transform:uppercase}
-#controls{position:relative;width:100%;height:auto;min-height:0;padding:0;margin:0;background:#000;z-index:6;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;gap:0;box-sizing:border-box}
-.pad-wrap{position:relative;width:100%;flex:0 0 120px;height:120px;min-height:120px;margin:0;padding:0;display:grid;grid-template-columns:12% auto auto 1fr auto auto 12%;grid-template-rows:1fr 1fr 1fr;align-items:center;justify-items:center;column-gap:2px;row-gap:1px;box-sizing:border-box}
+#controls{position:relative;width:100%;height:auto;min-height:0;padding:0;margin:0;background:transparent;z-index:6;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;gap:0;box-sizing:border-box}
+.pad-wrap{position:relative;width:100%;flex:0 0 120px;height:120px;min-height:120px;max-height:120px;margin:0;padding:0;background:#000;display:grid;grid-template-columns:12% auto auto 1fr auto auto 12%;grid-template-rows:1fr 1fr 1fr;align-items:center;justify-items:center;column-gap:2px;row-gap:1px;box-sizing:border-box;overflow:hidden}
 #moveL{grid-column:1;grid-row:1/4;justify-self:stretch;align-self:stretch}
 #moveR{grid-column:7;grid-row:1/4;justify-self:stretch;align-self:stretch}
 #lp{grid-column:2;grid-row:1;justify-self:start;align-self:end;margin-left:3px;margin-bottom:-12px}
@@ -206,7 +206,8 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 #controls{-ms-touch-action:none;overscroll-behavior:none}
 .pad-wrap,.pad-wrap *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none;touch-action:none;-webkit-tap-highlight-color:transparent}
 .util-row,.util-row *{touch-action:manipulation;pointer-events:auto;-webkit-user-select:none;user-select:none}
-.atk{position:relative;width:52px;height:52px;border:0;border-radius:0;padding:0;background-color:transparent;background-size:contain;background-repeat:no-repeat;background-position:center;cursor:pointer;transition:transform .1s ease,filter .1s ease}
+.atk{position:relative;width:56px;height:57px;border:0;border-radius:0;padding:0;background-color:transparent;background-size:56px 57px;background-repeat:no-repeat;background-position:center;cursor:pointer;transition:transform .1s ease,filter .1s ease}
+#lp,#lk,#rp,#rk{width:56px;height:57px;background-size:56px 57px}
 .atk,.move-btn{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-moz-user-select:none;-webkit-user-drag:none;user-drag:none;-webkit-tap-highlight-color:transparent}
 .atk:active,.move-btn:active{transform:scale(.92);filter:brightness(.85)}
 #lp{background-image:url(./buttons/lp.png)}
@@ -218,12 +219,12 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 #rk{background-image:url(./buttons/rk.png)}
 #bk.held{filter:brightness(1.3) drop-shadow(0 0 8px #0277bd)}
 #bk:active,#th:active{transform:scale(.92)}
-.move-btn{position:relative;top:auto;bottom:auto;left:auto;right:auto;width:100%;height:100%;border:0;border-radius:0;padding:0;background-color:transparent;background-repeat:no-repeat;background-position:center;background-size:contain;cursor:pointer;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none;user-drag:none;-webkit-tap-highlight-color:transparent}
+.move-btn{position:relative;top:auto;bottom:auto;left:auto;right:auto;width:100%;height:100%;border:0;border-radius:0;padding:0;background-color:transparent;background-repeat:no-repeat;background-position:center;background-size:56px 57px;cursor:pointer;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none;user-drag:none;-webkit-tap-highlight-color:transparent}
 .move-btn:active,.move-btn.held{filter:brightness(1.15)}
-#moveL{background-image:url(./buttons/left.png);background-position:left center}
-#moveR{background-image:url(./buttons/right.png);background-position:right center}
-.util-row{display:flex;flex:none;width:100%;height:auto;justify-content:center;align-items:center;gap:6px;padding:0;margin:0;border:0;min-height:0;line-height:1;box-sizing:border-box}
-.util-row .tiny-mute,.util-row #pauseBtn{flex:none;margin:0;padding:4px 8px;border-radius:0}
+#moveL{background-image:url(./buttons/left.png);background-position:center center;background-size:56px 57px}
+#moveR{background-image:url(./buttons/right.png);background-position:center center;background-size:56px 57px}
+.util-row{display:flex;flex:0 0 auto;width:100%;height:28px;min-height:28px;max-height:28px;justify-content:center;align-items:center;gap:8px;padding:0;margin:0;border:0;border-top:1px solid #1a1a1a;background:#0a0a0a;line-height:1;box-sizing:border-box}
+.util-row .tiny-mute,.util-row #pauseBtn{flex:none;margin:0;padding:4px 8px;border-radius:0;height:24px;box-sizing:border-box}
 #muteMusic,#pauseBtn,#muteFx{position:relative;grid-column:auto;grid-row:auto;margin:0}
 .overlay{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;padding:10px 16px 0;z-index:20;background:linear-gradient(180deg,rgba(0,0,0,.72),rgba(0,0,0,.22) 36%,transparent 66%);pointer-events:none;text-align:center}
 .overlay.show{display:flex}.overlay .btn{pointer-events:auto;width:min(100%,280px)}
@@ -513,7 +514,41 @@ if(mode==="arcade"){
 function goMatchup(){if(mode!=="arcade"&&fighterLocked(selectedOpponent))return;if(mode==="pvc"||mode==="arcade")cpuFighter=selectedOpponent;if(mode==="arcade"){selectedArena=arcadeArenaIndex();readyToFight=true;}else readyToFight=false;renderMatchup();show("matchup");}
 function fromMatchupNext(){if(mode==="arcade"||readyToFight){startFight(true);return;}goArenas();}
 function backFromMatchup(){if(mode==="arcade"){readyToFight=false;show("fighters");}else if(readyToFight){readyToFight=false;renderArenaCarousel();show("arenas");}else if(mode==="pvc"){renderOpponentScreen();show("opponents");}else show("fighters");}
-function showPostFight(beatenName,record){const mine=FIGHTERS[selectedFighter],theirs=FIGHTERS[cpuFighter];document.getElementById("postP1Name").textContent=mine.name;document.getElementById("postP2Name").textContent=theirs.name;bindSrcList(document.getElementById("postP1"),(mine.victory&&mine.victory.length)?mine.victory:mine.select);bindSrcList(document.getElementById("postP2"),(theirs.liquidated&&theirs.liquidated.length)?theirs.liquidated:((theirs.loser&&theirs.loser.length)?theirs.loser:theirs.select));document.getElementById("postHint").textContent=arcadeKing?"FUD KING":((beatenName||"CHALLENGER").toUpperCase()+"  •  LIQUIDATED");document.getElementById("postMark").textContent=arcadeKing?"CROWN":"WIN";document.getElementById("postSub").textContent="";preloadLiquidation();show("postfight");}
+function showPostFight(beatenName,record,youWon){
+  if(youWon==null)youWon=true;
+  const mine=FIGHTERS[selectedFighter],theirs=FIGHTERS[cpuFighter];
+  document.getElementById("postP1Name").textContent=mine.name;
+  document.getElementById("postP2Name").textContent=theirs.name;
+  const p1Art=youWon
+    ?((mine.victory&&mine.victory.length)?mine.victory:mine.select)
+    :((mine.liquidated&&mine.liquidated.length)?mine.liquidated:((mine.loser&&mine.loser.length)?mine.loser:mine.select));
+  const p2Art=youWon
+    ?((theirs.liquidated&&theirs.liquidated.length)?theirs.liquidated:((theirs.loser&&theirs.loser.length)?theirs.loser:theirs.select))
+    :((theirs.victory&&theirs.victory.length)?theirs.victory:theirs.select);
+  bindSrcList(document.getElementById("postP1"),p1Art);
+  bindSrcList(document.getElementById("postP2"),p2Art);
+  if(mode==="arcade"){
+    document.getElementById("postHint").textContent=arcadeKing?"FUD KING":((beatenName||"CHALLENGER").toUpperCase()+"  •  LIQUIDATED");
+    document.getElementById("postMark").textContent=arcadeKing?"CROWN":"WIN";
+    document.getElementById("postSub").textContent="";
+    document.getElementById("postContinue").style.display="";
+    document.getElementById("postPlayAgain").style.display="none";
+    document.getElementById("postExitTitle").style.display="none";
+    preloadLiquidation();
+  }else{
+    document.getElementById("postHint").textContent=youWon?"YOU WIN":"YOU LOSE";
+    document.getElementById("postMark").textContent=youWon?"WIN":"LOSE";
+    document.getElementById("postSub").textContent=(record||"");
+    document.getElementById("postContinue").style.display="none";
+    document.getElementById("postPlayAgain").style.display="";
+    document.getElementById("postExitTitle").style.display="";
+  }
+  show("postfight");
+}
+function playAgainExhibition(){
+  readyToFight=true;
+  startFight(true);
+}
 function preloadUrl(url){if(!url)return;const im=new Image();im.decoding="async";im.src=url;if(im.decode)im.decode().catch(function(){});}
 function preloadLiquidation(){
   const seen={};
@@ -774,7 +809,20 @@ function scheduleAI(){
 function togglePause(){if(over||announcing)return;paused=!paused;document.getElementById("pauseOv").classList.toggle("show",paused);if(paused){setBlock("you",false);pauseBgm();}else{playBgm();scheduleAI();tiltReady=false;}}
 function backToExhibitionFighters(){clearTimeout(aiTimer);clearReadyTimer();clearRoundTimer();stopWalkLoop();if(winFlashTimer){clearTimeout(winFlashTimer);winFlashTimer=null;}paused=over=announcing=false;readyToFight=false;setBlock("you",false);mode="pvc";invitedMember=null;renderFighterCarousel();show("fighters");}
 function showFinalStats(win,record,king){document.getElementById("winFlash").classList.remove("show");document.getElementById("endKo").textContent=king?"FUD KING":"K.O.";document.getElementById("endMsg").textContent=king?"YOU ARE THE FUD KING":(win?"YOU WIN THE PIT":(mode==="arcade"?"ARCADE OVER":"MARGIN CALLED"));const gainsBtn=document.getElementById("endGold"),titleBtn=document.getElementById("endTitle");if(mode==="pvc"){document.getElementById("endSub").textContent="CONGRATULATIONS";if(gainsBtn){gainsBtn.style.display="";gainsBtn.textContent="EXHIBITION";gainsBtn.onclick=backToExhibitionFighters;}if(titleBtn)titleBtn.textContent="MAIN";}else{document.getElementById("endSub").textContent="$"+matchScore+" gains  •  "+profileCrowns(activePlayer())+" CROWNS  •  +"+matchXp+" XP  •  "+record+" vs L"+effectiveSkill();if(gainsBtn){gainsBtn.style.display="";gainsBtn.textContent="GAINS & STATS";gainsBtn.onclick=openHighScores;}if(titleBtn)titleBtn.textContent="TITLE SCREEN";}document.getElementById("endOv").classList.add("show");}
-function finish(winner){over=true;announcing=false;clearTimeout(aiTimer);clearRoundTimer();setBlock("you",false);setBlock("cpu",false);playBgm();const youWonRound=winner==="you";playPose(winner,"victory");playPose(youWonRound?"cpu":"you","loser");matchScore+=dollarsLeft("you");matchXp+=10+(youWonRound?25:0)+effectiveSkill();if(youWonRound)roundWins.you+=1;else roundWins.cpu+=1;updateRoundHud();if(!matchOver()){holdRoundWinner(youWonRound);return;}const win=roundWins.you>roundWins.cpu;if(win)matchXp+=50;const record=roundWins.you+"-"+roundWins.cpu;lastArcadeRecord=record;const beaten=FIGHTERS[cpuFighter].name;if(mode==="arcade"&&win){matchXp+=20;arcadeBeaten[cpuFighter]=true;lastLiquidIdx=cpuFighter;lastBeatenName=beaten;arcadeIndex+=1;if(arcadeIndex>=arcadeQueue.length){arcadeKing=true;matchXp+=100;awardCrown();bumpArcadeSkill();}saveHighScore({id:String(Date.now()),name:playerLabel(),fighter:FIGHTERS[selectedFighter].name,score:matchScore,xp:matchXp,wins:roundWins.you,record:(arcadeKing?"FUD KING  ":"")+record+"  L"+effectiveSkill(),when:Date.now()},true);holdFinalKo(function(){showPostFight(lastBeatenName,record);});return;}saveHighScore({id:String(Date.now()),name:playerLabel(),fighter:FIGHTERS[selectedFighter].name,score:matchScore,xp:matchXp,wins:roundWins.you,record:record+"  L"+effectiveSkill(),when:Date.now()},win);startKoQuake();document.getElementById("winFlashKo").textContent=win?"PIT WINNER":"MARGIN CALL";document.getElementById("winFlashName").textContent=win?playerLabel():opponentLabel();document.getElementById("winFlash").classList.add("show");if(winFlashTimer)clearTimeout(winFlashTimer);winFlashTimer=setTimeout(function(){showFinalStats(win,record,false);},WIN_FLASH_MS);}
+function finish(winner){over=true;announcing=false;clearTimeout(aiTimer);clearRoundTimer();setBlock("you",false);setBlock("cpu",false);playBgm();const youWonRound=winner==="you";playPose(winner,"victory");playPose(youWonRound?"cpu":"you","loser");matchScore+=dollarsLeft("you");matchXp+=10+(youWonRound?25:0)+effectiveSkill();if(youWonRound)roundWins.you+=1;else roundWins.cpu+=1;updateRoundHud();if(!matchOver()){holdRoundWinner(youWonRound);return;}const win=roundWins.you>roundWins.cpu;if(win)matchXp+=50;const record=roundWins.you+"-"+roundWins.cpu;lastArcadeRecord=record;const beaten=FIGHTERS[cpuFighter].name;if(mode==="arcade"&&win){matchXp+=20;arcadeBeaten[cpuFighter]=true;lastLiquidIdx=cpuFighter;lastBeatenName=beaten;arcadeIndex+=1;if(arcadeIndex>=arcadeQueue.length){arcadeKing=true;matchXp+=100;awardCrown();bumpArcadeSkill();}saveHighScore({id:String(Date.now()),name:playerLabel(),fighter:FIGHTERS[selectedFighter].name,score:matchScore,xp:matchXp,wins:roundWins.you,record:(arcadeKing?"FUD KING  ":"")+record+"  L"+effectiveSkill(),when:Date.now()},true);holdFinalKo(function(){showPostFight(lastBeatenName,record,true);});return;}saveHighScore({id:String(Date.now()),name:playerLabel(),fighter:FIGHTERS[selectedFighter].name,score:matchScore,xp:matchXp,wins:roundWins.you,record:record+"  L"+effectiveSkill(),when:Date.now()},win);
+if(mode==="pvc"){
+  holdFinalKo(function(){
+    showPostFight(FIGHTERS[cpuFighter].name,record,win);
+  });
+  return;
+}
+startKoQuake();
+document.getElementById("winFlashKo").textContent=win?"PIT WINNER":"MARGIN CALL";
+document.getElementById("winFlashName").textContent=win?playerLabel():opponentLabel();
+document.getElementById("winFlash").classList.add("show");
+if(winFlashTimer)clearTimeout(winFlashTimer);
+winFlashTimer=setTimeout(function(){showFinalStats(win,record,false);},WIN_FLASH_MS);
+}
 function goTitle(){clearTimeout(aiTimer);clearReadyTimer();clearRoundTimer();stopWalkLoop();if(winFlashTimer){clearTimeout(winFlashTimer);winFlashTimer=null;}paused=over=announcing=false;readyToFight=false;setBlock("you",false);show("title");}
 function antiSelect(el){
   if(!el||el.dataset.selLock)return;
