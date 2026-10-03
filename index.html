@@ -203,12 +203,14 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 #th{grid-column:5;grid-row:2;justify-self:end;margin-right:4px}
 #rp{grid-column:6;grid-row:1;justify-self:end;align-self:end;margin-right:3px;margin-bottom:-12px}
 #rk{grid-column:6;grid-row:3;justify-self:end;align-self:start;margin-right:3px;margin-top:-12px}
-#controls{-ms-touch-action:none;overscroll-behavior:none}
-.pad-wrap,.pad-wrap *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none;touch-action:none;-webkit-tap-highlight-color:transparent}
-.util-row,.util-row *{touch-action:manipulation;pointer-events:auto;-webkit-user-select:none;user-select:none}
-.atk{position:relative;width:56px;height:57px;border:0;border-radius:0;padding:0;background-color:transparent;background-size:56px 57px;background-repeat:no-repeat;background-position:center;cursor:pointer;transition:transform .1s ease,filter .1s ease}
+#fight,#fight *{-webkit-user-select:none!important;-moz-user-select:none!important;-ms-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important;-webkit-user-drag:none!important;user-drag:none!important;-webkit-tap-highlight-color:transparent}
+#controls{-ms-touch-action:none;overscroll-behavior:none;-webkit-user-select:none!important;user-select:none!important}
+.pad-wrap,.pad-wrap *{-webkit-user-select:none!important;-moz-user-select:none!important;-ms-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important;-webkit-user-drag:none!important;user-drag:none!important;touch-action:none!important;-ms-touch-action:none;-webkit-tap-highlight-color:transparent}
+.util-row,.util-row *{touch-action:manipulation;pointer-events:auto;-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}
+.atk{position:relative;width:56px;height:57px;border:0;border-radius:0;padding:0;background-color:transparent;background-size:56px 57px;background-repeat:no-repeat;background-position:center;cursor:pointer;transition:transform .1s ease,filter .1s ease;touch-action:none!important;-ms-touch-action:none;outline:none;-webkit-user-select:none!important;user-select:none!important}
 #lp,#lk,#rp,#rk{width:56px;height:57px;background-size:56px 57px}
-.atk,.move-btn{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-moz-user-select:none;-webkit-user-drag:none;user-drag:none;-webkit-tap-highlight-color:transparent}
+.atk,.move-btn{-webkit-user-select:none!important;-moz-user-select:none!important;-ms-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important;-moz-user-select:none;-webkit-user-drag:none!important;user-drag:none!important;-webkit-tap-highlight-color:transparent;touch-action:none!important;-ms-touch-action:none;outline:none}
+.atk::selection,.move-btn::selection,.tiny-mute::selection,#pauseBtn::selection,#controls::selection,#controls *::selection{background:transparent!important;color:inherit!important}
 .atk:active,.move-btn:active{transform:scale(.92);filter:brightness(.85)}
 #lp{background-image:url(./buttons/lp.png)}
 #rp{background-image:url(./buttons/rp.png)}
@@ -219,7 +221,7 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 #rk{background-image:url(./buttons/rk.png)}
 #bk.held{filter:brightness(1.3) drop-shadow(0 0 8px #0277bd)}
 #bk:active,#th:active{transform:scale(.92)}
-.move-btn{position:relative;top:auto;bottom:auto;left:auto;right:auto;width:100%;height:100%;border:0;border-radius:0;padding:0;background-color:transparent;background-repeat:no-repeat;background-position:center;background-size:56px 57px;cursor:pointer;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none;user-drag:none;-webkit-tap-highlight-color:transparent}
+.move-btn{position:relative;top:auto;bottom:auto;left:auto;right:auto;width:100%;height:100%;border:0;border-radius:0;padding:0;background-color:transparent;background-repeat:no-repeat;background-position:center;background-size:56px 57px;cursor:pointer;touch-action:none!important;-ms-touch-action:none;-webkit-user-select:none!important;-moz-user-select:none!important;-ms-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important;-webkit-user-drag:none!important;user-drag:none!important;-webkit-tap-highlight-color:transparent;outline:none}
 .move-btn:active,.move-btn.held{filter:brightness(1.15)}
 #moveL{background-image:url(./buttons/left.png);background-position:center center;background-size:56px 57px}
 #moveR{background-image:url(./buttons/right.png);background-position:center center;background-size:56px 57px}
@@ -827,13 +829,23 @@ if(winFlashTimer)clearTimeout(winFlashTimer);
 winFlashTimer=setTimeout(function(){showFinalStats(win,record,false);},WIN_FLASH_MS);
 }
 function goTitle(){clearTimeout(aiTimer);clearReadyTimer();clearRoundTimer();stopWalkLoop();if(winFlashTimer){clearTimeout(winFlashTimer);winFlashTimer=null;}paused=over=announcing=false;readyToFight=false;setBlock("you",false);show("title");}
+function clearSel(){try{const s=window.getSelection&&window.getSelection();if(s&&s.removeAllRanges)s.removeAllRanges();}catch(e){}}
 function antiSelect(el){
   if(!el||el.dataset.selLock)return;
   el.dataset.selLock="1";
   el.setAttribute("draggable","false");
-  el.addEventListener("selectstart",function(e){e.preventDefault();});
-  el.addEventListener("dragstart",function(e){e.preventDefault();});
-  el.addEventListener("contextmenu",function(e){e.preventDefault();});
+  el.setAttribute("unselectable","on");
+  el.style.webkitUserSelect="none";
+  el.style.userSelect="none";
+  el.style.webkitTouchCallout="none";
+  el.style.touchAction="none";
+  function block(e){e.preventDefault();clearSel();}
+  el.addEventListener("touchstart",block,{passive:false});
+  el.addEventListener("touchmove",block,{passive:false});
+  el.addEventListener("selectstart",block,{passive:false});
+  el.addEventListener("dragstart",block,{passive:false});
+  el.addEventListener("contextmenu",block,{passive:false});
+  el.addEventListener("gesturestart",block,{passive:false});
 }
 function bindAtk(id,type){
   const el=document.getElementById(id);
@@ -841,6 +853,8 @@ function bindAtk(id,type){
   antiSelect(el);
   el.addEventListener("pointerdown",function(e){
     e.preventDefault();
+    clearSel();
+    try{if(el.setPointerCapture&&e.pointerId!=null)el.setPointerCapture(e.pointerId);}catch(err){}
     playerMove(type);
   });
 }
@@ -853,6 +867,8 @@ const bk=document.getElementById("bk");
 antiSelect(bk);
 bk.addEventListener("pointerdown",function(e){
   e.preventDefault();
+  clearSel();
+  try{if(bk.setPointerCapture&&e.pointerId!=null)bk.setPointerCapture(e.pointerId);}catch(err){}
   if(!paused&&!over&&!announcing)setBlock("you",true);
 });
 function endBlock(){setBlock("you",false);}
@@ -863,7 +879,12 @@ function bindMoveBtn(id,side){
   const el=document.getElementById(id);
   if(!el)return;
   antiSelect(el);
-  function down(e){e.preventDefault();moveHold[side]=true;el.classList.add("held");startWalkLoop();}
+  function down(e){
+    e.preventDefault();
+    clearSel();
+    try{if(el.setPointerCapture&&e.pointerId!=null)el.setPointerCapture(e.pointerId);}catch(err){}
+    moveHold[side]=true;el.classList.add("held");startWalkLoop();
+  }
   function up(){moveHold[side]=false;el.classList.remove("held");if(!isMoving())stopWalkLoop();}
   el.addEventListener("pointerdown",down);
   el.addEventListener("pointerup",up);
@@ -881,8 +902,16 @@ function bindUtil(id,fn){
 bindUtil("muteMusic",toggleMuteMusic);
 bindUtil("muteFx",toggleMuteFx);
 bindUtil("pauseBtn",togglePause);
+antiSelect(document.getElementById("controls"));
+antiSelect(document.querySelector("#controls .pad-wrap"));
+antiSelect(document.querySelector("#controls .util-row"));
+["muteMusic","muteFx","pauseBtn"].forEach(function(id){antiSelect(document.getElementById(id));});
 document.addEventListener("selectstart",function(e){
-  if(lastScreen==="fight")e.preventDefault();
+  if(lastScreen==="fight"){e.preventDefault();clearSel();return false;}
+  const t=e.target;if(t&&t.closest&&t.closest("#controls")){e.preventDefault();clearSel();return false;}
+},{passive:false});
+document.addEventListener("selectionchange",function(){
+  if(lastScreen==="fight")clearSel();
 });
 document.getElementById("enterArenaBtn").addEventListener("click",function(e){e.stopPropagation();enterArena();});
 document.getElementById("introCrt").addEventListener("pointerdown",function(e){if(!introStarted)return;onIntroInput();});
