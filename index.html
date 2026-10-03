@@ -749,19 +749,22 @@ function backToExhibitionFighters(){clearTimeout(aiTimer);clearReadyTimer();clea
 function showFinalStats(win,record,king){document.getElementById("winFlash").classList.remove("show");document.getElementById("endKo").textContent=king?"FUD KING":"K.O.";document.getElementById("endMsg").textContent=king?"YOU ARE THE FUD KING":(win?"YOU WIN THE PIT":(mode==="arcade"?"ARCADE OVER":"MARGIN CALLED"));const gainsBtn=document.getElementById("endGold"),titleBtn=document.getElementById("endTitle");if(mode==="pvc"){document.getElementById("endSub").textContent="CONGRADULATIONS";if(gainsBtn){gainsBtn.style.display="";gainsBtn.textContent="EXHIBITION";gainsBtn.onclick=backToExhibitionFighters;}if(titleBtn)titleBtn.textContent="MAIN";}else{document.getElementById("endSub").textContent="$"+matchScore+" gains  •  "+profileCrowns(activePlayer())+" CROWNS  •  +"+matchXp+" XP  •  "+record+" vs L"+effectiveSkill();if(gainsBtn){gainsBtn.style.display="";gainsBtn.textContent="GAINS & STATS";gainsBtn.onclick=openHighScores;}if(titleBtn)titleBtn.textContent="TITLE SCREEN";}document.getElementById("endOv").classList.add("show");}
 function finish(winner){over=true;announcing=false;clearTimeout(aiTimer);clearRoundTimer();setBlock("you",false);setBlock("cpu",false);playBgm();const youWonRound=winner==="you";playPose(winner,"victory");playPose(youWonRound?"cpu":"you","loser");matchScore+=dollarsLeft("you");matchXp+=10+(youWonRound?25:0)+effectiveSkill();if(youWonRound)roundWins.you+=1;else roundWins.cpu+=1;updateRoundHud();if(!matchOver()){holdRoundWinner(youWonRound);return;}const win=roundWins.you>roundWins.cpu;if(win)matchXp+=50;const record=roundWins.you+"-"+roundWins.cpu;lastArcadeRecord=record;const beaten=FIGHTERS[cpuFighter].name;if(mode==="arcade"&&win){matchXp+=20;arcadeBeaten[cpuFighter]=true;lastLiquidIdx=cpuFighter;lastBeatenName=beaten;arcadeIndex+=1;if(arcadeIndex>=arcadeQueue.length){arcadeKing=true;matchXp+=100;awardCrown();bumpArcadeSkill();}saveHighScore({id:String(Date.now()),name:playerLabel(),fighter:FIGHTERS[selectedFighter].name,score:matchScore,xp:matchXp,wins:roundWins.you,record:(arcadeKing?"FUD KING  ":"")+record+"  L"+effectiveSkill(),when:Date.now()},true);holdFinalKo(function(){showPostFight(lastBeatenName,record);});return;}saveHighScore({id:String(Date.now()),name:playerLabel(),fighter:FIGHTERS[selectedFighter].name,score:matchScore,xp:matchXp,wins:roundWins.you,record:record+"  L"+effectiveSkill(),when:Date.now()},win);startKoQuake();document.getElementById("winFlashKo").textContent=win?"PIT WINNER":"MARGIN CALL";document.getElementById("winFlashName").textContent=win?playerLabel():opponentLabel();document.getElementById("winFlash").classList.add("show");if(winFlashTimer)clearTimeout(winFlashTimer);winFlashTimer=setTimeout(function(){showFinalStats(win,record,false);},WIN_FLASH_MS);}
 function goTitle(){clearTimeout(aiTimer);clearReadyTimer();clearRoundTimer();stopWalkLoop();if(winFlashTimer){clearTimeout(winFlashTimer);winFlashTimer=null;}paused=over=announcing=false;readyToFight=false;setBlock("you",false);show("title");}
-function bindAtk(id,type){
-  const el=document.getElementById(id);
-  if(!el)return;
-  el.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});
-  el.addEventListener("pointerdown",function(e){
-    e.preventDefault();
-    e.stopPropagation();
-    try{el.setPointerCapture(e.pointerId);}catch(_){}
-    playerMove(type);
-  });
+function antiSelect(el){
+  if(!el||el.dataset.selLock)return;
+  el.dataset.selLock="1";
+  el.setAttribute("draggable","false");
   el.addEventListener("selectstart",function(e){e.preventDefault();});
   el.addEventListener("dragstart",function(e){e.preventDefault();});
   el.addEventListener("contextmenu",function(e){e.preventDefault();});
+}
+function bindAtk(id,type){
+  const el=document.getElementById(id);
+  if(!el)return;
+  antiSelect(el);
+  el.addEventListener("pointerdown",function(e){
+    e.preventDefault();
+    playerMove(type);
+  });
 }
 bindAtk("lp","punchL");
 bindAtk("rp","punchR");
@@ -769,48 +772,40 @@ bindAtk("lk","kickL");
 bindAtk("rk","kickR");
 bindAtk("th","throw");
 const bk=document.getElementById("bk");
-function lockControl(el){
-  if(!el||el.dataset.selLock)return;
-  el.dataset.selLock="1";
-  el.setAttribute("unselectable","on");
-  el.setAttribute("draggable","false");
-  el.style.webkitUserSelect="none";
-  el.style.userSelect="none";
-  el.style.webkitTouchCallout="none";
-  // stop text-select / long-press callout; do not block pointer flow for taps/holds
-  el.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});
-  ["selectstart","dragstart","contextmenu","gesturestart"].forEach(function(ev){
-    el.addEventListener(ev,function(e){e.preventDefault();});
-  });
-}
-function lockAllButtons(root){
-  (root||document).querySelectorAll("button,.btn,.atk,.move-btn").forEach(lockControl);
-}
-// Block: hold works via pointerdown → pointerup/leave/cancel (rapid re-tap still ok)
-bk.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});
+antiSelect(bk);
 bk.addEventListener("pointerdown",function(e){
   e.preventDefault();
-  e.stopPropagation();
-  try{bk.setPointerCapture(e.pointerId);}catch(_){}
   if(!paused&&!over&&!announcing)setBlock("you",true);
 });
 function endBlock(){setBlock("you",false);}
 bk.addEventListener("pointerup",endBlock);
 bk.addEventListener("pointerleave",endBlock);
 bk.addEventListener("pointercancel",endBlock);
-lockControl(bk);
-["lp","rp","lk","rk","th","moveL","moveR","muteMusic","muteFx","pauseBtn"].forEach(function(id){lockControl(document.getElementById(id));});
-lockAllButtons(document);
-// menus rebuild DOM (skill row, roster, pit, etc.) — re-lock on every screen show
-const _showSel=show;
-show=function(id){_showSel(id);lockAllButtons(document.getElementById(id)||document);};
-function bindMoveBtn(id,side){const el=document.getElementById(id);if(!el)return;function down(e){e.preventDefault();moveHold[side]=true;el.classList.add("held");startWalkLoop();}function up(){moveHold[side]=false;el.classList.remove("held");if(!isMoving())stopWalkLoop();}el.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});el.addEventListener("pointerdown",down);el.addEventListener("pointerup",up);el.addEventListener("pointerleave",up);el.addEventListener("pointercancel",up);}
+function bindMoveBtn(id,side){
+  const el=document.getElementById(id);
+  if(!el)return;
+  antiSelect(el);
+  function down(e){e.preventDefault();moveHold[side]=true;el.classList.add("held");startWalkLoop();}
+  function up(){moveHold[side]=false;el.classList.remove("held");if(!isMoving())stopWalkLoop();}
+  el.addEventListener("pointerdown",down);
+  el.addEventListener("pointerup",up);
+  el.addEventListener("pointerleave",up);
+  el.addEventListener("pointercancel",up);
+}
 bindMoveBtn("moveL","left");
 bindMoveBtn("moveR","right");
-function bindUtil(id,fn){const el=document.getElementById(id);if(!el)return;el.addEventListener("pointerup",function(e){e.preventDefault();e.stopPropagation();fn();});}
+function bindUtil(id,fn){
+  const el=document.getElementById(id);
+  if(!el)return;
+  antiSelect(el);
+  el.addEventListener("click",function(e){e.stopPropagation();fn();});
+}
 bindUtil("muteMusic",toggleMuteMusic);
 bindUtil("muteFx",toggleMuteFx);
 bindUtil("pauseBtn",togglePause);
+document.addEventListener("selectstart",function(e){
+  if(lastScreen==="fight")e.preventDefault();
+});
 document.getElementById("enterArenaBtn").addEventListener("click",function(e){e.stopPropagation();enterArena();});
 document.getElementById("introCrt").addEventListener("pointerdown",function(e){if(!introStarted)return;onIntroInput();});
 window.addEventListener("keydown",function(e){if(!introDone&&document.getElementById("intro").classList.contains("active")){e.preventDefault();onIntroInput();return;}if(e.target&&(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA"))return;keysDown[e.code]=true;if(e.code==="ArrowLeft"||e.code==="ArrowRight"||e.code==="KeyA"||e.code==="KeyD")startWalkLoop();});
