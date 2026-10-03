@@ -6,7 +6,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <title>FINTWITS FUD KINGZ</title>
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+button,.btn,.atk,.move-btn,.tiny-mute,#pauseBtn,.nav-row button,.skill-row button,.round-pick button,.invite-row button,.join-card button,.form-card button,.member button,.pit-list button,.pit-controls button,.menu-btns .btn{-webkit-user-select:none!important;-moz-user-select:none!important;-ms-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important;-webkit-user-drag:none;user-drag:none;-webkit-tap-highlight-color:transparent;outline:none}
 html,body{margin:0;width:100%;height:100%;height:100dvh;overflow:hidden;font-family:"Segoe UI",system-ui,sans-serif;background:#000;color:#e8f0ff;touch-action:manipulation;display:flex;align-items:center;justify-content:center}
 #app {
   position: relative;
@@ -204,7 +205,8 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 #muteMusic{grid-column:4;grid-row:1}
 #pauseBtn{grid-column:4;grid-row:2}
 #muteFx{grid-column:4;grid-row:3}
-#controls,#controls *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-moz-user-select:none;-webkit-user-drag:none;user-drag:none;-webkit-tap-highlight-color:transparent;touch-action:none}
+#controls,#controls *{-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important;-moz-user-select:none!important;-ms-user-select:none!important;-webkit-user-drag:none;user-drag:none;-webkit-tap-highlight-color:transparent;touch-action:none}
+#fight button{-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}
 #controls{-ms-touch-action:none;overscroll-behavior:none}
 #controls .util-row,#controls .util-row *{touch-action:manipulation;pointer-events:auto}
 .atk{position:relative;width:52px;height:52px;border:0;border-radius:0;padding:0;background-color:transparent;background-size:contain;background-repeat:no-repeat;background-position:center;cursor:pointer;transition:transform .1s ease,filter .1s ease}
@@ -314,7 +316,7 @@ input[type=file].hidden-file{display:none}
 <section id="arenas" class="screen menu"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>CHOOSE ARENA</p></div><div class="carousel-wrap"><div class="carousel" id="arenaCarousel"></div><div class="nav-row"><button type="button" onclick="shiftArena(-1)">◀</button><button type="button" onclick="shiftArena(1)">▶</button></div><div class="dots" id="arenaDots"></div></div><div class="menu-btns"><button class="btn btn-dark" onclick="backFromArenas()">BACK</button><button class="btn btn-gold" id="arenaNext" onclick="afterArena()">ENTER</button></div></section>
 <section id="crown" class="screen menu"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>CROWNING THE KING</p></div><div class="post-body"><div class="match-arena-name">CROWNING THE KING</div><div class="vs-card p1" style="width:min(70vw,280px)"><img id="crownHero" alt=""></div><p class="post-sub" id="crownSub"></p></div><div class="menu-btns"><button class="btn btn-gold" onclick="afterCrown()">CONTINUE</button></div></section>
 <section id="credits" class="screen menu"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"></div><div class="credits-mask"><div class="credits-roll" id="creditsRoll"></div></div><div class="menu-btns"><button class="btn btn-gold" onclick="afterCredits()">CONTINUE</button></div></section>
-<section id="guide" class="screen menu"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>GUIDE &amp; DISCLAIMER</p></div><div class="scores-wrap"><div class="stat-card"><div class="stat-head"><div><b>HOW TO PLAY</b><span>TOUCH CONTROLS</span></div></div><p class="post-sub">L and R walk. LP and RP are punches. LK and RK are kicks. BK holds block. TH throws only after the power meter is full. A landed punch or kick builds power. Alternating sides or punch and kick builds a combo. A full meter arms 3 throws. A landed hit drops money. A block heals $1 and stops the hit. A whiff is a miss.</p></div><div class="stat-card"><div class="stat-head"><div><b>MODES</b><span>ARCADE / EXHIBITION / 1 ON 1</span></div></div><p class="post-sub">ARCADE is the tournament. Beat the roster, then the mirror, then KING TROLL. A clear earns a crown and raises arcade skill by 1, from 5 up to 10. Hidden fighters need crowns. Only Arcade writes gains, wins, losses, XP, and crowns. EXHIBITION unlocks every fighter and every arena and does not save stats. 1 ON 1 is a private fight code. Rounds are first to 2, or first to 3 if 4 rounds is picked. Arcade is first to 2. Time limit is 2:00. A tie goes to sudden death. Power and throw ammo carry between rounds of the same match.</p></div><div class="stat-card"><div class="stat-head"><div><b>TOKEN INFO</b><span>NOT AN OFFER</span></div></div><p class="post-sub">EXHIBITION MATCH UNLOCKS EVERY FIGHTER. ARCADE HIDDEN FIGHTERS NEED CROWNS. WIN A TOURNAMENT TO EARN A CROWN.</p><p class="mint">Solana • FUD KINGZ • 54KdrURBhfNE7SQE8GDJkE3vSX9wHFbY1j8MKjLqpump</p><p class="grok-credit">PIT WIRED BY GROK • W.F.U.D. STUDIOS ON THE BOARD</p><p class="post-sub">The mint line is an identifier only. This game is entertainment. It is not financial, investment, or legal advice, and it does not sell, solicit, or promise any token, return, or crown value. Arcade entry text is flavor. No wallet payment is required to play Exhibition.</p></div></div><div class="menu-btns"><button class="btn btn-gold" onclick="show('title')">BACK</button></div></section>
+<section id="guide" class="screen menu"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>GUIDE &amp; DISCLAIMER</p></div><div class="scores-wrap"><div class="stat-card"><div class="stat-head"><div><b>HOW TO PLAY</b><span>TOUCH CONTROLS</span></div></div><p class="post-sub">L and R walk. LP and RP are punches. LK and RK are kicks. BK holds block. TH throws only after the power meter is full. A landed punch or kick builds power. Alternating sides or punch and kick builds a combo. A full meter arms 3 throws. A landed hit drops money. A block heals $1 and stops the hit. A whiff is a miss.</p></div><div class="stat-card"><div class="stat-head"><div><b>MODES</b><span>ARCADE / EXHIBITION / 1 ON 1</span></div></div><p class="post-sub">ARCADE is the tournament. Beat the roster, then the mirror, then KING TROLL. A clear earns a crown and raises arcade skill by 1, from 4 up to 10. Hidden fighters need crowns. Only Arcade writes gains, wins, losses, XP, and crowns. EXHIBITION unlocks every fighter and every arena and does not save stats. 1 ON 1 is a private fight code. Rounds are first to 2, or first to 3 if 4 rounds is picked. Arcade is first to 2. Time limit is 2:00. A tie goes to sudden death. Power and throw ammo carry between rounds of the same match.</p></div><div class="stat-card"><div class="stat-head"><div><b>TOKEN INFO</b><span>NOT AN OFFER</span></div></div><p class="post-sub">EXHIBITION MATCH UNLOCKS EVERY FIGHTER. ARCADE HIDDEN FIGHTERS NEED CROWNS. WIN A TOURNAMENT TO EARN A CROWN.</p><p class="mint">Solana • FUD KINGZ • 54KdrURBhfNE7SQE8GDJkE3vSX9wHFbY1j8MKjLqpump</p><p class="grok-credit">PIT WIRED BY GROK • W.F.U.D. STUDIOS ON THE BOARD</p><p class="post-sub">The mint line is an identifier only. This game is entertainment. It is not financial, investment, or legal advice, and it does not sell, solicit, or promise any token, return, or crown value. Arcade entry text is flavor. No wallet payment is required to play Exhibition.</p></div></div><div class="menu-btns"><button class="btn btn-gold" onclick="show('title')">BACK</button></div></section>
 <section id="soundtrack" class="screen menu"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>PIT DECK</p></div><div class="pit"><div class="pit-lcd"><b id="pitNow">PIT DECK</b><span id="pitSub">SELECT A TRACK</span></div><div class="pit-list" id="pitList"></div><div class="pit-controls"><button type="button" onclick="pitStep(-1)">PREV</button><button type="button" id="pitPlay" onclick="pitToggle()">PLAY</button><button type="button" onclick="pitStep(1)">NEXT</button></div></div><div class="menu-btns"><button class="btn btn-gold" onclick="show('title')">BACK</button></div></section>
 <section id="fight" class="screen">
   <div id="titlebar"><img class="brand-logo" src="./fight header.png" alt="FINTWITS FUD KINGZ"></div>
@@ -399,7 +401,7 @@ let paused=false,over=false,announcing=false,paid=false,skipPay=false,lastTap=0,
 let mutedMusic=false,mutedFx=false,musicStage=0,selectedFighter=0,selectedOpponent=1,cpuFighter=1,selectedArena=0;
 let arcadeQueue=[],arcadeIndex=0,arcadeKing=false,arcadeBeaten={},lastLiquidIdx=-1,lastArcadeRecord="",lastBeatenName="";
 let cpuSkill=Math.max(1,Math.min(10,parseInt(localStorage.getItem(SKILL_STORE)||"5",10)||5));
-let arcadeSkill=Math.max(5,Math.min(10,parseInt(localStorage.getItem(ARCADE_SKILL_STORE)||"5",10)||5));
+let arcadeSkill=Math.max(4,Math.min(10,parseInt(localStorage.getItem(ARCADE_SKILL_STORE)||"4",10)||4));
 let matchRounds=parseInt(localStorage.getItem(ROUNDS_STORE)||"3",10)===4?4:3;
 let youBlocking=false,cpuBlocking=false,currentTrack="",lastScreen="intro";
 let roomCode="",invitedMember=null,sentInvites={},poseTimer={you:null,cpu:null};
@@ -749,21 +751,61 @@ function backToExhibitionFighters(){clearTimeout(aiTimer);clearReadyTimer();clea
 function showFinalStats(win,record,king){document.getElementById("winFlash").classList.remove("show");document.getElementById("endKo").textContent=king?"FUD KING":"K.O.";document.getElementById("endMsg").textContent=king?"YOU ARE THE FUD KING":(win?"YOU WIN THE PIT":(mode==="arcade"?"ARCADE OVER":"MARGIN CALLED"));const gainsBtn=document.getElementById("endGold"),titleBtn=document.getElementById("endTitle");if(mode==="pvc"){document.getElementById("endSub").textContent="CONGRADULATIONS";if(gainsBtn){gainsBtn.style.display="";gainsBtn.textContent="EXHIBITION";gainsBtn.onclick=backToExhibitionFighters;}if(titleBtn)titleBtn.textContent="MAIN";}else{document.getElementById("endSub").textContent="$"+matchScore+" gains  •  "+profileCrowns(activePlayer())+" CROWNS  •  +"+matchXp+" XP  •  "+record+" vs L"+effectiveSkill();if(gainsBtn){gainsBtn.style.display="";gainsBtn.textContent="GAINS & STATS";gainsBtn.onclick=openHighScores;}if(titleBtn)titleBtn.textContent="TITLE SCREEN";}document.getElementById("endOv").classList.add("show");}
 function finish(winner){over=true;announcing=false;clearTimeout(aiTimer);clearRoundTimer();setBlock("you",false);setBlock("cpu",false);playBgm();const youWonRound=winner==="you";playPose(winner,"victory");playPose(youWonRound?"cpu":"you","loser");matchScore+=dollarsLeft("you");matchXp+=10+(youWonRound?25:0)+effectiveSkill();if(youWonRound)roundWins.you+=1;else roundWins.cpu+=1;updateRoundHud();if(!matchOver()){holdRoundWinner(youWonRound);return;}const win=roundWins.you>roundWins.cpu;if(win)matchXp+=50;const record=roundWins.you+"-"+roundWins.cpu;lastArcadeRecord=record;const beaten=FIGHTERS[cpuFighter].name;if(mode==="arcade"&&win){matchXp+=20;arcadeBeaten[cpuFighter]=true;lastLiquidIdx=cpuFighter;lastBeatenName=beaten;arcadeIndex+=1;if(arcadeIndex>=arcadeQueue.length){arcadeKing=true;matchXp+=100;awardCrown();bumpArcadeSkill();}saveHighScore({id:String(Date.now()),name:playerLabel(),fighter:FIGHTERS[selectedFighter].name,score:matchScore,xp:matchXp,wins:roundWins.you,record:(arcadeKing?"FUD KING  ":"")+record+"  L"+effectiveSkill(),when:Date.now()},true);holdFinalKo(function(){showPostFight(lastBeatenName,record);});return;}saveHighScore({id:String(Date.now()),name:playerLabel(),fighter:FIGHTERS[selectedFighter].name,score:matchScore,xp:matchXp,wins:roundWins.you,record:record+"  L"+effectiveSkill(),when:Date.now()},win);startKoQuake();document.getElementById("winFlashKo").textContent=win?"PIT WINNER":"MARGIN CALL";document.getElementById("winFlashName").textContent=win?playerLabel():opponentLabel();document.getElementById("winFlash").classList.add("show");if(winFlashTimer)clearTimeout(winFlashTimer);winFlashTimer=setTimeout(function(){showFinalStats(win,record,false);},WIN_FLASH_MS);}
 function goTitle(){clearTimeout(aiTimer);clearReadyTimer();clearRoundTimer();stopWalkLoop();if(winFlashTimer){clearTimeout(winFlashTimer);winFlashTimer=null;}paused=over=announcing=false;readyToFight=false;setBlock("you",false);show("title");}
-function bindAtk(id,type){const el=document.getElementById(id);el.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});el.addEventListener("pointerdown",function(e){e.preventDefault();playerMove(type);});el.addEventListener("selectstart",function(e){e.preventDefault();});el.addEventListener("dragstart",function(e){e.preventDefault();});}
+function bindAtk(id,type){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});
+  el.addEventListener("pointerdown",function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    try{el.setPointerCapture(e.pointerId);}catch(_){}
+    playerMove(type);
+  });
+  el.addEventListener("selectstart",function(e){e.preventDefault();});
+  el.addEventListener("dragstart",function(e){e.preventDefault();});
+  el.addEventListener("contextmenu",function(e){e.preventDefault();});
+}
 bindAtk("lp","punchL");
 bindAtk("rp","punchR");
 bindAtk("lk","kickL");
 bindAtk("rk","kickR");
 bindAtk("th","throw");
 const bk=document.getElementById("bk");
-function lockControl(el){if(!el)return;el.setAttribute("unselectable","on");el.style.webkitUserSelect="none";el.style.userSelect="none";el.style.webkitTouchCallout="none";el.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});["selectstart","dragstart","contextmenu","gesturestart"].forEach(function(ev){el.addEventListener(ev,function(e){e.preventDefault();});});}
+function lockControl(el){
+  if(!el||el.dataset.selLock)return;
+  el.dataset.selLock="1";
+  el.setAttribute("unselectable","on");
+  el.setAttribute("draggable","false");
+  el.style.webkitUserSelect="none";
+  el.style.userSelect="none";
+  el.style.webkitTouchCallout="none";
+  // stop text-select / long-press callout; do not block pointer flow for taps/holds
+  el.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});
+  ["selectstart","dragstart","contextmenu","gesturestart"].forEach(function(ev){
+    el.addEventListener(ev,function(e){e.preventDefault();});
+  });
+}
+function lockAllButtons(root){
+  (root||document).querySelectorAll("button,.btn,.atk,.move-btn").forEach(lockControl);
+}
+// Block: hold works via pointerdown → pointerup/leave/cancel (rapid re-tap still ok)
 bk.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});
-bk.addEventListener("pointerdown",function(e){e.preventDefault();if(!paused&&!over&&!announcing)setBlock("you",true);});
-bk.addEventListener("pointerup",function(){setBlock("you",false);});
-bk.addEventListener("pointerleave",function(){setBlock("you",false);});
-bk.addEventListener("pointercancel",function(){setBlock("you",false);});
+bk.addEventListener("pointerdown",function(e){
+  e.preventDefault();
+  e.stopPropagation();
+  try{bk.setPointerCapture(e.pointerId);}catch(_){}
+  if(!paused&&!over&&!announcing)setBlock("you",true);
+});
+function endBlock(){setBlock("you",false);}
+bk.addEventListener("pointerup",endBlock);
+bk.addEventListener("pointerleave",endBlock);
+bk.addEventListener("pointercancel",endBlock);
 lockControl(bk);
-["lp","rp","lk","rk","th","moveL","moveR"].forEach(function(id){lockControl(document.getElementById(id));});
+["lp","rp","lk","rk","th","moveL","moveR","muteMusic","muteFx","pauseBtn"].forEach(function(id){lockControl(document.getElementById(id));});
+lockAllButtons(document);
+// menus rebuild DOM (skill row, roster, pit, etc.) — re-lock on every screen show
+const _showSel=show;
+show=function(id){_showSel(id);lockAllButtons(document.getElementById(id)||document);};
 function bindMoveBtn(id,side){const el=document.getElementById(id);if(!el)return;function down(e){e.preventDefault();moveHold[side]=true;el.classList.add("held");startWalkLoop();}function up(){moveHold[side]=false;el.classList.remove("held");if(!isMoving())stopWalkLoop();}el.addEventListener("touchstart",function(e){e.preventDefault();},{passive:false});el.addEventListener("pointerdown",down);el.addEventListener("pointerup",up);el.addEventListener("pointerleave",up);el.addEventListener("pointercancel",up);}
 bindMoveBtn("moveL","left");
 bindMoveBtn("moveR","right");
