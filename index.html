@@ -574,10 +574,10 @@ function isHiddenFighter(i){return!!(FIGHTERS[i]&&FIGHTERS[i].hidden);}
 function hiddenCost(i){return(FIGHTERS[i]&&FIGHTERS[i].unlockCrowns)||1;}
 function crownLabel(n){return n===1?"1 CROWN":(n+" CROWNS");}
 function currentCrowns(){return profileCrowns(activePlayer());}
-function xpLocked(i){return isHiddenFighter(i)&&currentCrowns()<hiddenCost(i);}
+function xpLocked(i){const p=activePlayer();if(p&&(p.admin||isAdminKey(p.wallet)))return false;return isHiddenFighter(i)&&currentCrowns()<hiddenCost(i);}
 function freeLocked(i){if(isHiddenFighter(i))return xpLocked(i);return false;}
 function arenaLocked(i){return false;}
-function fighterLocked(i){return false;}
+function fighterLocked(i){const p=activePlayer();if(p&&(p.admin||isAdminKey(p.wallet)))return false;return xpLocked(i);}
 const ARCADE_ORDER=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
 function playableIndexes(){const list=[];for(let i=0;i<FIGHTERS.length;i++)list.push(i);return list;}
 function firstFree(){return 0;}
@@ -950,7 +950,8 @@ async function startArcadeMode(){startFreeDemo();}
 function chooseMode(m){startFreeDemo();}
 let gateMode="arcade";
 function openModeGate(which){gateMode=which==="one"?"one":"arcade";const p=activePlayer();const name=document.getElementById("gateName"),handle=document.getElementById("gateHandle"),wallet=document.getElementById("gateWallet");if(name)name.value=p?p.name:"";if(handle)handle.value=p?p.handle:"";if(wallet)wallet.value=(p&&p.wallet)||"";const hint=document.getElementById("gateHint");if(hint)hint.textContent=gateMode==="one"?"1 ON 1 — ROSTER / WALLET":"ARCADE — ROSTER / WALLET";const note=document.getElementById("gateNote");if(note)note.textContent="";show("gate");}
-function saveGateProfile(){const name=(document.getElementById("gateName").value||"").trim();const handle=normHandle(document.getElementById("gateHandle").value);const wallet=(document.getElementById("gateWallet").value||"").trim();const note=document.getElementById("gateNote");if(!name||!handle||!wallet){if(note)note.textContent="Name, @handle, and wallet are required.";return;}let p=rosterData.players.find(function(x){return x.handle.toLowerCase()===handle.toLowerCase();});if(!p){p=normalizePlayer({id:uid(),name:name,handle:handle,created:Date.now()});rosterData.players.push(p);}else{p.name=name;p.handle=handle;}p.wallet=wallet;rosterData.activeId=p.id;persistRoster();if(note)note.textContent="Saved "+handle;}
+function isAdminKey(wallet){return String(wallet||"").trim()==="$FUDKINGZadmin2026";}
+function saveGateProfile(){const name=(document.getElementById("gateName").value||"").trim();const handle=normHandle(document.getElementById("gateHandle").value);const wallet=(document.getElementById("gateWallet").value||"").trim();const note=document.getElementById("gateNote");if(!name||!handle||!wallet){if(note)note.textContent="Name, @handle, and wallet are required.";return;}let p=rosterData.players.find(function(x){return x.handle.toLowerCase()===handle.toLowerCase();});if(!p){p=normalizePlayer({id:uid(),name:name,handle:handle,created:Date.now()});rosterData.players.push(p);}else{p.name=name;p.handle=handle;}p.wallet=wallet;p.admin=isAdminKey(wallet);if(p.admin)p.crowns=Math.max(profileCrowns(p),5);rosterData.activeId=p.id;persistRoster();if(note)note.textContent=p.admin?"ADMIN KEY — full access":"Saved "+handle;}
 function enterGatedMode(){saveGateProfile();const p=activePlayer();if(!p||!p.wallet)return;ensureAudio();if(gateMode==="one"){mode="one";skipPay=false;paid=true;readyToFight=false;if(!roomCode)roomCode=makeCode();document.getElementById("roomCode").textContent=roomCode;renderMembers();show("invite");return;}mode="arcade";skipPay=false;paid=true;invitedMember=null;readyToFight=false;arcadeKing=false;renderFighterCarousel();show("fighters");}
 function setTokWords(upId,dnId,phrase){const parts=String(phrase||"").trim().split(/\s+/);const up=document.getElementById(upId),dn=document.getElementById(dnId);if(!up||!dn)return;if(parts.length<2){up.textContent=parts[0]||"";dn.textContent="";}else{up.textContent=parts[0];dn.textContent=parts.slice(1).join(" ");}}
 function startFreeDemo(){ensureAudio();skipPay=true;paid=false;mode="pvc";invitedMember=null;readyToFight=false;arcadeKing=false;arcadeQueue=[];arcadeIndex=0;arcadeBeaten={};selectedOpponent=pickRandomCpu();cpuFighter=selectedOpponent;renderFighterCarousel();show("fighters");}
