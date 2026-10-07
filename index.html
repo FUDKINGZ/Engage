@@ -68,6 +68,7 @@ html,body{margin:0;width:100%;height:100%;height:100dvh;overflow:hidden;font-fam
 .menu-btns.tight .btn{width:192px;margin:0;padding:8px 6px;font-size:12px;border-radius:10px;line-height:1.15}
 .menu-btns.tight .mode-split .btn{width:126px}
 .menu-btns.tight .span2{grid-column:1/3}.mode-split{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}.mode-split .btn{margin:0}.mode-split .btn:disabled{opacity:.4;filter:grayscale(.35);cursor:not-allowed}
+#gateEnter:disabled{opacity:.4;filter:grayscale(.35);cursor:not-allowed;pointer-events:none}
 .pit{width:min(92vw,420px);margin:8px auto;background:#07140c;border:1px solid #1f6b38;border-radius:14px;padding:10px;box-shadow:inset 0 0 0 1px #0c2416}
 .pit-lcd{background:#04160b;border:1px solid #39ff14;border-radius:8px;padding:8px;color:#39ff14;font-family:"Courier New",Courier,monospace;text-shadow:0 0 6px #39ff14}
 .pit-lcd b{display:block;font-size:13px;letter-spacing:1px}
@@ -397,7 +398,7 @@ input[type=file].hidden-file{display:none}
   </div>
   <div id="mainBanner"><img src="./main_banner.png" alt="" width="780" height="120"></div>
 </section>
-<section id="gate" class="screen menu"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p id="gateHint">ROSTER / WALLET</p></div><div class="roster-body"><div class="form-card"><div class="form-label">PROFILE — REQUIRED</div><div class="form-row" style="margin-top:8px"><input id="gateName" placeholder="Player name"/><input id="gateHandle" placeholder="@handle"/></div><div class="form-label" style="margin-top:10px">TOKEN WALLET — REQUIRED</div><div class="form-row"><input id="gateWallet" placeholder="Wallet address"/></div><div class="form-row"><button type="button" onclick="saveGateProfile()">SAVE</button></div><div class="sent-note" id="gateNote"></div><p class="post-sub">Save a profile and a wallet before Arcade or 1 On 1. Exhibition does not use this gate. The wallet line is an identifier only. No payment is taken here.</p></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="show('title')" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="22" font-weight="900" letter-spacing="3.2">BACK</text></svg></button><button type="button" class="tok-btn gold" onclick="enterGatedMode()" aria-label="Enter"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="16" font-weight="900" letter-spacing="2">ENTER</text></svg></button></div></section>
+<section id="gate" class="screen menu"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p id="gateHint">ROSTER / WALLET</p></div><div class="roster-body"><div class="form-card"><div class="form-label">PROFILE — REQUIRED</div><div class="form-row" style="margin-top:8px"><input id="gateName" placeholder="Player name"/><input id="gateHandle" placeholder="@handle"/></div><div class="form-label" style="margin-top:10px">TOKEN WALLET — REQUIRED</div><div class="form-row"><input id="gateWallet" placeholder="Wallet address"/></div><div class="form-row"><button type="button" onclick="saveGateProfile()">SAVE</button></div><div class="sent-note" id="gateNote"></div><p class="post-sub">Save a profile and a wallet before Arcade or 1 On 1. Exhibition does not use this gate. The wallet line is an identifier only. No payment is taken here.</p></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="show('title')" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="22" font-weight="900" letter-spacing="3.2">BACK</text></svg></button><button type="button" class="tok-btn gold" id="gateEnter" onclick="enterGatedMode()" aria-label="Enter" disabled><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="16" font-weight="900" letter-spacing="2">ENTER</text></svg></button></div></section>
 <section id="roster" class="screen menu"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>PLAYER ROSTER</p></div><div class="roster-body"><div class="form-card"><div class="form-label">NEW / UPDATE PROFILE</div><div class="form-row" style="margin-top:8px"><input id="rosterName" placeholder="Player name"/><input id="rosterHandle" placeholder="@handle"/></div><div class="form-row"><button type="button" onclick="saveRosterProfile()">SAVE PROFILE</button><button type="button" onclick="exportRosterFile()">SAVE FILE</button><button type="button" onclick="document.getElementById('rosterFile').click()">LOAD FILE</button></div><div class="sent-note" id="rosterNote"></div></div><div class="member-list" id="rosterList"></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="show('title')" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="22" font-weight="900" letter-spacing="3.2">BACK</text></svg></button></div></section>
 <section id="scores" class="screen menu"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>GALLERY</p></div><div class="carousel-wrap"><div class="match-arena-name" id="galleryName">ART</div><img id="galleryView" alt="" style="width:312px;height:25vh;object-fit:contain;background:rgba(0,0,0,.28);border:1px solid #334;border-radius:14px"><div class="nav-row"><button type="button" onclick="shiftGallery(-1)"></button><button type="button" onclick="shiftGallery(1)"></button></div><div class="dots" id="galleryDots"></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="show('title')" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="22" font-weight="900" letter-spacing="3.2">BACK</text></svg></button></div></section>
 <section id="stockcred" class="screen menu"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>STOCK CRED</p></div><div class="scores-wrap" id="stockCredBody">
@@ -472,7 +473,7 @@ input[type=file].hidden-file{display:none}
     <div class="fighter" id="cpu"><img class="fighter-img" id="cpuFile" alt=""></div>
     <div class="power-wrap p1" id="p1PowerWrap"><label>POWER <span id="p1PowerTxt">0%</span></label><div class="power-bar"><span id="p1Power"></span></div></div>
     <div class="power-wrap p2" id="p2PowerWrap"><label>POWER <span id="p2PowerTxt">0%</span></label><div class="power-bar"><span id="p2Power"></span></div></div>
-    <div class="overlay" id="pauseOv"><h2>PAUSED</h2><button class="btn btn-gold" onclick="togglePause()">RESUME</button><button class="btn btn-dark" onclick="goTitle()">TITLE SCREEN</button></div>
+    <div class="overlay" id="pauseOv"><h2>PAUSED</h2><button class="btn btn-gold" onclick="togglePause()">RESUME</button><button class="btn btn-dark" id="pauseRestart" onclick="restartExhibition()" style="display:none">RESTART</button><button class="btn btn-dark" onclick="goTitle()">TITLE SCREEN</button></div>
     <div class="overlay" id="roundOv"><div class="ko" id="roundKo">ROUND 1</div><h2 id="roundMsg">GET READY</h2><p id="roundSub" style="color:#9ad7b2"></p><div id="readyCount">3</div></div>
     <div class="overlay" id="winFlash"><div class="ko" id="winFlashKo">WINNER</div><div id="winFlashName">YOU</div><p id="winFlashSub" style="color:#9ad7b2"></p></div>
     <div class="overlay" id="endOv"><div class="ko" id="endKo">K.O.</div><h2 id="endMsg">YOU WIN</h2><p id="endSub" style="color:#9ad7b2"></p><button class="btn btn-gold" id="endGold" onclick="openHighScores()">GAINS & STATS</button><button class="btn btn-dark" id="endTitle" onclick="goTitle()">TITLE SCREEN</button></div>
@@ -561,7 +562,7 @@ let roundTimeLeft=ROUND_SECS,roundTimer=null,suddenDeath=false;
 let rosterData={activeId:"",players:[]},rosterFileHandle=null;
 let introTimer=null,introDone=false,introLocked="",introWanted=true,introStarted=false,introCanSkip=false;
 let youPos=YOU_HOME,cpuPos=CPU_HOME,tiltOn=false,tiltCenter=0,tiltReady=false,keysDown={},moveHold={left:false,right:false};
-let walkTimer=null,readyToFight=false;
+let walkTimer=null,readyToFight=false,runHold={left:false,right:false},runTap={left:0,right:0};
 const bgm=document.getElementById("bgm"),introSfx=document.getElementById("introSfx");
 const sfxPunchEl=document.getElementById("sfxPunch"),sfxKickEl=document.getElementById("sfxKick"),sfxThrowEl=document.getElementById("sfxThrow");
 document.getElementById("rosterArt").src=ROSTER;
@@ -656,6 +657,10 @@ function renderMatchup(){if(mode==="pvc"||mode==="arcade")cpuFighter=selectedOpp
 const skillLabel=matchSkill?matchSkill.querySelector("label"):null;
 if(mode==="arcade"){
   if(matchSkill)matchSkill.style.display="none";
+  if(skillRow)skillRow.style.display="none";
+  if(skillLabel)skillLabel.style.display="none";
+  if(roundBox)roundBox.style.display="none";
+  readyToFight=true;
 }else{
   if(matchSkill)matchSkill.style.display=readyToFight?"none":"";
   const showCpu=mode==="pvc"&&!readyToFight;
@@ -816,7 +821,8 @@ function tiltAxis(e){const type=(screen.orientation&&screen.orientation.type)||"
 function onTilt(e){if(paused||over||announcing||lastScreen!=="fight")return;const axis=tiltAxis(e);if(axis==null)return;if(!tiltReady){tiltCenter=axis;tiltReady=true;return;}const delta=axis-tiltCenter;if(Math.abs(delta)<TILT_DEAD)return;nudgeYou(Math.max(-1.15,Math.min(1.15,(delta-Math.sign(delta)*TILT_DEAD)/TILT_SCALE)));}
 async function enableTilt(){return false;}
 function isMoving(){return !!(moveHold.left||moveHold.right||keysDown.ArrowLeft||keysDown.ArrowRight||keysDown.KeyS||keysDown.KeyL);}
-function startWalkLoop(){if(walkTimer||!isMoving())return;walkTimer=setInterval(function(){if(paused||over||announcing||lastScreen!=="fight"||!isMoving()){stopWalkLoop();return;}if(keysDown.ArrowRight||keysDown.KeyL||moveHold.right)nudgeYou(0.7);if(keysDown.ArrowLeft||keysDown.KeyS||moveHold.left)nudgeYou(-0.7);},32);}
+function noteRun(side){const now=Date.now();if(now-runTap[side]<300)runHold[side]=true;runTap[side]=now;}
+function startWalkLoop(){if(walkTimer||!isMoving())return;walkTimer=setInterval(function(){if(paused||over||announcing||lastScreen!=="fight"||!isMoving()){stopWalkLoop();return;}if(keysDown.ArrowRight||keysDown.KeyL||moveHold.right)nudgeYou(runHold.right?1.4:0.7);if(keysDown.ArrowLeft||keysDown.KeyS||moveHold.left)nudgeYou(runHold.left?-1.4:-0.7);},32);}
 function stopWalkLoop(){if(walkTimer){clearInterval(walkTimer);walkTimer=null;}}
 function healthColor(ratio){const t=Math.max(0,Math.min(1,ratio));let r,g,b;if(t>0.5){const u=(t-0.5)/0.5;r=Math.round(255+(0-255)*u);g=Math.round(152+(200-152)*u);b=Math.round(0+(83-0)*u);}else{const u=t/0.5;r=255;g=Math.round(23+(152-23)*u);b=Math.round(68+(0-68)*u);}return"linear-gradient(180deg, rgba(255,255,255,.35), transparent 40%), rgb("+r+","+g+","+b+")";}
 function loadHighScores(){try{const list=JSON.parse(localStorage.getItem(HS_STORE)||"[]");return Array.isArray(list)?list:[];}catch(e){return[];}}
@@ -949,14 +955,15 @@ ARCADE_ORDER.forEach(function(i){if(i!==selectedFighter&&i!==FINAL_INDEX&&!fight
 async function startArcadeMode(){startFreeDemo();}
 function chooseMode(m){startFreeDemo();}
 let gateMode="arcade";
-function openModeGate(which){gateMode=which==="one"?"one":"arcade";const p=activePlayer();const name=document.getElementById("gateName"),handle=document.getElementById("gateHandle"),wallet=document.getElementById("gateWallet");if(name)name.value=p?p.name:"";if(handle)handle.value=p?p.handle:"";if(wallet)wallet.value=(p&&p.wallet)||"";const hint=document.getElementById("gateHint");if(hint)hint.textContent=gateMode==="one"?"1 ON 1 — ROSTER / WALLET":"ARCADE — ROSTER / WALLET";const note=document.getElementById("gateNote");if(note)note.textContent="";show("gate");}
+function syncGateEnter(){const btn=document.getElementById("gateEnter"),wallet=document.getElementById("gateWallet");if(!btn)return;btn.disabled=!(wallet&&String(wallet.value||"").trim());}
+function openModeGate(which){gateMode=which==="one"?"one":"arcade";const p=activePlayer();const name=document.getElementById("gateName"),handle=document.getElementById("gateHandle"),wallet=document.getElementById("gateWallet");if(name)name.value=p?p.name:"";if(handle)handle.value=p?p.handle:"";if(wallet)wallet.value=(p&&p.wallet)||"";const hint=document.getElementById("gateHint");if(hint)hint.textContent=gateMode==="one"?"1 ON 1 — ROSTER / WALLET":"ARCADE — ROSTER / WALLET";const note=document.getElementById("gateNote");if(note)note.textContent="";syncGateEnter();show("gate");}
 function isAdminKey(wallet){return String(wallet||"").trim()==="$FUDKINGZadmin2026";}
 function saveGateProfile(){const name=(document.getElementById("gateName").value||"").trim();const handle=normHandle(document.getElementById("gateHandle").value);const wallet=(document.getElementById("gateWallet").value||"").trim();const note=document.getElementById("gateNote");if(!name||!handle||!wallet){if(note)note.textContent="Name, @handle, and wallet are required.";return;}let p=rosterData.players.find(function(x){return x.handle.toLowerCase()===handle.toLowerCase();});if(!p){p=normalizePlayer({id:uid(),name:name,handle:handle,created:Date.now()});rosterData.players.push(p);}else{p.name=name;p.handle=handle;}p.wallet=wallet;p.admin=isAdminKey(wallet);if(p.admin)p.crowns=Math.max(profileCrowns(p),5);rosterData.activeId=p.id;persistRoster();if(note)note.textContent=p.admin?"ADMIN KEY — full access":"Saved "+handle;}
-function enterGatedMode(){saveGateProfile();const p=activePlayer();if(!p||!p.wallet)return;ensureAudio();if(gateMode==="one"){mode="one";skipPay=false;paid=true;readyToFight=false;if(!roomCode)roomCode=makeCode();document.getElementById("roomCode").textContent=roomCode;renderMembers();show("invite");return;}mode="arcade";skipPay=false;paid=true;invitedMember=null;readyToFight=false;arcadeKing=false;renderFighterCarousel();show("fighters");}
+function enterGatedMode(){saveGateProfile();const p=activePlayer();if(!p||!p.wallet)return;ensureAudio();if(gateMode==="one"){mode="one";skipPay=false;paid=true;readyToFight=false;if(!roomCode)roomCode=makeCode();document.getElementById("roomCode").textContent=roomCode;renderMembers();show("invite");return;}mode="arcade";skipPay=false;paid=true;invitedMember=null;readyToFight=false;arcadeKing=false;arcadeQueue=[];arcadeIndex=0;arcadeBeaten={};renderFighterCarousel();show("fighters");}
 function setTokWords(upId,dnId,phrase){const parts=String(phrase||"").trim().split(/\s+/);const up=document.getElementById(upId),dn=document.getElementById(dnId);if(!up||!dn)return;if(parts.length<2){up.textContent=parts[0]||"";dn.textContent="";}else{up.textContent=parts[0];dn.textContent=parts.slice(1).join(" ");}}
 function startFreeDemo(){ensureAudio();skipPay=true;paid=false;mode="pvc";invitedMember=null;readyToFight=false;arcadeKing=false;arcadeQueue=[];arcadeIndex=0;arcadeBeaten={};selectedOpponent=pickRandomCpu();cpuFighter=selectedOpponent;renderFighterCarousel();show("fighters");}
 function backFromFighters(){show("title");}
-function afterYourFighter(){if(fighterLocked(selectedFighter))return;mode="pvc";if(selectedOpponent===selectedFighter||fighterLocked(selectedOpponent))selectedOpponent=pickRandomCpu();cpuFighter=selectedOpponent;renderOpponentScreen();show("opponents");}
+function afterYourFighter(){if(fighterLocked(selectedFighter))return;if(mode==="arcade"){buildArcadeQueue();readyToFight=true;renderMatchup();show("matchup");return;}mode="pvc";if(selectedOpponent===selectedFighter||fighterLocked(selectedOpponent))selectedOpponent=pickRandomCpu();cpuFighter=selectedOpponent;renderOpponentScreen();show("opponents");}
 function goArenas(){if(mode==="pvc")cpuFighter=selectedOpponent;readyToFight=false;renderArenaCarousel();show("arenas");}
 function afterArena(){if(arenaLocked(selectedArena))return;readyToFight=true;if(mode==="pvc")cpuFighter=selectedOpponent;preloadMatchPair();renderMatchup();show("matchup");}
 function backFromArenas(){readyToFight=false;renderMatchup();show("matchup");}
@@ -1021,7 +1028,8 @@ function scheduleAI(){
     scheduleAI();
   },rush?160:tune.minDelay+Math.random()*tune.span);
 }
-function togglePause(){if(over||announcing)return;paused=!paused;document.getElementById("pauseOv").classList.toggle("show",paused);if(paused){setBlock("you",false);pauseBgm();}else{playBgm();scheduleAI();tiltReady=false;}}
+function restartExhibition(){if(mode!=="pvc")return;paused=false;document.getElementById("pauseOv").classList.remove("show");readyToFight=true;startFight(true);}
+function togglePause(){if(over||announcing)return;paused=!paused;const restart=document.getElementById("pauseRestart");if(restart)restart.style.display=(paused&&mode==="pvc")?"":"none";document.getElementById("pauseOv").classList.toggle("show",paused);if(paused){setBlock("you",false);pauseBgm();}else{playBgm();scheduleAI();tiltReady=false;}}
 function backToExhibitionFighters(){clearTimeout(aiTimer);clearReadyTimer();clearRoundTimer();stopWalkLoop();if(winFlashTimer){clearTimeout(winFlashTimer);winFlashTimer=null;}paused=over=announcing=false;readyToFight=false;setBlock("you",false);mode="pvc";invitedMember=null;renderFighterCarousel();show("fighters");}
 function showFinalStats(win,record,king){document.getElementById("winFlash").classList.remove("show");document.getElementById("endKo").textContent=king?"FUD KING":"K.O.";document.getElementById("endMsg").textContent=king?"YOU ARE THE FUD KING":(win?"YOU WIN THE PIT":(mode==="arcade"?"ARCADE OVER":"MARGIN CALLED"));const gainsBtn=document.getElementById("endGold"),titleBtn=document.getElementById("endTitle");if(mode==="pvc"){document.getElementById("endSub").textContent="CONGRATULATIONS";if(gainsBtn){gainsBtn.style.display="";gainsBtn.textContent="EXHIBITION";gainsBtn.onclick=backToExhibitionFighters;}if(titleBtn)titleBtn.textContent="MAIN";}else{document.getElementById("endSub").textContent="$"+matchScore+" gains  •  "+profileCrowns(activePlayer())+" CROWNS  •  +"+matchXp+" XP  •  "+record+" vs L"+effectiveSkill();if(gainsBtn){gainsBtn.style.display="";gainsBtn.textContent="GAINS & STATS";gainsBtn.onclick=openHighScores;}if(titleBtn)titleBtn.textContent="TITLE SCREEN";}document.getElementById("endOv").classList.add("show");}
 function finish(winner){over=true;announcing=false;clearTimeout(aiTimer);clearRoundTimer();setBlock("you",false);setBlock("cpu",false);playBgm();const youWonRound=winner==="you";playPose(winner,"victory");playPose(youWonRound?"cpu":"you","loser");matchScore+=dollarsLeft("you");matchXp+=10+(youWonRound?25:0)+effectiveSkill();if(youWonRound)roundWins.you+=1;else roundWins.cpu+=1;updateRoundHud();if(!matchOver()){holdRoundWinner(youWonRound);return;}const win=roundWins.you>roundWins.cpu;if(win)matchXp+=50;const record=roundWins.you+"-"+roundWins.cpu;lastArcadeRecord=record;const beaten=FIGHTERS[cpuFighter].name;saveHighScore({id:String(Date.now()),name:playerLabel(),fighter:FIGHTERS[selectedFighter].name,score:matchScore,xp:matchXp,wins:roundWins.you,record:record+"  L"+effectiveSkill(),when:Date.now()},win);
@@ -1091,9 +1099,9 @@ function bindMoveBtn(id,side){
     e.preventDefault();
     clearSel();
     try{if(el.setPointerCapture&&e.pointerId!=null)el.setPointerCapture(e.pointerId);}catch(err){}
-    moveHold[side]=true;el.classList.add("held");startWalkLoop();
+    noteRun(side);moveHold[side]=true;el.classList.add("held");startWalkLoop();
   }
-  function up(){moveHold[side]=false;el.classList.remove("held");if(!isMoving())stopWalkLoop();}
+  function up(){moveHold[side]=false;runHold[side]=false;el.classList.remove("held");if(!isMoving())stopWalkLoop();}
   el.addEventListener("pointerdown",down);
   el.addEventListener("pointerup",up);
   el.addEventListener("pointerleave",up);
@@ -1132,8 +1140,8 @@ document.getElementById("enterArenaBtn").addEventListener("pointerdown",function
 document.getElementById("enterArenaBtn").addEventListener("click",function(e){e.preventDefault();e.stopPropagation();});
 document.getElementById("introCrt").addEventListener("pointerdown",function(e){if(!introStarted||!introCanSkip)return;if(e.target&&e.target.closest&&e.target.closest("#enterArenaBtn,#coinPanel"))return;onIntroInput();});
 const KEY_ATK={KeyD:"kickL",KeyF:"punchL",KeyH:"throw",KeyJ:"punchR",KeyK:"kickR"};
-window.addEventListener("keydown",function(e){if(!introDone&&document.getElementById("intro").classList.contains("active")){e.preventDefault();onIntroInput();return;}if(e.target&&(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA"))return;keysDown[e.code]=true;if(e.code==="ArrowLeft"||e.code==="ArrowRight"||e.code==="KeyS"||e.code==="KeyL"){e.preventDefault();startWalkLoop();return;}if(e.repeat)return;if(e.code==="KeyG"){e.preventDefault();if(!paused&&!over&&!announcing)setBlock("you",true);return;}if(KEY_ATK[e.code]){e.preventDefault();playerMove(KEY_ATK[e.code]);}});
-window.addEventListener("keyup",function(e){keysDown[e.code]=false;if(e.code==="KeyG")setBlock("you",false);if(!isMoving())stopWalkLoop();});
+window.addEventListener("keydown",function(e){if(!introDone&&document.getElementById("intro").classList.contains("active")){e.preventDefault();onIntroInput();return;}if(e.target&&(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA"))return;keysDown[e.code]=true;if(e.code==="ArrowLeft"||e.code==="KeyS"){e.preventDefault();noteRun("left");startWalkLoop();return;}if(e.code==="ArrowRight"||e.code==="KeyL"){e.preventDefault();noteRun("right");startWalkLoop();return;}if(e.repeat)return;if(e.code==="KeyG"){e.preventDefault();if(!paused&&!over&&!announcing)setBlock("you",true);return;}if(KEY_ATK[e.code]){e.preventDefault();playerMove(KEY_ATK[e.code]);}});
+window.addEventListener("keyup",function(e){keysDown[e.code]=false;if(e.code==="ArrowLeft"||e.code==="KeyS")runHold.left=false;if(e.code==="ArrowRight"||e.code==="KeyL")runHold.right=false;if(e.code==="KeyG")setBlock("you",false);if(!isMoving())stopWalkLoop();});
 rosterData=loadRosterLocal();
 ensureDefaultPlayer();
 tryLoadRootRoster();
@@ -1145,6 +1153,8 @@ applyFighterArt();
 refreshMuteButtons();
 updatePowerMeters();
 introSfx.src=INTRO_BED;
+const gateWalletEl=document.getElementById("gateWallet");
+if(gateWalletEl)gateWalletEl.addEventListener("input",syncGateEnter);
 runIntro();
 </script></body>
 </html>
