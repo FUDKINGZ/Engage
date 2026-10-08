@@ -1320,12 +1320,14 @@ function finishLiquidate(){
   const doneFn=liquidateDone;clearLiquidate();
   playPose("you","idle");
   const stage=document.getElementById("stage"),ammo=document.createElement("img");
-  ammo.className="toss";ammo.style.width="120px";ammo.style.height="120px";ammo.style.maxWidth="120px";ammo.style.maxHeight="120px";ammo.style.left="58%";ammo.style.top="-80px";
+  ammo.className="toss liquid-pin";ammo.id="liquidPin";
+  ammo.style.cssText="position:absolute;width:120px;height:120px;max-width:120px;max-height:120px;left:58%;top:-80px;z-index:9;pointer-events:none;object-fit:contain";
   var liqName=String(FIGHTERS[selectedFighter].name||"").trim().toLowerCase();
-  bindSrcList(ammo,[FIGHTER_DIR+liqName+"/"+liqName+"_l_object.png"].concat(FIGHTERS[selectedFighter].objects||[]));stage.appendChild(ammo);
-  ammo.animate([{transform:"translate(0,0)"},{transform:"translate(0,210px)"}],{duration:900,easing:"ease-in",fill:"forwards"});
+  bindSrcList(ammo,[FIGHTER_DIR+liqName+"/"+liqName+"_l_object.png"]);stage.appendChild(ammo);
+  const drop=ammo.animate([{top:"-80px"},{top:"46%"}],{duration:900,easing:"ease-in",fill:"forwards"});
+  drop.onfinish=function(){ammo.style.top="46%";ammo.style.left="58%";};
   setTimeout(function(){
-    ammo.style.top="46%";ammo.style.left="58%";ammo.style.transform="none";ammo.style.zIndex="9";
+    ammo.style.top="46%";ammo.style.left="58%";
     flyMoney("cpu",100);
     setTimeout(function(){
       playPose("you","victory");
