@@ -403,37 +403,7 @@ input[type=file].hidden-file{display:none}
   justify-content:space-between;align-items:center
 }
 #gate .frame-390 .tok-btn{width:58.5px;height:58.5px}
-/* scene lock: 390×528 column */
-.screen{position:absolute;inset:0;display:none;flex-direction:column;contain:layout paint}
-.screen.active{display:flex}
-#postfight{overflow:visible;contain:none}
-.fixed-390.screen.active{display:flex!important;flex-direction:column;align-items:center;width:390px;height:528px;left:50%;right:auto;margin-left:-195px;overflow:hidden}
-.fixed-390,.fixed-390.menu{
-  background-color:#071018;
-  background-image:url(./scenebg.png);
-  background-repeat:no-repeat;
-  background-position:center top;
-  background-size:390px 528px;
-}
-.fixed-390 .brand{display:block;position:relative;z-index:5;width:390px;height:auto;min-height:45px;flex:none;margin:0 auto;padding:0;overflow:visible}
-.fixed-390 .brand .brand-logo{display:block;width:390px;height:45px;flex:none;margin:0;padding:0}
-.fixed-390 .menu-btns.tok-row{display:flex;width:390px;flex:none;margin:0 auto;box-sizing:border-box;justify-content:space-between;align-items:center;padding:0 20px 50px}
-.fixed-390 .tok-btn{width:58.5px;height:58.5px;flex:none}
-.fixed-390.back-left .menu-btns.tok-row{justify-content:flex-start;margin:auto auto 0}
-.fixed-390 .carousel-wrap,.fixed-390 .scores-wrap,.fixed-390 .pit,.fixed-390 .liquid-wrap,.fixed-390 .post-body,.fixed-390 .matchup-body,.fixed-390 .roster-body,.fixed-390 .invite-body,.fixed-390 .credits-mask{width:390px;flex:1 1 auto;min-height:0;margin:50px auto 0;padding:0;overflow:auto}
-#title{background:#071018;background-image:none}
-#title .brand,#title .brand .brand-logo{width:390px;height:45px}
-#mainBanner,#mainBanner img{display:block;width:390px;height:60px;margin:0 auto;padding:0}
-.menu-btns.tight{display:grid;width:390px;margin:0 auto;grid-template-columns:192px 192px;gap:6px;flex:none}
-#fight.screen.active{display:flex;flex-direction:column;align-items:center;width:100%;height:100%;min-height:0}
-#stage{flex:none;min-height:293px;width:390px;max-width:390px;height:293px;max-height:293px;margin:0 auto}
-#fightU,#fightUtil{flex:none;width:100%;max-width:390px;height:36px;min-height:36px;max-height:36px;margin:0 auto}
-#controls{flex:0 1 197px;max-height:197px;width:100%;max-width:390px;margin:0 auto}
-#gate.screen.active{display:flex!important;align-items:center!important;justify-content:center!important;background:#05070d!important}
-#gate .frame-390{width:390px;height:528px;max-width:390px;max-height:528px;overflow:hidden;display:flex;flex-direction:column;align-items:center;background-color:#071018;background-image:linear-gradient(180deg,rgba(5,8,14,.55),rgba(5,8,14,.72)),url(./scenebg.png);background-repeat:no-repeat;background-position:center top;background-size:390px 528px}
-#gate .frame-390 .roster-body{width:390px;flex:1 1 auto;min-height:0;margin:50px auto 0;padding:0 12px;overflow:auto}
-#gate .frame-390 .menu-btns.tok-row{display:flex;width:390px;flex:none;margin:0 auto;padding:0 20px 50px;justify-content:space-between;align-items:center}
-#gate .frame-390 .tok-btn{width:58.5px;height:58.5px}
+
 </style></head>
 <body>
 <div id="app">
@@ -443,6 +413,7 @@ input[type=file].hidden-file{display:none}
 <audio id="sfxKick" src="./audio/sound fx/sfx-kick.wav" preload="auto" playsinline></audio>
 <audio id="sfxThrow" src="./audio/sound fx/sfx-throw.wav" preload="auto" playsinline></audio>
 <audio id="sfxGrunt" src="./audio/sound fx/grunt.wav" preload="auto" playsinline></audio>
+<audio id="sfxLiquidate" src="./audio/sound fx/liquidate.mp3" preload="auto" playsinline></audio>
 <audio id="sfxDrag" src="./audio/sound fx/drag.wav" preload="auto" playsinline loop></audio>
 <input type="file" id="rosterFile" accept="application/json,.json" class="hidden-file"/>
 <section id="intro" class="screen active"><div class="crt" id="introCrt"><div class="coin-panel" id="coinPanel"><h2>FUD KINGZ OF FINTWITS</h2><div class="coin-slot-wrap"><div class="token" id="enterArenaBtn" aria-label="WFUD ARCADE, free play"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><path id="tokUp" d="M16,54 A34,34 0 0 1 84,54"/><path id="tokDn" d="M80,58 A30,30 0 0 1 20,58"/></defs><text fill="#5a3200" font-size="8" font-weight="900" letter-spacing="0.6"><textPath href="#tokUp" startOffset="50%" text-anchor="middle">WFUD ARCADE</textPath></text><text fill="#5a3200" font-size="7.2" font-weight="900" letter-spacing="0.8"><textPath href="#tokDn" startOffset="50%" text-anchor="middle">WFUD ARCADE</textPath></text><text x="50" y="56" text-anchor="middle" fill="#3a2200" font-size="11" font-weight="900" letter-spacing="0.4" stroke="#fff3bf" stroke-width="0.6">FREE PLAY</text></svg></div><div class="coin-slot" id="coinSlot"></div><div class="coin-hint">INSERT TOKEN</div></div></div><pre id="introText"></pre><div class="intro-skip">PRESS ANY KEY / TAP TO SKIP</div></div></section>
@@ -484,7 +455,7 @@ input[type=file].hidden-file{display:none}
 <section id="arenas" class="screen menu fixed-390"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>CHOOSE ARENA</p></div><div class="carousel-wrap"><div class="carousel" id="arenaCarousel"></div><div class="nav-row"><button type="button" onclick="shiftArena(-1)"></button><button type="button" onclick="shiftArena(1)"></button></div><div class="dots" id="arenaDots"></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="backFromArenas()" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="20" font-weight="900" letter-spacing="2">BACK</text></svg></button><button type="button" class="tok-btn gold" id="arenaNext" onclick="afterArena()" aria-label="Next"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="22" font-weight="900" letter-spacing="3.2" stroke="#fff3bf" stroke-width=".5" id="arenaNextWord">NEXT</text></svg></button></div></section>
 <section id="crown" class="screen menu fixed-390"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>CROWNING THE KING</p></div><div class="post-body"><div class="match-arena-name">CROWNING THE KING</div><div class="vs-card p1" style="width:min(70vw,280px)"><img id="crownHero" alt=""></div><p class="post-sub" id="crownSub"></p></div><div class="menu-btns tok-row"><button type="button" class="tok-btn gold" onclick="afterCrown()" aria-label="Continue"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="11" stroke="#fff3bf" stroke-width=".4">CONT</text></svg></button></div></section>
 <section id="credits" class="screen menu fixed-390"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"></div><div class="credits-mask"><div class="credits-roll" id="creditsRoll"></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn gold" onclick="afterCredits()" aria-label="Continue"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="11" stroke="#fff3bf" stroke-width=".4">CONT</text></svg></button></div></section>
-<section id="guide" class="screen menu fixed-390 back-left"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>GUIDE & DISCLAIMER</p></div><div class="scores-wrap"><div class="stat-card"><div class="stat-head"><div><b>HOW TO PLAY</b><span>TOUCH + KEYBOARD</span></div></div><p class="post-sub">Touch: L and R walk. LP and RP punch. LK and RK kick. BK holds block. TH throws only after the power meter is full.</p><p class="post-sub">Keyboard: S or the Left Arrow walks left. L or the Right Arrow walks right. Hold either key to keep walking. D is LK. F is LP. G holds block. H throws, and only after the meter is full. J is RP. K is RK.</p><p class="post-sub">A landed punch or kick builds power. Alternating sides, or a punch and a kick, builds a combo. A full meter arms 3 throws. A landed hit drops money. A block heals $1 and stops the hit. A whiff is a miss.</p></div><div class="stat-card"><div class="stat-head"><div><b>KEYBOARD</b><span>ASDF JKL;</span></div></div><p class="post-sub">S walks left. D is left kick. F is left punch. G holds block.</p><p class="post-sub">H throws. J is right punch. K is right kick. L walks right.</p><p class="post-sub">The Left Arrow and the Right Arrow also walk. Attack keys fire once per press.</p></div><div class="stat-card"><div class="stat-head"><div><b>MODES</b><span>ARCADE / EXHIBITION / 1 ON 1</span></div></div><p class="post-sub">Exhibition is free play. Every fighter and every arena is unlocked. Pick the CPU level and the rounds on the matchup screen. Rounds are first to 2 in a 3-round match, or first to 3 in a 4-round match. The time limit is 2:00. A tie goes to sudden death. Power and throw ammo carry between rounds of the same match. Soundtrack opens the Pit Deck. Gallery shows the pit art. Stock Cred is credits and the disclaimer only.</p></div><div class="stat-card"><div class="stat-head"><div><b>TOKEN INFO</b><span>NOT AN OFFER</span></div></div><p class="post-sub">From everyone at WFUD Studios, you are appreciated.</p><p class="mint">Solana • FUD KINGZ • 54KdrURBhfNE7SQE8GDJkE3vSX9wHFbY1j8MKjLqpump</p><p class="grok-credit">PIT WIRED BY GROK • W.F.U.D. STUDIOS ON THE BOARD</p><p class="post-sub">The mint line is an identifier only. This game is entertainment. It is not financial, investment, or legal advice, and it does not sell, solicit, or promise any token, return, or crown value. Arcade entry text is flavor. No wallet payment is required to play Exhibition.</p></div>
+<section id="guide" class="screen menu fixed-390 back-left"><div class="brand"><img class="brand-logo" src="./title header.png" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>GUIDE & DISCLAIMER</p></div><div class="scores-wrap"><div class="stat-card"><div class="stat-head"><div><b>HOW TO PLAY</b><span>TOUCH + KEYBOARD</span></div></div><p class="post-sub">Touch: L and R walk. LP and RP punch. LK and RK kick. BK holds block. TH throws only after the power meter is full.</p><p class="post-sub">Keyboard: S or the Left Arrow walks left. L or the Right Arrow walks right. Hold either key to keep walking. D is LK. F is LP. G holds block. H throws, and only after the meter is full. J is RP. K is RK.</p><p class="post-sub">A landed punch or kick builds power. Alternating sides, or a punch and a kick, builds a combo. A full meter arms 3 throws. A landed hit drops money. A block stops the hit and breaks the combo. It does not heal. A whiff is a miss. A throw only fires while throw ammo remains, and a blocked throw does no damage.</p></div><div class="stat-card"><div class="stat-head"><div><b>KEYBOARD</b><span>ASDF JKL;</span></div></div><p class="post-sub">S walks left. D is left kick. F is left punch. G holds block.</p><p class="post-sub">H throws. J is right punch. K is right kick. L walks right.</p><p class="post-sub">The Left Arrow and the Right Arrow also walk. Attack keys fire once per press.</p></div><div class="stat-card"><div class="stat-head"><div><b>MODES</b><span>ARCADE / EXHIBITION / 1 ON 1</span></div></div><p class="post-sub">Exhibition is free play. Every fighter and every arena is unlocked. It does not write fights, wins, losses, points, or XP. Pick the CPU level and the rounds on the matchup screen. Rounds are first to 2 in a 3-round match, or first to 3 in a 4-round match. Arcade is first to 2 in a 3-round match, and only Arcade writes the career book. The time limit is 2:00. A tie goes to sudden death. Power and throw ammo carry between rounds of the same match. Soundtrack opens the Pit Deck. Gallery shows the pit art. Stock Cred is credits and the disclaimer only.</p></div><div class="stat-card"><div class="stat-head"><div><b>TOKEN INFO</b><span>NOT AN OFFER</span></div></div><p class="post-sub">From everyone at WFUD Studios, you are appreciated.</p><p class="mint">Solana • FUD KINGZ • 54KdrURBhfNE7SQE8GDJkE3vSX9wHFbY1j8MKjLqpump</p><p class="grok-credit">PIT WIRED BY GROK • W.F.U.D. STUDIOS ON THE BOARD</p><p class="post-sub">The mint line is an identifier only. This game is entertainment. It is not financial, investment, or legal advice, and it does not sell, solicit, or promise any token, return, or crown value. Arcade entry text is flavor. No wallet payment is required to play Exhibition.</p></div>
 <div class="stat-card"><div class="stat-head"><div><b>DISCLAIMER</b><span>IP, LIKENESS, AND USE</span></div></div>
 <p class="post-sub">Fud Kingz of Fintwits, the pit, the roster, the arenas, the audio cues, and the on-screen text are original intellectual property of WFUD Studios, except where a separate written agreement says otherwise.</p>
 <p class="post-sub">Private intellectual property stays with its owner. A name, handle, profile picture, portrait, or other asset appears here only for entertainment, and only where WFUD Studios has permission or a written agreement to use it.</p>
@@ -624,9 +595,10 @@ let roundTimeLeft=ROUND_SECS,roundTimer=null,suddenDeath=false;
 let rosterData={activeId:"",players:[]},rosterFileHandle=null;
 let introTimer=null,introDone=false,introLocked="",introWanted=true,introStarted=false,introCanSkip=false;
 let youPos=YOU_HOME,cpuPos=CPU_HOME,tiltOn=false,tiltCenter=0,tiltReady=false,keysDown={},moveHold={left:false,right:false};
+let liquidateOn=false,liquidateTimer=null,liquidateLeft=15,liquidateSeq="",liquidateDone=null;
 let walkTimer=null,readyToFight=false,runHold={left:false,right:false},runTap={left:0,right:0};
 const bgm=document.getElementById("bgm"),introSfx=document.getElementById("introSfx");
-const sfxPunchEl=document.getElementById("sfxPunch"),sfxKickEl=document.getElementById("sfxKick"),sfxThrowEl=document.getElementById("sfxThrow"),sfxDragEl=document.getElementById("sfxDrag"),sfxGruntEl=document.getElementById("sfxGrunt");
+const sfxPunchEl=document.getElementById("sfxPunch"),sfxKickEl=document.getElementById("sfxKick"),sfxThrowEl=document.getElementById("sfxThrow"),sfxDragEl=document.getElementById("sfxDrag"),sfxGruntEl=document.getElementById("sfxGrunt"),sfxLiquidateEl=document.getElementById("sfxLiquidate");
 let dragWho="";
 document.getElementById("rosterArt").src=ROSTER;
 function wrap(i,n){return(i+n)%n;}
@@ -650,7 +622,7 @@ function matchOver(){return roundWins.you>=winsNeeded()||roundWins.cpu>=winsNeed
 function emptyRoster(){return{activeId:"",players:[]};}
 function scoreWasWin(s){const m=String((s&&s.record)||"").match(/^(\d+)\s*-\s*(\d+)/);if(m)return parseInt(m[1],10)>parseInt(m[2],10);return!!(s&&s.wins&&s.wins>=2);}
 function emptyFighterBook(){const book={};FIGHTERS.forEach(function(f){book[f.name]={fights:0,wins:0,losses:0,points:0,xp:0};});return book;}
-function normalizePlayer(p){const scores=Array.isArray(p&&p.scores)?p.scores:[];let fights=parseInt(p&&p.fights,10),wins=parseInt(p&&p.wins,10),losses=parseInt(p&&p.losses,10),points=parseInt(p&&p.points,10);if(!fights)fights=scores.length;if(isNaN(wins)||wins<0)wins=scores.filter(scoreWasWin).length;if(isNaN(losses)||losses<0)losses=Math.max(0,fights-wins);if(isNaN(points)||points<0)points=scores.reduce(function(n,s){return n+(s.score||0);},0);return{id:(p&&p.id)||uid(),name:(p&&p.name)||"Player",handle:normHandle((p&&(p.handle||p.name))||"@player"),created:(p&&p.created)||Date.now(),scores:scores,invites:Array.isArray(p&&p.invites)?p.invites:[],xp:Math.max(0,parseInt(p&&p.xp,10)||0),crowns:Math.max(0,parseInt(p&&p.crowns,10)||0),fights:Math.max(0,fights||0),wins:Math.max(0,wins||0),losses:Math.max(0,losses||0),points:Math.max(0,points||0),fighters:Object.assign(emptyFighterBook(),(p&&p.fighters)||{})};}
+function normalizePlayer(p){const scores=Array.isArray(p&&p.scores)?p.scores:[];let fights=parseInt(p&&p.fights,10),wins=parseInt(p&&p.wins,10),losses=parseInt(p&&p.losses,10),points=parseInt(p&&p.points,10);if(!fights)fights=scores.length;if(isNaN(wins)||wins<0)wins=scores.filter(scoreWasWin).length;if(isNaN(losses)||losses<0)losses=Math.max(0,fights-wins);if(isNaN(points)||points<0)points=scores.reduce(function(n,s){return n+(s.score||0);},0);return{id:(p&&p.id)||uid(),name:(p&&p.name)||"Player",handle:normHandle((p&&(p.handle||p.name))||"@player"),wallet:String((p&&p.wallet)||"").trim(),admin:!!(p&&p.admin),created:(p&&p.created)||Date.now(),scores:scores,invites:Array.isArray(p&&p.invites)?p.invites:[],xp:Math.max(0,parseInt(p&&p.xp,10)||0),crowns:Math.max(0,parseInt(p&&p.crowns,10)||0),fights:Math.max(0,fights||0),wins:Math.max(0,wins||0),losses:Math.max(0,losses||0),points:Math.max(0,points||0),fighters:Object.assign(emptyFighterBook(),(p&&p.fighters)||{})};}
 function loadRosterLocal(){try{const data=JSON.parse(localStorage.getItem(ROSTER_STORE)||"null");if(!data||!Array.isArray(data.players))return emptyRoster();return{activeId:data.activeId||"",players:data.players.map(normalizePlayer)};}catch(e){return emptyRoster();}}
 function persistRoster(){try{localStorage.setItem(ROSTER_STORE,JSON.stringify(rosterData));}catch(e){}writeRosterToRoot(false);}
 function activePlayer(){return rosterData.players.find(function(p){return p.id===rosterData.activeId;})||null;}
@@ -977,7 +949,7 @@ function healthColor(ratio){const t=Math.max(0,Math.min(1,ratio));let r,g,b;if(t
 function loadHighScores(){try{const list=JSON.parse(localStorage.getItem(HS_STORE)||"[]");return Array.isArray(list)?list:[];}catch(e){return[];}}
 function writeHighScores(list){try{localStorage.setItem(HS_STORE,JSON.stringify(list.slice(0,HS_LIMIT)));}catch(e){}}
 function recordCareer(entry,win){const p=activePlayer();if(!p)return;p.xp=profileXp(p)+(entry.xp||0);p.fights=(p.fights||0)+1;p.wins=(p.wins||0)+(win?1:0);p.losses=(p.losses||0)+(win?0:1);p.points=(p.points||0)+(entry.score||0);p.fighters=p.fighters||emptyFighterBook();const fname=entry.fighter||FIGHTERS[selectedFighter].name;if(!p.fighters[fname])p.fighters[fname]={fights:0,wins:0,losses:0,points:0,xp:0};const fc=p.fighters[fname];fc.fights+=1;fc.wins+=win?1:0;fc.losses+=win?0:1;fc.points+=entry.score||0;fc.xp+=entry.xp||0;p.scores=p.scores||[];p.scores.push(entry);p.scores.sort(function(a,b){return b.score-a.score;});p.scores=p.scores.slice(0,HS_LIMIT);persistRoster();}
-function saveHighScore(entry,win){return loadHighScores();}
+function saveHighScore(entry,win){if(mode==="arcade")recordCareer(entry,!!win);return loadHighScores();}
 function renderHighScores(){const box=document.getElementById("scoreList");box.innerHTML="";const players=rosterData.players.slice().sort(function(a,b){return(b.points||0)-(a.points||0)||(b.xp||0)-(a.xp||0)||profileCrowns(b)-profileCrowns(a);});if(!players.length){box.innerHTML='<div class="empty-scores">No profiles yet.</div>';return;}players.forEach(function(p){const card=document.createElement("div");card.className="stat-card"+(p.id===rosterData.activeId?" active":"");const used=Object.keys(p.fighters||{}).filter(function(name){return p.fighters[name]&&p.fighters[name].fights>0;});let fighterHtml=used.map(function(name){const f=p.fighters[name];return'<div class="fighter-stat"><b>'+name+'</b><span>'+f.fights+' F</span><span>'+f.wins+'-'+f.losses+'</span><span>$'+f.points+'</span></div>';}).join("")||'<div class="empty-scores" style="padding:8px">No fighter data yet.</div>';card.innerHTML='<div class="stat-head"><div class="av">'+(p.handle||p.name).replace("@","").slice(0,2).toUpperCase()+'</div><div><b>'+p.name+'</b><span>'+p.handle+'</span></div></div><div class="stat-grid"><div class="stat-cell"><small>FIGHTS</small><b>'+(p.fights||0)+'</b></div><div class="stat-cell"><small>W / L</small><b>'+(p.wins||0)+'-'+(p.losses||0)+'</b></div><div class="stat-cell"><small>GAINS</small><b>$'+(p.points||0)+'</b></div><div class="stat-cell"><small>CROWNS</small><b>'+profileCrowns(p)+'</b></div><div class="stat-cell"><small>XP</small><b>'+profileXp(p)+'</b></div></div>'+fighterHtml;box.appendChild(card);});}
 function openHighScores(){openPopularityBoard();}
 function openStockCred(){show("stockcred");}
@@ -1241,7 +1213,7 @@ function floats(to,text,kind){const n=takeFx();n.className="fx"+(kind?" "+kind:"
 function takeCash(){const img=cashPool.pop()||document.createElement("img");img.className="cash";img.style.width="42px";img.style.height="36px";img.style.maxWidth="42px";img.style.maxHeight="36px";img.style.objectFit="contain";img.alt="";return img;}
 function flyMoney(to,count){const stage=document.getElementById("stage"),body=bodyBox(to),stageBox=stage.getBoundingClientRect();const bills=Math.max(1,count||1),half=CASH_W/2;for(let i=0;i<bills;i++){const img=takeCash();bindSrcList(img,MONEY_URLS);const ox=(Math.random()*56-28)+i*14;img.style.left=(body.mid-stageBox.left-half+ox)+"px";img.style.top=(body.top-stageBox.top+8)+"px";stage.appendChild(img);const dir=to==="cpu"?1:-1,dx=dir*(90+Math.random()*110+i*22),dy=-120-Math.random()*90;img.animate([{transform:"translate(0,0) rotate(0deg)",opacity:1},{transform:"translate("+dx+"px,"+(dy+50)+"px) rotate("+(dir*110)+"deg)",opacity:0}],{duration:720+i*90,easing:"ease-out",delay:i*45});setTimeout(function(){if(img.parentNode)img.parentNode.removeChild(img);cashPool.push(img);},980+i*90);}}
 function setBlock(who,on){if(who==="you"){youBlocking=on;document.getElementById("bk").classList.toggle("held",on);playPose("you",on?"block":"idle");}else{cpuBlocking=on;playPose("cpu",on?"block":"idle");}}
-function playerMove(type){if(paused||over||announcing||youBlocking)return;const now=Date.now();if(now-lastTap<180)return;lastTap=now;if(type==="throw"){if(!canThrow("you")){floats("you","NO POWER","miss");return;}throwObject("you","cpu");}else attack("you","cpu",type);}
+function playerMove(type){if(liquidateOn){if(type==="punchR")noteLiquidate("RP");return;}if(paused||over||announcing||youBlocking)return;const now=Date.now();if(now-lastTap<180)return;lastTap=now;if(type==="throw"){if(!canThrow("you")){floats("you","NO POWER","miss");return;}throwObject("you","cpu");}else attack("you","cpu",type);}
 function moneyCountFor(dmg){if(dmg>=THROW_DMG)return 3;if(dmg>=KICK_DMG)return 2;return 1;}
 function ammoDamage(){
   const you=document.getElementById("you").getBoundingClientRect();
@@ -1319,9 +1291,54 @@ if(mode==="arcade"){
     arcadeKing=false;
   }
 }
+if(win){startLiquidate(function(){showPostFight(beaten,record,true);});return;}
 holdFinalKo(function(){
   showPostFight(beaten,record,win);
-},win?playerLabel():opponentLabel());
+},opponentLabel());
+}
+function clearLiquidate(){liquidateOn=false;liquidateSeq="";if(liquidateTimer){clearInterval(liquidateTimer);liquidateTimer=null;}if(sfxLiquidateEl){sfxLiquidateEl.pause();try{sfxLiquidateEl.currentTime=0;}catch(e){}}}
+function noteLiquidate(step){if(!liquidateOn)return;liquidateSeq=(liquidateSeq+step).slice(-4);if(liquidateSeq==="LLRP")finishLiquidate();}
+function startLiquidate(done){
+  liquidateDone=done;liquidateOn=true;liquidateSeq="";liquidateLeft=15;announcing=true;over=true;
+  playPose("you","idle");
+  if(sfxLiquidateEl&&!mutedFx){try{sfxLiquidateEl.currentTime=0;}catch(e){}sfxLiquidateEl.play().catch(function(){});}
+  document.getElementById("winFlashKo").textContent="LIQUIDATE THEM";
+  document.getElementById("winFlashName").textContent="L  L  RP";
+  document.getElementById("winFlashSub").textContent=liquidateLeft;
+  document.getElementById("winFlash").classList.add("show","top");
+  if(liquidateTimer)clearInterval(liquidateTimer);
+  liquidateTimer=setInterval(function(){
+    liquidateLeft-=1;
+    document.getElementById("winFlashSub").textContent=Math.max(0,liquidateLeft);
+    if(liquidateLeft>0)return;
+    const doneFn=liquidateDone;clearLiquidate();
+    document.getElementById("winFlash").classList.remove("show");
+    holdFinalKo(doneFn,playerLabel());
+  },1000);
+}
+function finishLiquidate(){
+  const doneFn=liquidateDone;clearLiquidate();
+  playPose("you","idle");
+  const stage=document.getElementById("stage"),ammo=document.createElement("img");
+  ammo.className="toss";ammo.style.width="120px";ammo.style.height="120px";ammo.style.maxWidth="120px";ammo.style.maxHeight="120px";ammo.style.left="58%";ammo.style.top="-80px";
+  var liqName=String(FIGHTERS[selectedFighter].name||"").trim().toLowerCase();
+  bindSrcList(ammo,[FIGHTER_DIR+liqName+"/"+liqName+"_l_object.png"].concat(FIGHTERS[selectedFighter].objects||[]));stage.appendChild(ammo);
+  ammo.animate([{transform:"translate(0,0)"},{transform:"translate(0,210px)"}],{duration:900,easing:"ease-in",fill:"forwards"});
+  setTimeout(function(){
+    ammo.style.top="46%";ammo.style.left="58%";ammo.style.transform="none";ammo.style.zIndex="9";
+    flyMoney("cpu",100);
+    setTimeout(function(){
+      playPose("you","victory");
+      document.getElementById("winFlashKo").textContent="WINNER";
+      document.getElementById("winFlashName").textContent=playerLabel();
+      document.getElementById("winFlashSub").textContent="";
+      document.getElementById("winFlash").classList.add("show","top");
+      setTimeout(function(){
+        document.getElementById("winFlash").classList.remove("show");
+        if(doneFn)doneFn();
+      },FINAL_KO_HOLD_MS);
+    },1800);
+  },1100);
 }
 function goTitle(){
   clearTimeout(aiTimer);clearReadyTimer();clearRoundTimer();stopWalkLoop();
@@ -1392,6 +1409,7 @@ function bindMoveBtn(id,side){
     e.preventDefault();
     clearSel();
     try{if(el.setPointerCapture&&e.pointerId!=null)el.setPointerCapture(e.pointerId);}catch(err){}
+    if(liquidateOn){if(side==="left")noteLiquidate("L");return;}
     noteRun(side);moveHold[side]=true;el.classList.add("held");startWalkLoop();
   }
   function up(){moveHold[side]=false;runHold[side]=false;el.classList.remove("held");if(!isMoving())stopWalkLoop();}
@@ -1433,7 +1451,7 @@ document.getElementById("enterArenaBtn").addEventListener("pointerdown",function
 document.getElementById("enterArenaBtn").addEventListener("click",function(e){e.preventDefault();e.stopPropagation();});
 document.getElementById("introCrt").addEventListener("pointerdown",function(e){if(!introStarted||!introCanSkip)return;if(e.target&&e.target.closest&&e.target.closest("#enterArenaBtn,#coinPanel"))return;onIntroInput();});
 const KEY_ATK={KeyD:"kickL",KeyF:"punchL",KeyH:"throw",KeyJ:"punchR",KeyK:"kickR"};
-window.addEventListener("keydown",function(e){if(!introDone&&document.getElementById("intro").classList.contains("active")){e.preventDefault();onIntroInput();return;}if(e.target&&(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA"))return;keysDown[e.code]=true;if(e.code==="ArrowLeft"||e.code==="KeyS"){e.preventDefault();noteRun("left");startWalkLoop();return;}if(e.code==="ArrowRight"||e.code==="KeyL"){e.preventDefault();noteRun("right");startWalkLoop();return;}if(e.repeat)return;if(e.code==="KeyG"){e.preventDefault();if(!paused&&!over&&!announcing)setBlock("you",true);return;}if(KEY_ATK[e.code]){e.preventDefault();playerMove(KEY_ATK[e.code]);}});
+window.addEventListener("keydown",function(e){if(!introDone&&document.getElementById("intro").classList.contains("active")){e.preventDefault();onIntroInput();return;}if(e.target&&(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA"))return;keysDown[e.code]=true;if(e.code==="ArrowLeft"||e.code==="KeyS"){e.preventDefault();if(liquidateOn){noteLiquidate("L");return;}noteRun("left");startWalkLoop();return;}if(e.code==="ArrowRight"||e.code==="KeyL"){e.preventDefault();noteRun("right");startWalkLoop();return;}if(e.repeat)return;if(e.code==="KeyG"){e.preventDefault();if(!paused&&!over&&!announcing)setBlock("you",true);return;}if(KEY_ATK[e.code]){e.preventDefault();playerMove(KEY_ATK[e.code]);}});
 window.addEventListener("keyup",function(e){keysDown[e.code]=false;if(e.code==="ArrowLeft"||e.code==="KeyS")runHold.left=false;if(e.code==="ArrowRight"||e.code==="KeyL")runHold.right=false;if(e.code==="KeyG")setBlock("you",false);if(!isMoving())stopWalkLoop();});
 rosterData=loadRosterLocal();
 ensureDefaultPlayer();
