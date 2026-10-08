@@ -1342,8 +1342,9 @@ function finishLiquidate(){
       document.getElementById("winFlash").classList.add("show","top");
       setTimeout(function(){
         document.getElementById("winFlash").classList.remove("show");
+        if(sfxLiquidateEl){sfxLiquidateEl.pause();try{sfxLiquidateEl.currentTime=0;}catch(e){}}
         if(doneFn)doneFn();
-      },FINAL_KO_HOLD_MS);
+      },12100);
     },1800);
   },1100);
 }
