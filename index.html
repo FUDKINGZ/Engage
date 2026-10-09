@@ -422,6 +422,7 @@ input[type=file].hidden-file{display:none}
 <audio id="sfxGrunt2" src="./audio/sound fx/player2_grunt.wav" preload="auto" playsinline></audio>
 <audio id="sfxLiquidate" src="./audio/sound fx/liquidate.mp3" preload="auto" playsinline></audio>
 <audio id="sfxLiquidateThem" src="./audio/sound fx/liquidate_them.wav" preload="auto" playsinline></audio>
+<audio id="sfxWhistleCrash" src="./audio/sound fx/whistle_crash.wav" preload="auto" playsinline></audio>
 <audio id="sfxDrag" src="./audio/sound fx/drag.wav" preload="auto" playsinline loop></audio>
 <input type="file" id="rosterFile" accept="application/json,.json" class="hidden-file"/>
 <section id="intro" class="screen active"><div class="crt" id="introCrt"><div class="coin-panel" id="coinPanel"><h2>FUD KINGZ OF FINTWITS</h2><div class="coin-slot-wrap"><div class="token" id="enterArenaBtn" aria-label="WFUD ARCADE, free play"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><path id="tokUp" d="M16,54 A34,34 0 0 1 84,54"/><path id="tokDn" d="M80,58 A30,30 0 0 1 20,58"/></defs><text fill="#5a3200" font-size="8" font-weight="900" letter-spacing="0.6"><textPath href="#tokUp" startOffset="50%" text-anchor="middle">WFUD ARCADE</textPath></text><text fill="#5a3200" font-size="7.2" font-weight="900" letter-spacing="0.8"><textPath href="#tokDn" startOffset="50%" text-anchor="middle">WFUD ARCADE</textPath></text><text x="50" y="56" text-anchor="middle" fill="#3a2200" font-size="11" font-weight="900" letter-spacing="0.4" stroke="#fff3bf" stroke-width="0.6">FREE PLAY</text></svg></div><div class="coin-slot" id="coinSlot"></div><div class="coin-hint">INSERT TOKEN</div></div></div><pre id="introText"></pre><div class="intro-skip">PRESS ANY KEY / TAP TO SKIP</div></div></section>
@@ -606,7 +607,7 @@ let youPos=YOU_HOME,cpuPos=CPU_HOME,tiltOn=false,tiltCenter=0,tiltReady=false,ke
 let liquidateOn=false,liquidateTimer=null,liquidateLeft=15,liquidateSeq="",liquidateDone=null;
 let walkTimer=null,readyToFight=false,runHold={left:false,right:false},runTap={left:0,right:0};
 const bgm=document.getElementById("bgm"),introSfx=document.getElementById("introSfx");
-const sfxPunchEl=document.getElementById("sfxPunch"),sfxKickEl=document.getElementById("sfxKick"),sfxThrowEl=document.getElementById("sfxThrow"),sfxDragEl=document.getElementById("sfxDrag"),sfxGruntEl=document.getElementById("sfxGrunt"),sfxGrunt2El=document.getElementById("sfxGrunt2"),sfxLiquidateEl=document.getElementById("sfxLiquidate"),sfxLiquidateThemEl=document.getElementById("sfxLiquidateThem"),sfxPowerChimeEl=document.getElementById("sfxPowerChime");
+const sfxPunchEl=document.getElementById("sfxPunch"),sfxKickEl=document.getElementById("sfxKick"),sfxThrowEl=document.getElementById("sfxThrow"),sfxDragEl=document.getElementById("sfxDrag"),sfxGruntEl=document.getElementById("sfxGrunt"),sfxGrunt2El=document.getElementById("sfxGrunt2"),sfxLiquidateEl=document.getElementById("sfxLiquidate"),sfxLiquidateThemEl=document.getElementById("sfxLiquidateThem"),sfxPowerChimeEl=document.getElementById("sfxPowerChime"),sfxWhistleCrashEl=document.getElementById("sfxWhistleCrash");
 let dragWho="";
 document.getElementById("rosterArt").src=ROSTER;
 function wrap(i,n){return(i+n)%n;}
@@ -813,7 +814,7 @@ function preloadCritical(){
     TITLE_TRACK,
     INTRO_BED
   ].forEach(function(u){preloadUrl(u,"high");});
-  [sfxPunchEl,sfxKickEl,sfxThrowEl,sfxDragEl,sfxGruntEl,sfxGrunt2El,sfxPowerChimeEl].forEach(function(el){
+  [sfxPunchEl,sfxKickEl,sfxThrowEl,sfxDragEl,sfxGruntEl,sfxGrunt2El,sfxPowerChimeEl,sfxWhistleCrashEl].forEach(function(el){
     if(el){el.preload="auto";try{el.load();}catch(e){}}
   });
 }
@@ -898,6 +899,7 @@ function sfxCall(word){if(word==="FIGHT!!"||word==="FIGHT!"){playTone(220,0.18,"
 function sfxMiss(){playTone(160,0.07,"square",0.05);}
 function sfxBlock(){playTone(740,0.06,"triangle",0.1);playTone(1180,0.05,"square",0.05);}
 function sfxPowerReady(){playFile(sfxPowerChimeEl);playTone(620,0.1,"triangle",0.1);playTone(880,0.12,"square",0.07);}
+function sfxWhistleCrash(){playFile(sfxWhistleCrashEl);}
 function setIntroText(t){document.getElementById("introText").innerHTML=t+'<span class="cursor"> </span>';}
 function stopTitleSong(){bgm.pause();}
 function stopIntroBed(){introSfx.pause();try{introSfx.currentTime=0;}catch(e){}}
@@ -922,7 +924,7 @@ function enterArena(){
   const slot=document.getElementById("coinSlot");
   if(slot)slot.classList.add("fed");
   ensureAudio();
-  sfxPunchEl.load();sfxKickEl.load();sfxThrowEl.load();if(sfxDragEl)sfxDragEl.load();if(sfxGruntEl)sfxGruntEl.load();if(sfxGrunt2El)sfxGrunt2El.load();
+  sfxPunchEl.load();sfxKickEl.load();sfxThrowEl.load();if(sfxDragEl)sfxDragEl.load();if(sfxGruntEl)sfxGruntEl.load();if(sfxGrunt2El)sfxGrunt2El.load();if(sfxWhistleCrashEl)sfxWhistleCrashEl.load();
   startIntroBed();
   setTimeout(function(){
     if(panel)panel.classList.add("hidden");
@@ -1349,7 +1351,7 @@ function finishLiquidate(by){
   var liqName=String(FIGHTERS[by==="you"?selectedFighter:cpuFighter].name||"").trim().toLowerCase();
   bindSrcList(ammo,[FIGHTER_DIR+liqName+"/"+liqName+"_l_object.png"]);stage.appendChild(ammo);
   const drop=ammo.animate([{top:"-80px"},{top:pinTop+"px"}],{duration:900,easing:"ease-in",fill:"forwards"});
-  drop.onfinish=function(){ammo.style.top=pinTop+"px";ammo.style.left=pinLeft+"px";};
+  drop.onfinish=function(){ammo.style.top=pinTop+"px";ammo.style.left=pinLeft+"px";sfxWhistleCrash();};
   setTimeout(function(){
     ammo.style.top=pinTop+"px";ammo.style.left=pinLeft+"px";
     flyMoney(loser,100);
