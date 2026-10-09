@@ -551,7 +551,7 @@ const POSE_MS=420,HS_LIMIT=10,ANNOUNCE_MS=800,WIN_FLASH_MS=4200,ROUND_WIN_HOLD_M
 const THROW_MS=640,POWER_MAX=100,POWER_PUNCH=22,POWER_KICK=28,COMBO_WINDOW=900,COMBO_BONUS=12,THROWS_PER_POWER=3;
 const ROUND_SECS=120,YOU_HOME=4,YOU_MIN=0,YOU_MAX=75,CPU_HOME=4,CPU_MIN=0,CPU_MAX=75,TILT_DEAD=7,TILT_SCALE=28,ARCADE_ROUNDS=2,CASH_W=29,CASH_H=26,TOSS_SIZE=55;
 const ROUND_CALLS=["3","2","1","READY","FIGHT!"],TITLE_MENUS={fighters:1,opponents:1,invite:1,scores:1,roster:1,crown:1,credits:1,guide:1,stockcred:1,soundtrack:1,gate:1};
-const KEEP_ARENA_MUSIC={postfight:1,liquid:1,fight:1};
+const KEEP_ARENA_MUSIC={fight:1};
 const POSE_LABEL={punchL:"left punch",punchR:"right punch",kickL:"left kick",kickR:"right kick",throw:"throw",block:"block",victory:"victory",loser:"loser"};
 const THROW_OBJECTS=["phone.png","laptop.png","coffee.png","chart.png","newspaper.png","megaphone.png","bag.png","keyboard.png","coin.png","contract.png"];
 const INTRO_PAGES=["W.F.U.D. STUDIOS","PRESENTS","FUD KINGZ OF FINTWITS"],LOAD_HOLD_MS=3000;
@@ -1039,7 +1039,7 @@ function renderPitDeck(){const box=document.getElementById("pitList");if(!box)re
 function pitPlay(force){ensureAudio();const t=PIT_TRACKS[pitIndex];if(!t)return;setTrack(t.file,true,!!force);renderPitDeck();}
 function pitToggle(){if(!bgm.paused&&currentTrack===PIT_TRACKS[pitIndex].file){pauseBgm();renderPitDeck();return;}pitPlay(false);}
 function pitStep(dir){pitIndex=(pitIndex+dir+PIT_TRACKS.length)%PIT_TRACKS.length;pitPlay(true);}
-function show(id){document.querySelectorAll(".screen").forEach(function(s){s.classList.remove("active");});document.getElementById(id).classList.add("active");lastScreen=id;if(id==="intro"){startIntroBed();return;}if(id==="title"){startTitleSong();return;}if(id==="soundtrack"){renderPitDeck();return;}if(id==="matchup"){renderMatchup();startTitleSong();return;}if(KEEP_ARENA_MUSIC[id]){if(id==="fight")playArenaMusic(false);else playBgm();return;}if(TITLE_MENUS[id])startTitleSong();if(id==="arenas"){const w=document.getElementById("arenaNextWord");if(w)w.textContent="NEXT";startTitleSong();}if(id==="fighters"){document.getElementById("fighterHint").textContent=mode==="arcade"?"CHOOSE YOUR FIGHTER":"CHOOSE FIGHTER";renderSkillRow();renderFighterCarousel();}if(id==="opponents")renderOpponentScreen();}
+function show(id){document.querySelectorAll(".screen").forEach(function(s){s.classList.remove("active");});document.getElementById(id).classList.add("active");lastScreen=id;if(id==="intro"){startIntroBed();return;}if(id==="title"){startTitleSong();return;}if(id==="soundtrack"){renderPitDeck();return;}if(id==="matchup"){renderMatchup();startTitleSong();return;}if(KEEP_ARENA_MUSIC[id]){if(id==="fight")playArenaMusic(false);else playBgm();return;}if(id==="postfight"||id==="liquid"){startTitleSong();return;}if(TITLE_MENUS[id])startTitleSong();if(id==="arenas"){const w=document.getElementById("arenaNextWord");if(w)w.textContent="NEXT";startTitleSong();}if(id==="fighters"){document.getElementById("fighterHint").textContent=mode==="arcade"?"CHOOSE YOUR FIGHTER":"CHOOSE FIGHTER";renderSkillRow();renderFighterCarousel();}if(id==="opponents")renderOpponentScreen();}
 function makeCode(){const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let s="";for(let i=0;i<6;i++)s+=chars[Math.floor(Math.random()*chars.length)];return s;}
 function inviteLink(){return location.href.split("#")[0]+"#fight="+roomCode;}
 function newRoom(){roomCode=makeCode();sentInvites={};invitedMember=null;document.getElementById("roomCode").textContent=roomCode;setInviteNote("New pit opened.");renderMembers();}
@@ -1337,8 +1337,6 @@ function finishLiquidate(by){
   liquidateOn=false;liquidateSeq="";
   if(liquidateTimer){clearInterval(liquidateTimer);liquidateTimer=null;}
   bgm.pause();
-  if(sfxLiquidateEl){sfxLiquidateEl.loop=false;try{sfxLiquidateEl.currentTime=0;}catch(e){}if(!mutedFx)sfxLiquidateEl.play().catch(function(){});}
-  cueLiquidateThem();
   playPose(by,"idle");
   playPose(by==="you"?"cpu":"you","loser");
   const stage=document.getElementById("stage"),ammo=document.createElement("img");
