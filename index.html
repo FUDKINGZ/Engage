@@ -6,7 +6,7 @@
 <title>FUD KINGZ OF FINTWITS</title>
 <link rel="preload" href="./title header.png" as="image">
 <link rel="preload" href="./scenebg.png" as="image">
-<link rel="preload" href="./title screen.png" as="image">
+<link rel="preload" href="./title screen.jpg" as="image">
 <link rel="preload" href="./controller/controller_texture.png" as="image">
 <link rel="preload" href="./main_banner.png" as="image">
 <link rel="preload" href="./audio/title/maintitle.mp3" as="audio">
@@ -551,7 +551,7 @@ input[type=file].hidden-file{display:none}
 <script>
 const ROOT="./",ARENA_DIR=ROOT+"arenas/",FIGHTER_DIR=ROOT+"fighters/",TITLECARD_DIR=ROOT+"titlecards/",OBJECT_DIR=ROOT+"objects/",AUDIO=ROOT+"audio/";
 const TITLE_TRACK=AUDIO+"title/maintitle.mp3",INTRO_BED=AUDIO+"intro/intro-boot.wav";
-const ROSTER=ROOT+"title screen.png",ROSTER_FILE=ROOT+"roster.json";
+const ROSTER=ROOT+"title screen.jpg",ROSTER_FILE=ROOT+"roster.json";
 const MAX=100,PUNCH_DMG=0.5,KICK_DMG=1,THROW_DMG=2.5,BLOCK_HEAL=0.5,HIT_GAP=42;
 const HS_STORE="ft_gains",SKILL_STORE="ft_skill",ARCADE_SKILL_STORE="ft_arcade_skill",ROSTER_STORE="ft_roster",ROUNDS_STORE="ft_rounds";
 const POSE_MS=420,HS_LIMIT=10,ANNOUNCE_MS=800,WIN_FLASH_MS=4200,ROUND_WIN_HOLD_MS=4000,FINAL_KO_HOLD_MS=4000;
@@ -825,7 +825,7 @@ function preloadCritical(){
   [
     "./title header.png",
     "./scenebg.png",
-    "./title screen.png",
+    "./title screen.jpg",
     "./controller/controller_texture.png",
     "./main_banner.png",
     "./fight_u_banner.png",
@@ -1018,7 +1018,7 @@ function renderPopularityBoard(){
   });
 }
 let galleryIndex=0;
-function galleryItems(){const items=[{name:"TITLE HEADER",file:"./title header.png"},{name:"FIGHT HEADER",file:"./fight header.png"},{name:"TITLE SCREEN",file:"./title screen.png"},{name:"SCENE",file:"./scenebg.png"}];ARENAS.forEach(function(a){items.push({name:a.name,file:a.file});});FIGHTERS.forEach(function(f,i){items.push({name:f.name,file:(f.select||[])[0]||""});items.push({name:AMMO_NAMES[i]||f.name,file:(f.objects||[])[0]||""});});return items.filter(function(x){return x.file;});}
+function galleryItems(){const items=[{name:"TITLE HEADER",file:"./title header.png"},{name:"FIGHT HEADER",file:"./fight header.png"},{name:"TITLE SCREEN",file:"./title screen.jpg"},{name:"SCENE",file:"./scenebg.png"}];ARENAS.forEach(function(a){items.push({name:a.name,file:a.file});});FIGHTERS.forEach(function(f,i){items.push({name:f.name,file:(f.select||[])[0]||""});items.push({name:AMMO_NAMES[i]||f.name,file:(f.objects||[])[0]||""});});return items.filter(function(x){return x.file;});}
 function renderGallery(){const items=galleryItems();if(!items.length)return;galleryIndex=(galleryIndex+items.length)%items.length;const cur=items[galleryIndex];document.getElementById("galleryName").textContent=cur.name;document.getElementById("galleryView").src=cur.file;const dots=document.getElementById("galleryDots");if(!dots)return;dots.innerHTML="";items.forEach(function(_,i){const d=document.createElement("i");if(i===galleryIndex)d.className="on";dots.appendChild(d);});}
 function shiftGallery(dir){galleryIndex+=dir;renderGallery();}
 function openGallery(){renderGallery();show("scores");}
