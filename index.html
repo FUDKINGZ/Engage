@@ -7,7 +7,7 @@
 <link rel="preload" href="./title header.jpg" as="image">
 <link rel="preload" href="./scenebg.jpg" as="image">
 <link rel="preload" href="./title screen.jpg" as="image">
-<link rel="preload" href="./controller/controller_texture.png" as="image">
+<link rel="preload" href="./controller/controller_texture.jpg" as="image">
 <link rel="preload" href="./main_banner.png" as="image">
 <link rel="preload" href="./audio/title/maintitle.mp3" as="audio">
 <link rel="preload" href="./audio/intro/intro-boot.wav" as="audio">
@@ -128,7 +128,7 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 #arenas .slot-wrap.side .slot{width:100%;height:100%;flex:none;aspect-ratio:16/9;background:transparent}
 #arenas .slot .arena-art{width:100%;height:100%;flex:none;background-color:transparent!important;background-size:cover!important;background-repeat:no-repeat;background-position:center center}
 #arenaDots{display:none}
-#opponents .carousel-wrap{display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+#opponents .carousel-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center}
 #opponents .carousel{position:relative;width:100%;height:50%;flex:1 1 auto;min-height:0;margin:0}
 #opponentDots{display:none}
 #matchup .matchup-body{justify-content:center}
@@ -149,6 +149,9 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
   align-items:end;
   min-height:28vh;
   overflow:hidden;
+  border:2px solid #ffd54f;
+  border-radius:14px;
+  box-shadow:0 0 22px rgba(255,213,79,.45);
 }
 #matchup .vs-name{
   position:relative;
@@ -173,14 +176,21 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 }
 .carousel-wrap{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:6px 4px}
 .carousel{position:relative;width:100%;height:50%}
-#fighters .carousel-wrap{display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+#fighters .carousel-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center}
 #fighters .carousel{position:relative;width:100%;height:50%;flex:1 1 auto;min-height:0;margin:0}
 .slot-wrap{position:absolute;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
 .slot-wrap.side{width:28%;height:68%;pointer-events:auto}.slot-wrap.left{left:18%}.slot-wrap.right{left:82%}
-.slot-wrap.center{width:46%;height:96%;left:50%;z-index:3}
-.slot-name{width:100%;font-size:10px;color:#ffe082;font-weight:900;text-transform:uppercase;white-space:normal;overflow:hidden;text-align:center;line-height:1.15;-webkit-text-stroke:1px #000;paint-order:stroke fill;text-shadow:2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000,0 0 8px #ffb300}
+.slot-wrap.center{width:46%;height:82%;left:50%;z-index:3;top:58%}
+.slot-name{position:absolute;left:0;right:0;bottom:100%;margin-bottom:4px;width:100%;font-size:10px;color:#ffe082;font-weight:900;text-transform:uppercase;white-space:normal;overflow:hidden;text-align:center;line-height:1.15;-webkit-text-stroke:1px #000;paint-order:stroke fill;text-shadow:2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000,0 0 8px #ffb300;pointer-events:none;z-index:4}
 .slot-wrap.center .slot-name{font-size:12px;color:#ffd54f}.slot-wrap.side .slot-name{display:none}
 .slot{position:relative;width:100%;flex:1;min-height:0;border:2px solid #2a3344;border-radius:14px;background:#121826;overflow:hidden;display:flex;flex-direction:column}
+#fighters .slot,
+#opponents .slot{
+  aspect-ratio: 4/3;
+  width: 100%;
+  height: auto;
+  flex: none;
+}
 .slot-wrap.side .slot{opacity:.9;filter:none;background:transparent;border-color:transparent;box-shadow:none}
 .slot-wrap.center .slot{border-color:#ffd54f;box-shadow:0 0 22px rgba(255,213,79,.45)}
 .slot img,.slot .arena-art{width:100%;flex:1;min-height:0;object-fit:contain;object-position:center bottom;display:block;background:transparent}
@@ -302,7 +312,7 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .power-wrap.squeeze,.power-wrap.ready{border-color:#39ff14;box-shadow:0 0 12px rgba(57,255,20,.75)}
 @keyframes squeezeFlash{50%{opacity:.2}}
 #winFlashName{font-family:Impact,"Arial Black",system-ui,sans-serif;font-size:clamp(20px,6vw,35px);font-weight:900;color:#ffd54f;text-shadow:0 0 24px #ffb300;letter-spacing:3px;text-transform:uppercase}#postBanner{white-space:pre-line;line-height:1.05}#postBanner .liq{display:inline-block;margin-top:10px;color:#ff1744;-webkit-text-stroke:2px #000;paint-order:stroke fill;text-shadow:2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000,0 0 20px #f00}#winFlash.show{justify-content:flex-start;padding-top:50px}#winFlashKo,#winFlashName{-webkit-text-stroke:2px #000;paint-order:stroke fill;text-shadow:2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000,0 0 14px #ffb300}#winFlashName{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);margin:0}
-#controls{position:relative;width:100%;max-width:none;height:auto;min-height:0;max-height:none;flex:0 0 auto;padding:0 0 env(safe-area-inset-bottom);margin:0;background:url(./controller/controller_texture.png) center / 100% 100% no-repeat;z-index:6;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;box-sizing:border-box;overflow:hidden}#controls::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:4;box-shadow:inset 0 0 18px rgba(0,0,0,.55)}
+#controls{position:relative;width:100%;max-width:none;height:auto;min-height:0;max-height:none;flex:0 0 auto;padding:0 0 env(safe-area-inset-bottom);margin:0;background:url(./controller/controller_texture.jpg) center / 100% 100% no-repeat;z-index:6;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;box-sizing:border-box;overflow:hidden}#controls::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:4;box-shadow:inset 0 0 18px rgba(0,0,0,.55)}
 .pad-wrap{position:relative;width:100%;height:auto;min-height:0;max-height:none;margin:0;padding:11px 11px 15px;background:transparent;border:0;border-top:0;border-radius:0;box-shadow:none;display:grid;grid-template-columns:57px 57px 57px 1fr 57px 57px 57px;grid-template-rows:57px 57px 57px;align-items:center;justify-items:center;column-gap:0;row-gap:0;box-sizing:border-box;overflow:visible}
 #moveL{grid-column:1;grid-row:2;justify-self:center;align-self:center;width:57px;height:57px}
 #moveR{grid-column:7;grid-row:2;justify-self:center;align-self:center;width:57px;height:57px}
@@ -855,7 +865,7 @@ function preloadCritical(){
     "./title header.jpg",
     "./scenebg.jpg",
     "./title screen.jpg",
-    "./controller/controller_texture.png",
+    "./controller/controller_texture.jpg",
     "./main_banner.png",
     "./fight_u_banner.png",
     "./fight_banner.png",
