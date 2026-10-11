@@ -45,7 +45,7 @@ html,body{margin:0;width:100%;height:100%;height:100dvh;overflow:hidden;font-fam
 .fixed-390.back-left .menu-btns.tok-row{justify-content:flex-start}
 #title{background:#071018;background-image:none}
 .menu{background:radial-gradient(ellipse at top,rgba(80,20,0,.35),transparent 55%),#071018}
-.fixed-390.menu,.fixed-390{
+.fixed-390.menu,.fixed-390,#gate .frame-390{
   background-color:#071018;
   background-image:linear-gradient(180deg,rgba(5,8,14,.55),rgba(5,8,14,.72)),url(./scenebg.jpg);
   background-repeat:no-repeat;
@@ -1017,7 +1017,23 @@ function onTilt(e){if(paused||over||announcing||lastScreen!=="fight")return;cons
 async function enableTilt(){return false;}
 function isMoving(){return !!(moveHold.left||moveHold.right||keysDown.ArrowLeft||keysDown.ArrowRight||keysDown.KeyS||keysDown.KeyL||keysDown.KeyR);}
 function noteRun(side){const now=Date.now();if(now-runTap[side]<300)runHold[side]=true;runTap[side]=now;}
-function startWalkLoop(){if(walkTimer||!isMoving())return;if(!youBlocking)playPose("you","walk");walkTimer=setInterval(function(){if(lastScreen!=="fight"||!isMoving()||(!liquidateOn&&(paused||over||announcing))){stopWalkLoop();return;}if(pushingNow())playerPush();else{if(dragWho==="cpu")stopDragSfx();const youImg=document.getElementById("youFile");if(youImg&&youImg.dataset.pose!=="walk")playPose("you","walk");if(keysDown.ArrowRight||keysDown.KeyL||keysDown.KeyR||moveHold.right)nudgeYou(runHold.right?1.4:0.7);}if(keysDown.ArrowLeft||keysDown.KeyS||moveHold.left)nudgeYou(runHold.left?-1.4:-0.7);},32);}
+function startWalkLoop(){
+  if(walkTimer||!isMoving())return;
+  if(!youBlocking)playPose("you","walk");
+  walkTimer=setInterval(function(){
+    if(document.hidden||lastScreen!=="fight"||!isMoving()||(!liquidateOn&&(paused||over||announcing))){
+      stopWalkLoop();return;
+    }
+    if(pushingNow())playerPush();
+    else{
+      if(dragWho==="cpu")stopDragSfx();
+      const youImg=document.getElementById("youFile");
+      if(youImg&&youImg.dataset.pose!=="walk")playPose("you","walk");
+      if(keysDown.ArrowRight||keysDown.KeyL||keysDown.KeyR||moveHold.right)nudgeYou(runHold.right?1.4:0.7);
+    }
+    if(keysDown.ArrowLeft||keysDown.KeyS||moveHold.left)nudgeYou(runHold.left?-1.4:-0.7);
+  },32);
+}
 function stopWalkLoop(){if(walkTimer){clearInterval(walkTimer);walkTimer=null;}if(dragWho)stopDragSfx();const youImg=document.getElementById("youFile");if(youImg&&youImg.dataset.pose==="walk"&&!youBlocking)playPose("you","idle");}
 function healthColor(ratio){const t=Math.max(0,Math.min(1,ratio));let r,g,b;if(t>0.5){const u=(t-0.5)/0.5;r=Math.round(255+(0-255)*u);g=Math.round(152+(200-152)*u);b=Math.round(0+(83-0)*u);}else{const u=t/0.5;r=255;g=Math.round(23+(152-23)*u);b=Math.round(68+(0-68)*u);}return"linear-gradient(180deg, rgba(255,255,255,.35), transparent 40%), rgb("+r+","+g+","+b+")";}
 function loadHighScores(){try{const list=JSON.parse(localStorage.getItem(HS_STORE)||"[]");return Array.isArray(list)?list:[];}catch(e){return[];}}
@@ -1222,7 +1238,33 @@ function saveArcadeSlot(){const p=activePlayer();if(!p||mode!=="arcade")return n
 function saveArcadeRun(){saveArcadeSlot();}
 function deleteArcadeSlot(id){const p=activePlayer();if(!p||!Array.isArray(p.arcadeSaves))return;p.arcadeSaves=p.arcadeSaves.filter(function(s){return s.id!==id;});persistRoster();try{const raw=localStorage.getItem(arcadeSaveKey());if(raw&&JSON.parse(raw).id===id)localStorage.removeItem(arcadeSaveKey());}catch(e){}renderArcadeSaves();}
 function renderArcadeSaves(){const box=document.getElementById("gateSaves");if(!box)return;const p=activePlayer();const list=(p&&p.arcadeSaves)||[];box.innerHTML="";if(!list.length){box.innerHTML='<div class="empty-scores">No saved runs.</div>';return;}list.forEach(function(s){const row=document.createElement("div");row.style.cssText="display:flex;gap:4px;align-items:stretch";const b=document.createElement("button");b.type="button";b.style.flex="1";const next=FIGHTERS[s.arcadeQueue&&s.arcadeQueue[s.arcadeIndex]];b.textContent=s.label+(s.arcadeKing?" • CROWN":(next?" • NEXT "+next.name:""));b.onclick=function(){resumeArcadeSlot(s.id);};const del=document.createElement("button");del.type="button";del.textContent="DEL";del.style.flex="none";del.onclick=function(e){e.stopPropagation();deleteArcadeSlot(s.id);};row.appendChild(b);row.appendChild(del);box.appendChild(row);});}
-function resumeArcadeSlot(id){const p=activePlayer();if(!p)return false;const snap=(p.arcadeSaves||[]).find(function(s){return s.id===id;});if(!snap)return false;mode="arcade";skipPay=false;paid=true;pauseSaveLocked=true;selectedFighter=snap.selectedFighter||0;arcadeQueue=snap.arcadeQueue||[];arcadeIndex=snap.arcadeIndex||0;arcadeKing=!!snap.arcadeKing;arcadeBeaten=snap.arcadeBeaten||{};matchScore=snap.matchScore||0;matchXp=snap.matchXp||0;lastBeatenName=snap.lastBeatenName||"";lastArcadeRecord=snap.lastArcadeRecord||"";if(snap.arcadeSkill)arcadeSkill=Math.max(1,Math.min(5,snap.arcadeSkill));if(arcadeKing||arcadeIndex>=arcadeQueue.length){showCrownScene();return true;}selectedOpponent=arcadeQueue[arcadeIndex];cpuFighter=selectedOpponent;selectedArena=arcadeArenaIndex();readyToFight=true;currentRound=1;roundWins={you:0,cpu:0};resetPower();renderMatchup();show("matchup");return true;}
+function resumeArcadeSlot(id){
+  const p=activePlayer();if(!p)return false;
+  const snap=(p.arcadeSaves||[]).find(function(s){return s.id===id;});
+  if(!snap)return false;
+  mode="arcade";skipPay=false;paid=true;pauseSaveLocked=true;
+  selectedFighter=snap.selectedFighter||0;
+  arcadeQueue=snap.arcadeQueue||[];
+  arcadeIndex=snap.arcadeIndex||0;
+  arcadeKing=!!snap.arcadeKing;
+  arcadeBeaten=snap.arcadeBeaten||{};
+  matchScore=snap.matchScore||0;
+  matchXp=snap.matchXp||0;
+  lastBeatenName=snap.lastBeatenName||"";
+  lastArcadeRecord=snap.lastArcadeRecord||"";
+  if(snap.arcadeSkill)arcadeSkill=Math.max(1,Math.min(5,snap.arcadeSkill));
+  if(arcadeKing||arcadeIndex>=arcadeQueue.length){showCrownScene();return true;}
+  selectedOpponent=arcadeQueue[arcadeIndex];
+  cpuFighter=selectedOpponent;
+  selectedArena=arcadeArenaIndex();
+  readyToFight=true;
+  currentRound=1;
+  roundWins={you:0,cpu:0};
+  resetPower();
+  renderMatchup();
+  show("matchup");
+  return true;
+}
 function resumeArcadeRun(){let snap=null;try{snap=JSON.parse(localStorage.getItem(arcadeSaveKey())||"null");}catch(e){snap=null;}if(!snap)return false;mode="arcade";skipPay=false;paid=true;pauseSaveLocked=true;selectedFighter=snap.selectedFighter||0;selectedOpponent=snap.selectedOpponent||0;cpuFighter=snap.cpuFighter||selectedOpponent;selectedArena=snap.selectedArena||0;arcadeQueue=snap.arcadeQueue||[];arcadeIndex=snap.arcadeIndex||0;arcadeKing=!!snap.arcadeKing;arcadeBeaten=snap.arcadeBeaten||{};currentRound=snap.currentRound||1;roundWins=snap.roundWins||{you:0,cpu:0};matchScore=snap.matchScore||0;matchXp=snap.matchXp||0;lastBeatenName=snap.lastBeatenName||"";lastArcadeRecord=snap.lastArcadeRecord||"";readyToFight=true;startFight(false);hp.you=snap.hp&&snap.hp.you!=null?snap.hp.you:MAX;hp.cpu=snap.hp&&snap.hp.cpu!=null?snap.hp.cpu:MAX;power.you=snap.power&&snap.power.you!=null?snap.power.you:50;power.cpu=snap.power&&snap.power.cpu!=null?snap.power.cpu:50;throwAmmo.you=snap.throwAmmo&&snap.throwAmmo.you||0;throwAmmo.cpu=snap.throwAmmo&&snap.throwAmmo.cpu||0;youPos=snap.youPos!=null?snap.youPos:YOU_HOME;cpuPos=snap.cpuPos!=null?snap.cpuPos:CPU_HOME;applyYouPos();applyCpuPos();updateMeters();updatePowerMeters();updateRoundHud();return true;}
 function saveOrResumeArcade(){if(mode!=="arcade"||pauseSaveLocked)return;pauseSaveLocked=true;const saveBtn=document.getElementById("pauseSave");if(saveBtn){saveBtn.disabled=true;saveBtn.textContent="SAVED";saveBtn.onclick=null;}if(typeof syncLiquidSave==="function")syncLiquidSave();saveArcadeRun();}
 function enterGatedMode(){
@@ -1477,6 +1519,7 @@ function cueLiquidateThem(){if(liquidateCallTimer)clearTimeout(liquidateCallTime
 function clearLiquidate(){liquidateOn=false;liquidateSeq="";if(liquidateTimer){clearInterval(liquidateTimer);liquidateTimer=null;}if(liquidateCallTimer){clearTimeout(liquidateCallTimer);liquidateCallTimer=null;}if(sfxLiquidateEl){sfxLiquidateEl.pause();try{sfxLiquidateEl.currentTime=0;}catch(e){}}if(sfxLiquidateThemEl){sfxLiquidateThemEl.pause();try{sfxLiquidateThemEl.currentTime=0;}catch(e){}}if(sfxRound1SusEl){sfxRound1SusEl.pause();sfxRound1SusEl.loop=false;try{sfxRound1SusEl.currentTime=0;}catch(e){}}}
 function noteLiquidate(step){if(!liquidateOn)return;liquidateSeq=(liquidateSeq+step).slice(-3);if(liquidateSeq==="LLJ")finishLiquidate();}
 function startLiquidate(done,by){
+  if(liquidateOn)return;
   by=by==="cpu"?"cpu":"you";
   liquidateDone=done;liquidateOn=true;liquidateSeq="";liquidateLeft=15;announcing=true;over=true;
   playPose(by,"idle");
@@ -1500,6 +1543,7 @@ function startLiquidate(done,by){
   },1000);
 }
 function finishLiquidate(by){
+  if(!liquidateOn)return;
   by=by==="cpu"?"cpu":"you";
   const doneFn=liquidateDone;
   liquidateOn=false;liquidateSeq="";
@@ -1539,6 +1583,9 @@ function finishLiquidate(by){
 function goTitle(){
   clearTimeout(aiTimer);clearReadyTimer();clearRoundTimer();stopWalkLoop();
   if(winFlashTimer){clearTimeout(winFlashTimer);winFlashTimer=null;}
+  if(liquidateTimer){clearInterval(liquidateTimer);liquidateTimer=null;}
+  if(liquidateCallTimer){clearTimeout(liquidateCallTimer);liquidateCallTimer=null;}
+  clearLiquidate();
   paused=over=announcing=false;
   setBlock("you",false);
   resetModeRunState();
