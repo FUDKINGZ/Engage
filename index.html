@@ -548,7 +548,7 @@ input[type=file].hidden-file{display:none}
    </div>
    <div id="fightGap"><img id="fightBanner" src="./fight_banner.png" alt=""></div>
   </section>
-<div class="fine-print"><span>BUILD:10.9~0942</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.10~2014</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 </div>
 <script>
 const ROOT="./",ARENA_DIR=ROOT+"arenas/",FIGHTER_DIR=ROOT+"fighters/",TITLECARD_DIR=ROOT+"titlecards/",OBJECT_DIR=ROOT+"objects/",AUDIO=ROOT+"audio/";
@@ -729,14 +729,12 @@ if(mode==="arcade"){
   if(skillLabel)skillLabel.style.display=showCpu?"":"none";
   if(roundBox)roundBox.style.display=readyToFight?"none":"";
 }const matchVs=document.getElementById("matchVs"),matchHint=document.getElementById("matchHint");const matchEl=document.getElementById("matchup");if(mode==="arcade"||readyToFight){if(matchEl)matchEl.classList.add("arena-on");if(matchVs)matchVs.style.display="";if(matchHint)matchHint.textContent="MATCH UP";arenaLine.textContent=arena.name;setTokWords("matchNextUp","matchNextDn","ENTER ARENA");paintMatchupBg(arena);preloadMatchPair();}else{if(matchEl)matchEl.classList.remove("arena-on");if(matchVs)matchVs.style.display="none";if(matchHint)matchHint.textContent="CHOOSE CPU LEVEL";arenaLine.textContent="";setTokWords("matchNextUp","matchNextDn","CHOOSE ARENA");paintMatchupBg(null);}renderSkillRow();}
-function goMatchup(){if(mode!=="arcade"&&fighterLocked(selectedOpponent))return;if(mode==="pvc"||mode==="arcade")cpuFighter=selectedOpponent;if(mode==="arcade"){selectedArena=arcadeArenaIndex();readyToFight=true;}else readyToFight=false;renderMatchup();show("matchup");}
-function fromMatchupNext(){if(mode==="arcade"||readyToFight){startFight(true);return;}goArenas();}
+function goMatchup(){if(mode!=="arcade"&&fighterLocked(selectedOpponent))return;if(mode==="pvc"||mode==="arcade")cpuFighter=selectedOpponent;if(mode==="arcade"){selectedArena=arcadeArenaIndex();readyToFight=true;renderMatchup();show("matchup");}else{readyToFight=false;renderArenaCarousel();show("arenas");}}
+function fromMatchupNext(){if(mode==="arcade"||readyToFight){startFight(true);return;}readyToFight=true;renderMatchup();}
 function backFromMatchup(){
   if(mode==="arcade"){readyToFight=false;show("fighters");return;}
-  if(readyToFight){readyToFight=false;renderArenaCarousel();show("arenas");return;}
-  if(mode==="pvc"){renderOpponentScreen();show("opponents");return;}
-  if(mode==="one"){show("fighters");return;}
-  show("fighters");
+  if(readyToFight){readyToFight=false;renderMatchup();return;}
+  readyToFight=false;renderArenaCarousel();show("arenas");
 }
 function showPostFight(beatenName,record,youWon){
   if(youWon==null)youWon=true;
@@ -1070,7 +1068,7 @@ function renderPitDeck(){const box=document.getElementById("pitList");if(!box)re
 function pitPlay(force){ensureAudio();const t=PIT_TRACKS[pitIndex];if(!t)return;setTrack(t.file,true,!!force);renderPitDeck();}
 function pitToggle(){if(!bgm.paused&&currentTrack===PIT_TRACKS[pitIndex].file){pauseBgm();renderPitDeck();return;}pitPlay(false);}
 function pitStep(dir){pitIndex=(pitIndex+dir+PIT_TRACKS.length)%PIT_TRACKS.length;pitPlay(true);}
-function show(id){document.querySelectorAll(".screen").forEach(function(s){s.classList.remove("active");});document.getElementById(id).classList.add("active");lastScreen=id;if(id==="intro"){startIntroBed();return;}if(id==="title"){startTitleSong();return;}if(id==="soundtrack"){renderPitDeck();return;}if(id==="matchup"){renderMatchup();startTitleSong();return;}if(KEEP_ARENA_MUSIC[id]){if(id==="fight")playArenaMusic(false);else playBgm();return;}if(id==="postfight"||id==="liquid"){startTitleSong();return;}if(TITLE_MENUS[id])startTitleSong();if(id==="arenas"){const w=document.getElementById("arenaNextWord");if(w)w.textContent="NEXT";startTitleSong();}if(id==="fighters"){document.getElementById("fighterHint").textContent=mode==="arcade"?"CHOOSE YOUR FIGHTER":"CHOOSE FIGHTER";renderSkillRow();renderFighterCarousel();}if(id==="opponents")renderOpponentScreen();}
+function show(id){document.querySelectorAll(".screen").forEach(function(s){s.classList.remove("active");});document.getElementById(id).classList.add("active");lastScreen=id;if(id==="intro"){startIntroBed();return;}if(id==="title"){startTitleSong();return;}if(id==="soundtrack"){renderPitDeck();return;}if(id==="matchup"){renderMatchup();startTitleSong();return;}if(KEEP_ARENA_MUSIC[id]){if(id==="fight")playArenaMusic(false);else playBgm();return;}if(id==="postfight"||id==="liquid"){startTitleSong();return;}if(TITLE_MENUS[id])startTitleSong();if(id==="arenas"){const w=document.getElementById("arenaNextWord");if(w)w.textContent="NEXT";const an=document.getElementById("arenaNext");if(an)an.setAttribute("aria-label","Choose CPU level");startTitleSong();}if(id==="fighters"){document.getElementById("fighterHint").textContent=mode==="arcade"?"CHOOSE YOUR FIGHTER":"CHOOSE FIGHTER";renderSkillRow();renderFighterCarousel();}if(id==="opponents")renderOpponentScreen();}
 function makeCode(){const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let s="";for(let i=0;i<6;i++)s+=chars[Math.floor(Math.random()*chars.length)];return s;}
 function inviteLink(){return location.href.split("#")[0]+"#fight="+roomCode;}
 function newRoom(){roomCode=makeCode();sentInvites={};invitedMember=null;document.getElementById("roomCode").textContent=roomCode;setInviteNote("New pit opened.");renderMembers();}
@@ -1266,8 +1264,8 @@ function afterYourFighter(){
   show("opponents");
 }
 function goArenas(){if(mode==="pvc")cpuFighter=selectedOpponent;readyToFight=false;renderArenaCarousel();show("arenas");}
-function afterArena(){if(arenaLocked(selectedArena))return;readyToFight=true;if(mode==="pvc")cpuFighter=selectedOpponent;preloadMatchPair();renderMatchup();show("matchup");}
-function backFromArenas(){readyToFight=false;renderMatchup();show("matchup");}
+function afterArena(){if(arenaLocked(selectedArena))return;readyToFight=false;if(mode==="pvc")cpuFighter=selectedOpponent;preloadMatchPair();renderMatchup();show("matchup");}
+function backFromArenas(){readyToFight=false;if(mode==="pvc"){renderOpponentScreen();show("opponents");return;}if(mode==="one"){show("fighters");return;}show("fighters");}
 function clearReadyTimer(){if(readyTimer){clearInterval(readyTimer);readyTimer=null;}}
 function setAnnounceCall(word){
   document.getElementById("readyCount").textContent=word;
