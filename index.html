@@ -4,12 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <title>FUD KINGZ OF FINTWITS</title>
-<link rel="preload" href="./title header.jpg" as="image">
-<link rel="preload" href="./scenebg.jpg" as="image">
-<link rel="preload" href="./title screen.jpg" as="image">
-<link rel="preload" href="./controller/controller_texture.jpg" as="image">
-<link rel="preload" href="./main_banner.png" as="image">
-<link rel="preload" href="./audio/title/maintitle.mp3" as="audio">
+<link rel="preload" href="./intro-dish.jpg" as="image">
 <link rel="preload" href="./audio/intro/intro-boot.wav" as="audio">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
@@ -243,7 +238,7 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #roundClock.sd{color:#ea80fc;font-size:9px}
 #fight{position:absolute;top:0;left:0;right:0;bottom:0;min-height:0;height:100%;overflow:hidden;padding-top:env(safe-area-inset-top);background:#05070d;container-type:inline-size}
 #fight.screen.active{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;width:100%;height:100%;min-height:0}
-#stage{flex:none;position:relative;overflow:hidden;background:#12080c;width:100%;aspect-ratio:790/573;max-height:calc(100% - 36px - 33px - 196px);margin:0 auto}
+#stage{flex:1 1 auto;position:relative;overflow:hidden;background:#12080c;width:100%;aspect-ratio:790/573;max-height:calc(100dvh - 36px - 33px - 180px - env(safe-area-inset-bottom));margin:0 auto;min-height:0}
 .arena-img{display:block;width:100%;height:100%;object-fit:fill;object-position:center center;pointer-events:none;position:absolute;inset:0;z-index:1}
 #fightU{display:block;width:100%;height:36px;min-height:36px;max-height:36px;margin:0;padding:0;background:#05070d;overflow:hidden;flex:none}
 #fightUBanner{display:block;width:100%;height:36px;margin:0;padding:0;pointer-events:none;object-fit:cover}
@@ -308,7 +303,7 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #postBanner .liq{display:inline-block;margin-top:10px;color:#ff1744;-webkit-text-stroke:2px #000;paint-order:stroke fill;text-shadow:2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000,0 0 20px #f00}
 #winFlash.show{justify-content:flex-start;padding-top:50px}
 #winFlashKo,#winFlashName{-webkit-text-stroke:2px #000;paint-order:stroke fill;text-shadow:2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000,0 0 14px #ffb300}
-#controls{position:relative;width:100%;max-width:none;height:auto;min-height:0;max-height:none;flex:0 0 auto;padding:0 0 env(safe-area-inset-bottom);margin:0;background:url(./controller/controller_texture.jpg) center / 100% 100% no-repeat;z-index:6;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;box-sizing:border-box;overflow:hidden}
+#controls{position:relative;width:100%;max-width:none;height:auto;min-height:0;max-height:none;flex:0 0 auto;padding:0 0 calc(env(safe-area-inset-bottom) + 4px);margin:0;background:url(./controller/controller_texture.jpg) center / 100% 100% no-repeat;z-index:6;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;box-sizing:border-box;overflow:hidden}
 #controls::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:4;box-shadow:inset 0 0 18px rgba(0,0,0,.55)}
 .pad-wrap{position:relative;width:100%;height:auto;min-height:0;max-height:none;margin:0;padding:11px 11px 15px;background:transparent;border:0;border-top:0;border-radius:0;box-shadow:none;display:grid;grid-template-columns:57px 57px 57px 1fr 57px 57px 57px;grid-template-rows:57px 57px 57px;align-items:center;justify-items:center;column-gap:0;row-gap:0;box-sizing:border-box;overflow:visible}
 #moveL{grid-column:1;grid-row:2;justify-self:center;align-self:center;width:57px;height:57px;background-image:url(./controller/left.png);background-position:center center;background-size:contain}
@@ -464,7 +459,7 @@ input[type=file].hidden-file{display:none}
 </section>
 <section id="gate" class="screen menu"><div class="frame-390"><div class="brand"><img class="brand-logo" src="./title header.jpg" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p id="gateHint">ROSTER / WALLET</p></div><div class="roster-body"><div class="form-card"><div class="form-label">PROFILE — REQUIRED</div><div class="form-row" style="margin-top:8px"><input id="gateName" placeholder="Player name"/><input id="gateHandle" placeholder="@handle"/></div><div class="form-label" style="margin-top:10px">TOKEN WALLET — REQUIRED</div><div class="form-row"><input id="gateWallet" placeholder="Wallet address"/></div><div class="form-row"><button type="button" id="gateSave" onclick="saveGateProfile()" disabled>SAVE</button></div><div class="sent-note" id="gateNote"></div><div class="form-label" style="margin-top:10px">SAVED RUNS</div><div class="pit-list" id="gateSaves"></div><p class="post-sub">Save a profile and a wallet before Arcade or 1 On 1. Exhibition does not use this gate. The wallet line is an identifier only. No payment is taken here. A win in Arcade writes a run here. Open one to restart that character on the next opponent.</p></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="show('title')" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="22" font-weight="900" letter-spacing="3.2">BACK</text></svg></button><button type="button" class="tok-btn gold" id="gateEnter" onclick="enterGatedMode()" aria-label="Enter" disabled><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="16" font-weight="900" letter-spacing="2">ENTER</text></svg></button></div></div></section>
 <section id="roster" class="screen menu fixed-390"><div class="brand"><img class="brand-logo" src="./title header.jpg" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>PLAYER ROSTER</p></div><div class="roster-body"><div class="form-card"><div class="form-label">NEW / UPDATE PROFILE</div><div class="form-row" style="margin-top:8px"><input id="rosterName" placeholder="Player name"/><input id="rosterHandle" placeholder="@handle"/></div><div class="form-row"><button type="button" onclick="saveRosterProfile()">SAVE PROFILE</button><button type="button" onclick="exportRosterFile()">SAVE FILE</button><button type="button" onclick="document.getElementById('rosterFile').click()">LOAD FILE</button></div><div class="sent-note" id="rosterNote"></div></div><div class="member-list" id="rosterList"></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="show('title')" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="22" font-weight="900" letter-spacing="3.2">BACK</text></svg></button></div></section>
-<section id="scores" class="screen menu fixed-390 back-left"><div class="brand"><img class="brand-logo" src="./title header.jpg" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>GALLERY</p></div><div class="carousel-wrap"><div class="match-arena-name" id="galleryName">ART</div><img id="galleryView" alt="" style="width:min(92vw,520px);height:42vh;object-fit:contain;background:rgba(0,0,0,.28);border:1px solid #334;border-radius:14px"><div class="nav-row"><button type="button" onclick="shiftGallery(-1)"><span class="arr">‹</span><span class="arr">‹</span><span class="arr">‹</span></button><button type="button" onclick="shiftGallery(1)"><span class="arr">›</span><span class="arr">›</span><span class="arr">›</span></button></div><div class="dots" id="galleryDots"></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="show('title')" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="22" font-weight="900" letter-spacing="3.2">BACK</text></svg></button></div></section>
+<section id="scores" class="screen menu fixed-390 back-left"><div class="brand"><img class="brand-logo" src="./title header.jpg" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>GALLERY</p></div><div class="carousel-wrap"><div class="match-arena-name" id="galleryName">ART</div><img id="galleryView" alt="" style="width:100%;max-width:100%;height:42vh;object-fit:contain;background:rgba(0,0,0,.28);border:1px solid #334;border-radius:14px"><div class="nav-row"><button type="button" onclick="shiftGallery(-1)"><span class="arr">‹</span><span class="arr">‹</span><span class="arr">‹</span></button><button type="button" onclick="shiftGallery(1)"><span class="arr">›</span><span class="arr">›</span><span class="arr">›</span></button></div><div class="dots" id="galleryDots"></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="show('title')" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="22" font-weight="900" letter-spacing="3.2">BACK</text></svg></button></div></section>
 <section id="stockcred" class="screen menu fixed-390 back-left"><div class="brand"><img class="brand-logo" src="./title header.jpg" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>STOCK CRED</p></div><div class="scores-wrap" id="stockCredBody">
 <div class="stat-card"><div class="stat-head"><div><b>FUD KINGZ OF FINTWITS</b><span>STOCK CREDITS</span></div></div>
 <p class="post-sub">W.F.U.D. STUDIOS presents a fictional pit. All names, handles, and figures are entertainment only.</p>
@@ -846,24 +841,23 @@ function warmNeighbors(idx){
 }
 function preloadCritical(){
   [
+    "./intro-dish.jpg",
+    INTRO_BED
+  ].forEach(function(u){preloadUrl(u,"high");});
+}
+function preloadTitleAssets(){
+  [
     "./title header.jpg",
     "./scenebg.jpg",
     "./title screen.jpg",
-    "./controller/controller_texture.jpg",
     "./main_banner.png",
-    "./fight_u_banner.png",
-    "./fight_banner.png",
-    TITLE_TRACK,
-    INTRO_BED
+    TITLE_TRACK
   ].forEach(function(u){preloadUrl(u,"high");});
-  [sfxPunchEl,sfxKickEl,sfxThrowEl,sfxDragEl,sfxGruntEl,sfxGrunt2El,sfxPowerChimeEl,sfxWhistleCrashEl].forEach(function(el){
-    if(el){el.preload="auto";try{el.load();}catch(e){}}
-  });
 }
 function scheduleIdleWarm(){
   function batch(){
-    playableIndexes().forEach(warmFighter);
-    ARENAS.forEach(function(a){preloadUrl(a.file);if(a.music)preloadUrl(a.music);});
+    playableIndexes().slice(0,8).forEach(warmFighter);
+    ARENAS.slice(0,6).forEach(function(a){preloadUrl(a.file);if(a.music)preloadUrl(a.music);});
   }
   if("requestIdleCallback"in window){
     requestIdleCallback(batch,{timeout:2500});
@@ -968,7 +962,7 @@ function enterArena(){
   const slot=document.getElementById("coinSlot");
   if(slot)slot.classList.add("fed");
   ensureAudio();
-  sfxPunchEl.load();sfxKickEl.load();sfxThrowEl.load();if(sfxDragEl)sfxDragEl.load();if(sfxGruntEl)sfxGruntEl.load();if(sfxGrunt2El)sfxGrunt2El.load();if(sfxWhistleCrashEl)sfxWhistleCrashEl.load();
+  preloadTitleAssets();
   startIntroBed();
   setTimeout(function(){
     if(panel)panel.classList.add("hidden");
@@ -1734,7 +1728,6 @@ updatePowerMeters();
 introSfx.src=INTRO_BED;
 ["gateName","gateHandle","gateWallet"].forEach(function(id){const el=document.getElementById(id);if(el)el.addEventListener("input",function(){gateSaved=false;syncGateEnter();});});
 preloadCritical();
-scheduleIdleWarm();
 runIntro();
 </script></body>
 </html>
