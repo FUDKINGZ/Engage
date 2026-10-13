@@ -10,7 +10,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
 button,.btn,.atk,.move-btn,.tiny-mute,#pauseBtn,.nav-row button,.skill-row button,.round-pick button,.invite-row button,.join-card button,.form-card button,.member button,.pit-list button,.pit-controls button,.menu-btns .btn{-webkit-user-select:none!important;-moz-user-select:none!important;-ms-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important;-webkit-user-drag:none;user-drag:none;-webkit-tap-highlight-color:transparent;outline:none}
 html,body{margin:0;width:100%;height:100%;height:100dvh;overflow:hidden;font-family:"Segoe UI",system-ui,sans-serif;background:#000;color:#e8f0ff;touch-action:manipulation;display:flex;align-items:center;justify-content:center}
-#app{position:relative;width:100%;max-width:430px;height:100dvh;max-height:100dvh;margin:0 auto;flex:none;overflow:hidden;background:#05070d;display:flex;flex-direction:column;min-height:0}
+#app{position:relative;width:100%;max-width:min(100%,720px);height:100dvh;max-height:100dvh;margin:0 auto;flex:none;overflow:hidden;background:#05070d;display:flex;flex-direction:column;min-height:0}
 #title.screen.active{display:flex;flex-direction:column;align-items:stretch;height:100%;min-height:0;background:#071018;background-image:none}
 #title .menu-art{flex:none;display:flex;width:100%;min-width:0;height:auto;min-height:0;max-height:none;align-items:flex-start;justify-content:center;overflow:hidden}
 #title .menu-art img.roster{width:100%;max-width:100%;height:auto;max-height:none;min-width:0;min-height:0;object-fit:contain;object-position:center top}
@@ -240,7 +240,7 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #roundClock.sd{color:#ea80fc;font-size:9px}
 #fight{position:absolute;top:0;left:0;right:0;bottom:0;min-height:0;height:100%;overflow:hidden;padding-top:env(safe-area-inset-top);background:#05070d;container-type:inline-size}
 #fight.screen.active{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;width:100%;height:100%;min-height:0}
-#stage{flex:1 1 auto;position:relative;overflow:hidden;background:#12080c;width:100%;aspect-ratio:790/573;max-height:calc(100dvh - 36px - 33px - 180px - env(safe-area-inset-bottom));margin:0 auto;min-height:0}
+#stage{flex:1 1 auto;position:relative;overflow:hidden;background:#12080c;width:100%;aspect-ratio:790/573;max-height:calc(100dvh - 36px - 33px - 160px - env(safe-area-inset-bottom));margin:0 auto;min-height:0}
 .arena-img{display:block;width:100%;height:100%;object-fit:fill;object-position:center center;pointer-events:none;position:absolute;inset:0;z-index:1}
 #fightU{display:block;width:100%;height:36px;min-height:36px;max-height:36px;margin:0;padding:0;background:#05070d;overflow:hidden;flex:none}
 #fightUBanner{display:block;width:100%;height:36px;margin:0;padding:0;pointer-events:none;object-fit:cover}
@@ -250,9 +250,9 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #fight.quake #you,#fight.quake #cpu{animation:fighterQuake 2.2s linear}
 @keyframes quake{0%,100%{transform:translate(0,0)}8%{transform:translate(-10px,6px)}16%{transform:translate(12px,-8px)}24%{transform:translate(-8px,-5px)}32%{transform:translate(9px,7px)}40%{transform:translate(-12px,3px)}48%{transform:translate(7px,-9px)}56%{transform:translate(-6px,8px)}64%{transform:translate(11px,-4px)}72%{transform:translate(-9px,5px)}80%{transform:translate(6px,-6px)}88%{transform:translate(-4px,3px)}}
 @keyframes fighterQuake{0%,100%{transform:translate(0,0) rotate(0)}12%{transform:translate(-6px,4px) rotate(-2deg)}28%{transform:translate(8px,-5px) rotate(2deg)}44%{transform:translate(-7px,3px) rotate(-1deg)}60%{transform:translate(5px,-4px) rotate(2deg)}76%{transform:translate(-4px,2px) rotate(-1deg)}}
-.fighter{position:absolute;bottom:11%;width:38%;max-width:none;aspect-ratio:3/4;max-height:none;transform-origin:center bottom;z-index:4}
-#you{left:4%}
-#cpu{right:4%}
+.fighter{position:absolute;bottom:11%;width:48%;max-width:none;aspect-ratio:3/4;max-height:none;transform-origin:center bottom;z-index:4}
+#you{left:2%}
+#cpu{right:2%}
 .fighter-img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:none;background:transparent!important;transform:none}
 #cpu .fighter-img{transform:scaleX(-1)}
 .fighter.hit{filter:none}
