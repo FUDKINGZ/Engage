@@ -25,7 +25,7 @@ html,body{margin:0;width:100%;height:100%;height:100dvh;overflow:hidden;font-fam
 .fixed-390 .menu-btns.tok-row{display:flex;width:100%;flex:none;margin:0;box-sizing:border-box;justify-content:space-between;align-items:center;padding:6px 12px calc(30px + env(safe-area-inset-bottom))}
 .fixed-390 .tok-btn{width:78px;height:78px;flex:none}
 .fixed-390 .menu-btns.tok-row .tok-btn.gold{margin-left:auto}
-.fixed-390 .carousel-wrap,.fixed-390 .scores-wrap,.fixed-390 .pit,.fixed-390 .liquid-wrap,.fixed-390 .post-body,.fixed-390 .matchup-body,.fixed-390 .roster-body,.fixed-390 .invite-body,.fixed-390 .credits-mask{width:100%;flex:1 1 auto;min-height:0;margin:0;padding:6px 12px;overflow:auto}
+.fixed-390 .carousel-wrap,.fixed-390 .scores-wrap,.fixed-390 .pit,.fixed-390 .liquid-wrap,.fixed-390 .post-body,.fixed-390 .matchup-body,.fixed-390 .roster-body,.fixed-390 .invite-body,.fixed-390 .credits-mask{width:100%;flex:1 1 auto;min-height:0;margin:0;padding:6px 12px;overflow:hidden}
 .fixed-390.back-left .menu-btns.tok-row{justify-content:flex-start}
 #title{background:#071018;background-image:none}
 .menu{background:radial-gradient(ellipse at top,rgba(80,20,0,.35),transparent 55%),#071018}
@@ -202,8 +202,8 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .dots i.on{background:#ffd54f}
 .dots i.lock{background:#664}
 #fighterDots{display:none}
-.ammo-label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:#ffd54f;text-shadow:0 0 8px #ffb300;line-height:1;margin:0 0 -6px;padding:0}
-.ammo-row{display:flex;align-items:flex-start;justify-content:center;gap:16px;width:100%;height:auto;min-height:0;pointer-events:none;overflow:visible}
+.ammo-label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:#ffd54f;text-shadow:0 0 8px #ffb300;line-height:1;margin:0;padding:0 0 2px}
+.ammo-row{display:flex;align-items:flex-start;justify-content:center;gap:16px;width:100%;height:auto;min-height:0;pointer-events:none;overflow:visible;margin:0}
 .ammo-row img{width:44px;height:44px;object-fit:contain;background:rgba(0,0,0,.4);border:1px solid #334;border-radius:8px}
 .ammo-row img.side{opacity:.35}
 .ammo-row img.center{width:62px;height:62px;border-color:#ffd54f;opacity:1}
@@ -254,8 +254,8 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 .fighter-img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:none;background:transparent!important;transform:none}
 #cpu .fighter-img{transform:scaleX(-1)}
 .fighter.hit{filter:none}
-#you .fighter-img[data-pose="knee"]{transform:scale(0.6);transform-origin:center bottom}
-#cpu .fighter-img[data-pose="knee"]{transform:scaleX(-1) scale(0.6);transform-origin:center bottom}
+#you .fighter-img[data-pose="knee"]{transform:scale(1);transform-origin:center bottom}
+#cpu .fighter-img[data-pose="knee"]{transform:scaleX(-1) scale(1);transform-origin:center bottom}
 #you.punchL{transform:translateX(12%) rotate(-5deg)}
 #you.punchR{transform:translateX(16%) rotate(3deg)}
 #you.kickL{transform:translateX(11%) rotate(7deg)}
@@ -1089,7 +1089,27 @@ function addPower(who,base,type){if(throwAmmo[who]>0)return;const side=attackSid
 function losePower(who,amount){if((throwAmmo[who]||0)>0)return;power[who]=Math.max(0,power[who]-(amount||8));updatePowerMeters();}
 function breakCombo(who){comboCount[who]=0;comboAt[who]=0;lastSide[who]="";lastKind[who]="";}
 function spendThrow(who){throwAmmo[who]=Math.max(0,(throwAmmo[who]||0)-1);if(throwAmmo[who]<=0){power[who]=0;comboCount[who]=0;comboAt[who]=0;lastSide[who]="";lastKind[who]="";}else power[who]=Math.round(POWER_MAX*throwAmmo[who]/THROWS_PER_POWER);updatePowerMeters();}
-function bindSrcList(img,list){const urls=unique(list);if(img.dataset.list===urls[0]&&img.src)return;img.dataset.list=urls[0]||"";let i=0;img.onerror=function(){i+=1;if(i<urls.length){this.src=urls[i];return;}this.onerror=null;};img.src=urls[0]||"";}
+function bindSrcList(img,list){
+  const urls=unique(list);
+  if(!urls.length)return;
+  if(img.dataset.list===urls[0]&&img.src)return;
+  img.dataset.list=urls[0]||"";
+  let i=0;
+  const next=new Image();
+  next.decoding="async";
+  next.onload=function(){
+    img.src=next.src;
+    img.style.display="block";
+  };
+  next.onerror=function(){
+    i+=1;
+    if(i<urls.length){
+      next.src=urls[i];
+      return;
+    }
+  };
+  next.src=urls[0];
+}
 function playPose(who,pose){
   const fighter=FIGHTERS[who==="you"?selectedFighter:cpuFighter];
   const img=document.getElementById(who==="you"?"youFile":"cpuFile");
@@ -1165,7 +1185,7 @@ const WHERE_NOW={
   "That Badger Girl":"The salon lights stayed on. Left the chair spinning and the dryer running.",
   "Platinum Meow":"The neon alleys still know the name. Left a bow string humming and the city lights on."
 };
-function paintAmmo(id,idx){const box=document.getElementById(id);if(!box)return;box.innerHTML="";const list=playableIndexes();if(!list.length)return;const at=Math.max(0,list.indexOf(idx)),n=list.length;[list[wrap(at-1,n)],list[at],list[wrap(at+1,n)]].forEach(function(i,slot){const cell=document.createElement("div");cell.style.cssText="display:flex;flex-direction:column;align-items:center;gap:3px;width:72px";const img=document.createElement("img");img.alt=AMMO_NAMES[i]||"";img.className=slot===1?"center":"side";bindSrcList(img,FIGHTERS[i].objects);cell.appendChild(img);if(slot===1){const cap=document.createElement("b");cap.textContent=AMMO_NAMES[i]||"";cap.style.cssText="font-size:7px;color:#ffd54f;text-align:center;line-height:1.1;white-space:nowrap;width:100%";cell.style.width="104px";cell.appendChild(cap);}box.appendChild(cell);});}
+function paintAmmo(id,idx){const box=document.getElementById(id);if(!box)return;box.innerHTML="";const list=playableIndexes();if(!list.length)return;const at=Math.max(0,list.indexOf(idx)),n=list.length;[list[wrap(at-1,n)],list[at],list[wrap(at+1,n)]].forEach(function(i,slot){const cell=document.createElement("div");cell.style.cssText="display:flex;flex-direction:column;align-items:center;gap:3px;width:72px";const img=document.createElement("img");img.alt=AMMO_NAMES[i]||"";img.className=slot===1?"center":"side";bindSrcList(img,FIGHTERS[i].objects);cell.appendChild(img);if(slot===1){const cap=document.createElement("b");cap.textContent=AMMO_NAMES[i]||"";cap.style.cssText="font-size:7px;color:#ffd54f;text-align:center;line-height:1;white-space:nowrap;width:100%;margin:2px 0 0;padding:0";cell.style.width="104px";cell.appendChild(cap);}box.appendChild(cell);});}
 function renderFighterCarousel(){const box=document.getElementById("fighterCarousel"),dots=document.getElementById("fighterDots");box.innerHTML="";dots.innerHTML="";const list=playableIndexes();if(list.indexOf(selectedFighter)<0)selectedFighter=list[0]||0;const n=list.length,at=Math.max(0,list.indexOf(selectedFighter)),L=list[wrap(at-1,n)],R=list[wrap(at+1,n)];box.appendChild(makeFighterSlot(FIGHTERS[L],"side left",L,function(){shiftFighter(-1);}));box.appendChild(makeFighterSlot(FIGHTERS[selectedFighter],"center",selectedFighter));box.appendChild(makeFighterSlot(FIGHTERS[R],"side right",R,function(){shiftFighter(1);}));list.forEach(function(i){const d=document.createElement("i");if(i===selectedFighter)d.className="on";dots.appendChild(d);});paintAmmo("fighterAmmo",selectedFighter);warmNeighbors(selectedFighter);}
 function pickOpponent(idx){if(fighterLocked(idx))return;selectedOpponent=idx;renderOpponentScreen();}
 function renderHiddenRow(){const box=document.getElementById("hiddenRow");if(!box)return;box.innerHTML="";HIDDEN_INDEXES.forEach(function(idx){const f=FIGHTERS[idx];const cell=document.createElement("div");cell.className="hidden-cell"+(fighterLocked(idx)?" locked":"")+(selectedOpponent===idx?" picked":"");const b=document.createElement("b");b.textContent=fighterLocked(idx)?"\u00a0":f.name;cell.appendChild(b);const panel=document.createElement("div");panel.className="panel";const img=document.createElement("img");img.decoding="async";img.alt=f.name;bindSrcList(img,f.select);panel.appendChild(img);if(fighterLocked(idx)){const need=document.createElement("div");need.className="need";need.textContent="LOCKED  "+crownLabel(hiddenCost(idx));panel.appendChild(need);}cell.appendChild(panel);cell.onclick=function(){pickOpponent(idx);};box.appendChild(cell);});}
