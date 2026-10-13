@@ -152,8 +152,9 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 #fighters .slot,#opponents .slot{aspect-ratio:4/5;width:100%;height:auto;flex:none}
 .slot-wrap.side .slot{opacity:.9;filter:none;background:transparent;border-color:transparent;box-shadow:none}
 .slot-wrap.center .slot{border-color:#ffd54f;box-shadow:0 0 22px rgba(255,213,79,.45)}
-.slot img,.slot .arena-art{width:100%;flex:1;min-height:0;object-fit:contain;object-position:center bottom;display:block;background:transparent;opacity:0}
-.slot img.loaded,.slot .arena-art.loaded{opacity:1}
+.slot img{width:100%;flex:1;min-height:0;object-fit:contain;object-position:center bottom;display:block;background:transparent;opacity:0}
+.slot img.loaded{opacity:1}
+.slot .arena-art{width:100%;flex:1;min-height:0;object-fit:contain;object-position:center bottom;display:block;background:transparent;opacity:1}
 .slot .arena-art{object-fit:cover}
 .slot.locked img,.slot.locked .arena-art{filter:grayscale(1) brightness(.38)}
 .lock-tag{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);background:rgba(0,0,0,.78);color:#ffd54f;border:1px solid #886;font-size:11px;font-weight:900;padding:7px 10px;border-radius:8px;text-align:center;width:max-content;max-width:92%;white-space:normal;line-height:1.15}
@@ -515,6 +516,7 @@ input[type=file].hidden-file{display:none}
 <p class="post-sub">Trashed Panda (Exhibition only)<br>Arena - Pet Grooming<br>Song - Battlefield Boots.mp3<br>Ammo - TRASH BAG<br>Bio - Dumpster-diving panda who treats the grooming table like a ring. Wait for the spray, then swipe. Weak if you stay clean.</p>
 <p class="post-sub">That Badger Girl (Exhibition only)<br>Arena - Hair Salon<br>Song - Fintwits War Machine.mp3<br>Ammo - BADGER CLAW<br>Bio - Salon chair is her ring. She styles the hair, then styles the face. Weak if you stay still under the dryer.</p>
 <p class="post-sub">Platinum Meow<br>Arena - Anime City<br>Song - private-beach-party.mp3<br>Ammo - BOW<br>Bio - Neon alley cat. Fast claws, precise shots. Circles then strikes. Weak if you hold block. BOW is the closer.</p>
+<p class="post-sub">Dark Fud 420 (Exhibition only)<br>Arena - Wizards Castle<br>Song - Fire It Up [Smash Follow].mp3<br>Ammo - ENERGY SPELL<br>Bio - Exhibition only. Wizard of the pit. Casts from the tower. Weak if you close the gap and hold block. ENERGY SPELL is the closer.</p>
 </div>
 <div class="stat-card"><div class="stat-head"><div><b>CREDITS</b><span>PIT ROLL</span></div></div>
 <p class="post-sub">Creator and Game Director — Dark Fud 420</p>
@@ -588,12 +590,15 @@ function selectUrls(name){const n=String(name||"").trim().toLowerCase(),dir=figh
 function titlecardUrls(name){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);return unique([dir+n+" titlecard.png",dir+"titlecard.png",TITLECARD_DIR+n+" titlecard.png"]);}
 function shadowboxUrls(name){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);return unique([dir+n+" shadowbox.png",dir+"shadowbox.png",TITLECARD_DIR+n+" shadowbox.png"]);}
 function liquidatedUrls(name){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);return unique([dir+n+" liquidated.gif",dir+"liquidated.gif",FIGHTER_DIR+n+" liquidated.gif"].concat(poseUrls(name,"loser")));}
-function poseUrls(name,pose){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);let file="idle.gif";if(pose==="idle")file="idle.gif";else if(pose==="throw")file="throw.gif";else if(pose==="walk")file="walk.gif";else if(pose==="knee"){const kUrls=unique([dir+n+"_knee.gif",dir+"knee.gif",FIGHTER_DIR+n+"_knee.gif"]);return unique(kUrls.concat(selectUrls(name)));}else file=String(POSE_LABEL[pose]||"idle").toLowerCase()+".gif";const urls=unique([dir+n+" "+file,dir+file,FIGHTER_DIR+n+" "+file]);if(pose==="walk")return unique(urls.concat([dir+n+" idle.gif",dir+"idle.gif",FIGHTER_DIR+n+" idle.gif"]));return unique(urls.concat(selectUrls(name)));}
+function poseUrls(name,pose){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);let file="idle.gif";if(pose==="idle")file="idle.gif";else if(pose==="throw")file="throw.gif";else if(pose==="walk")file="walk.gif";else if(pose==="knee"){const kUrls=unique([dir+n+"_knee.gif",dir+"knee.gif",FIGHTER_DIR+n+"_knee.gif"]);return unique(kUrls.concat(selectUrls(name)));}
+else if(pose==="summon"){const sUrls=unique([dir+n+" summon.gif",dir+"summon.gif",FIGHTER_DIR+n+" summon.gif"]);return unique(sUrls.concat(selectUrls(name)));}
+else file=String(POSE_LABEL[pose]||"idle").toLowerCase()+".gif";const urls=unique([dir+n+" "+file,dir+file,FIGHTER_DIR+n+" "+file]);if(pose==="walk")return unique(urls.concat([dir+n+" idle.gif",dir+"idle.gif",FIGHTER_DIR+n+" idle.gif"]));return unique(urls.concat(selectUrls(name)));}
 function objectUrls(name){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);return unique([dir+n+" object.png",dir+"object.png",OBJECT_DIR+n+" object.png",FIGHTER_DIR+n+" object.png"].concat(THROW_OBJECTS.map(function(f){return OBJECT_DIR+String(f).toLowerCase();})));}
 function decorateFighter(f){f.select=selectUrls(f.name);f.idle=poseUrls(f.name,"idle");f.walk=poseUrls(f.name,"walk");f.punchL=poseUrls(f.name,"punchL");f.punchR=poseUrls(f.name,"punchR");f.kickL=poseUrls(f.name,"kickL");f.kickR=poseUrls(f.name,"kickR");f.throw=poseUrls(f.name,"throw");f.block=poseUrls(f.name,"block");f.victory=poseUrls(f.name,"victory");f.loser=poseUrls(f.name,"loser");f.knee=poseUrls(f.name,"knee");f.liquidated=liquidatedUrls(f.name);f.objects=objectUrls(f.name);return f;}
 const FIGHTERS=[{name:"Stonks 6-7",handle:"@Stonks67",tint:"#1a2333",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"punch",bio:"Chart gremlin. Light, short reach, twitch. Walk in, punch-punch, back out. Weak to kicks. Throws NUDE PIX early."},{name:"Ventifa",handle:"@Ventifa",tint:"#0d7377",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hands",bio:"Night-shift closer. Fastest hands. LP then RP, block the return, then kick. EPT TEST interrupts, it does not finish."},{name:"Davinstigator",handle:"@Davinstigator",tint:"#37474f",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"bait",bio:"Boarding-line loudmouth. Close the gap, stall in block, late kick. Weak to throws while blocking. PRISON SHOE waits for the commit."},{name:"Troll Bee",handle:"@TrollBee",tint:"#f9a825",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Smallest box, highest step. Circle, sting, never stand in kick range. FUD RADIO is spent on the first full meter."},{name:"Jose Brownstein",handle:"@JoseBrownstein",tint:"#8d6e63",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"kick",bio:"Shop boss. Hold center, kick, block, kick. Weak to speed in and out. TOOL BOX is a mid-range check."},{name:"Captn Jack Hashtag",handle:"@CaptnJack",tint:"#e65100",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sloppy",bio:"Rail-braced and sloppy. Random side, high whiff. COCKTAIL is often thrown from too far. Weak to a patient block."},{name:"WHOLLY MAC",handle:"@WhollyMac",tint:"#6d4c41",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"rush",bio:"Arrives first. Walk in, then a kick. Does not retreat. Weak to a block-heal loop. TOMBSTONE is the finisher."},{name:"Dev Root X",handle:"@DevRootX",tint:"#00bcd4",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"edge",bio:"Long reach, light body. Stay at the edge, kick, back up. Weak inside. FUSION REACTOR closes, then punches."},{name:"WHITE CASSEL",handle:"@WhiteCassel",tint:"#90a4ae",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"late",bio:"Diplomat until the cup is empty. Block early, then punch-kick. HOT DOG is the switch from peace to fight."},{name:"Fuzzled Raccoon",handle:"@FuzzledRacc",tint:"#4e342e",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"counter",bio:"Scavenger. Wait for a whiff, then punch. Does not open. SKULL & BONES is a counter throw."},{name:"Big Daddy Turk",handle:"@BigDaddyTurk",tint:"#1b5e20",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"plant",bio:"Heaviest stance, widest body. Plant, block, kick. Does not chase. OIL BARREL stops a walk-in."},{name:"Dragonfly Fairy",handle:"@DragonflyFairy",tint:"#e91e63",hidden:true,unlockCrowns:1,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hover",bio:"Hover. In, kick, out. Weak if pinned. MULLEN DRAGONFLY reopens space."},{name:"Bioweapon Bulldog",handle:"@BioBulldog",tint:"#6a1b9a",hidden:true,unlockCrowns:2,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"forward",bio:"Does not heel. Walk forward only, kick, no retreat. GLOBE is a shove at contact."},{name:"LIL OJ",handle:"@LilOJ",tint:"#ef6c00",hidden:true,unlockCrowns:3,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"question",bio:"Press room. Block, pause, punch. Weak to a kick during the pause. WFUD PODIUM is a setup throw."},{name:"Fud Daddy 420",handle:"@FudDaddy420",tint:"#2b6cb0",hidden:true,unlockCrowns:4,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"elder",bio:"Lets the player spend meter, blocks the throw, then kicks. Weak to a raw walk-in. MICROPHONE is the last word."},{name:"KING TROLL",handle:"@KingTroll",tint:"#b71c1c",hidden:true,unlockCrowns:5,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"boss",bio:"Boss. Punches a kicker, kicks a puncher, blocks a full meter. STREET BIKE punishes a whiff."},{name:"Platinum Meow",handle:"@PlatinumMeow",tint:"#c0c0c0",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Neon alley cat. Fast claws, precise shots. Circles then strikes. Weak if you hold block. BOW is the closer."},{name:"Grox",handle:"@Grox",tint:"#39ff14",exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hands",bio:"Exhibition only. Dojo build. Not on the arcade board."},
 {name:"Trashed Panda",handle:"@TrashedPanda",tint:"#5d4037",exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"counter",bio:"Exhibition only. Dumpster-diving panda who treats the grooming table like a ring. Wait for the spray, then swipe. Weak if you stay clean. TRASH BAG is the counter."},
-{name:"That Badger Girl",handle:"@ThatBadgerGirl",tint:"#4e342e",exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Exhibition only. Salon chair is her ring. She styles the hair, then styles the face. Weak if you stay still under the dryer. BADGER CLAW is the closer."}].map(decorateFighter);
+{name:"That Badger Girl",handle:"@ThatBadgerGirl",tint:"#4e342e",exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Exhibition only. Salon chair is her ring. She styles the hair, then styles the face. Weak if you stay still under the dryer. BADGER CLAW is the closer."},
+{name:"Dark Fud 420",handle:"@DarkFud420",tint:"#6b21a8",exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Exhibition only. Wizard of the pit. Casts ENERGY SPELL from the tower. Weak if you close the gap and hold block."}].map(decorateFighter);
 function fighterStat(who,key){const f=FIGHTERS[who==="you"?selectedFighter:cpuFighter];const n=f&&f[key];return (n==null||n===""||isNaN(n))?5:Number(n);}
 const MAIN_COUNT=11,HIDDEN_INDEXES=[11,12,13,14,15],FINAL_INDEX=15;
 const MEMBERS=FIGHTERS.filter(function(f){return!f.hidden;}).map(function(f,i){return{handle:f.handle,name:f.name,fighter:i,color:f.tint};});
@@ -617,7 +622,8 @@ const ARENAS=[
 {name:"Grox Dojo",file:ARENA_DIR+"Grox Dojo.jpg",pos:"center",color:"#07140c",music:AUDIO+"arena/FIRE IT UP! [DREZDMX].mp3"},
 {name:"Pet Grooming",file:ARENA_DIR+"Pet Grooming.jpg",pos:"center",color:"#1a242c",music:AUDIO+"arena/Battlefield Boots.mp3"},
 {name:"Hair Salon",file:ARENA_DIR+"Hair Salon.jpg",pos:"center",color:"#1a1a22",music:AUDIO+"arena/Fintwits War Machine.mp3"},
-{name:"Anime City",file:ARENA_DIR+"Anime City.jpg",pos:"center",color:"#1a1028",music:AUDIO+"arena/First Class To Ibiza.mp3"}
+{name:"Anime City",file:ARENA_DIR+"Anime City.jpg",pos:"center",color:"#1a1028",music:AUDIO+"arena/First Class To Ibiza.mp3"},
+{name:"Wizards Castle",file:ARENA_DIR+"Wizards Castle.jpg",pos:"center",color:"#1a0a28",music:AUDIO+"arena/Fire It Up [Smash Follow].mp3"}
 ];
 let mode="pvc",hp={you:MAX,cpu:MAX},power={you:0,cpu:0},throwAmmo={you:0,cpu:0};
 let comboCount={you:0,cpu:0},comboAt={you:0,cpu:0},lastSide={you:"",cpu:""},lastKind={you:"",cpu:""};
@@ -724,7 +730,8 @@ function arcadeArenaIndex(){
     "Grox":"Grox Dojo",
     "Trashed Panda":"Pet Grooming",
     "That Badger Girl":"Hair Salon",
-    "Platinum Meow":"Anime City"
+    "Platinum Meow":"Anime City",
+    "Dark Fud 420":"Wizards Castle"
   };
   const who=FIGHTERS[(mode==="arcade")?selectedOpponent:selectedFighter];
   const want=who&&homes[who.name];
@@ -1147,7 +1154,8 @@ function toggleMuteMusic(){musicStage=(musicStage+1)%3;mutedMusic=musicStage===2
 function toggleMuteFx(){mutedFx=!mutedFx;introSfx.muted=mutedFx;if(mutedFx)stopIntroBed();else if(!introDone)startIntroBed();refreshMuteButtons();}
 const PIT_TRACKS=[{name:"MAIN TITLE",file:TITLE_TRACK},{name:"TRAILER PARK",file:AUDIO+"arena/trailer-park.mp3"},{name:"DUMPSTER FIRE",file:AUDIO+"arena/dumpster-fire.mp3"},{name:"THROUGH THE NOISE",file:AUDIO+"arena/Through The Noise.mp3"},{name:"I GOT THE SMOKE",file:AUDIO+"arena/I got the smoke.mp3"},{name:"WFUD ROOFTOP",file:AUDIO+"arena/wfud-studios-rooftop.mp3"},{name:"SAVAGE REALITY",file:AUDIO+"arena/Savage Reality.mp3"},{name:"PRIVATE BEACH PARTY",file:AUDIO+"arena/private-beach-party.mp3"},{name:"FUCKS WITH FUD",file:AUDIO+"arena/Fucks With Fud.mp3"},{name:"BATTLEFIELD BOOTS",file:AUDIO+"arena/Battlefield Boots.mp3"},
 {name:"X-AUSTIVE JOURNEY",file:AUDIO+"arena/X-Austive Journey.mp3"},{name:"BOOM BOOM POW!",file:AUDIO+"arena/Boom Boom Pow!.mp3"},{name:"TRADING FLOOR",file:AUDIO+"arena/nasdaq-trading-floor.mp3"},{name:"CRAZY DOTS",file:AUDIO+"arena/Crazy Dots.mp3"},{name:"RIFFS OF CHAOS",file:AUDIO+"arena/Riffs Of Chaos.mp3"},{name:"GOLD VAULT",file:AUDIO+"arena/gold-vault.mp3"},{name:"EV VAN WAREHOUSE",file:AUDIO+"arena/ev-van-warehouse.mp3"},
-{name:"FIRST CLASS TO IBIZA",file:AUDIO+"arena/First Class To Ibiza.mp3"}];
+{name:"FIRST CLASS TO IBIZA",file:AUDIO+"arena/First Class To Ibiza.mp3"},
+{name:"FIRE IT UP [SMASH FOLLOW]",file:AUDIO+"arena/Fire It Up [Smash Follow].mp3"}];
 let pitIndex=0;
 function renderPitDeck(){const box=document.getElementById("pitList");if(!box)return;box.innerHTML="";PIT_TRACKS.forEach(function(t,i){const b=document.createElement("button");b.type="button";b.textContent=(i+1)+"  "+t.name;if(i===pitIndex)b.className="on";b.onclick=function(){pitIndex=i;pitPlay(true);};box.appendChild(b);});const cur=PIT_TRACKS[pitIndex];document.getElementById("pitNow").textContent=cur?cur.name:"PIT DECK";document.getElementById("pitSub").textContent=(pitIndex+1)+" / "+PIT_TRACKS.length;document.getElementById("pitPlay").textContent=bgm.paused?"PLAY":"PAUSE";}
 function pitPlay(force){ensureAudio();const t=PIT_TRACKS[pitIndex];if(!t)return;setTrack(t.file,true,!!force);renderPitDeck();}
@@ -1169,7 +1177,7 @@ function afterInvite(){if(!invitedMember&&mode==="one"){setInviteNote("Invite so
 function decorateSlot(el,locked,label){if(!locked)return el;el.classList.add("locked");const tag=document.createElement("div");tag.className="lock-tag";tag.textContent=label||"LOCKED";el.appendChild(tag);return el;}
 function makeFighterSlot(f,cls,idx,onClick){const wrapEl=document.createElement("div");wrapEl.className="slot-wrap "+cls;const locked=fighterLocked(idx);const name=document.createElement("b");name.className="slot-name";name.textContent=locked?(hiddenCost(idx)+" CROWNS TO UNLOCK"):f.name;wrapEl.appendChild(name);const el=document.createElement("div");el.className="slot "+cls;const img=document.createElement("img");img.decoding="async";img.alt=f.name;bindSrcList(img,f.select);el.appendChild(img);decorateSlot(el,locked,hiddenCost(idx)+" CROWNS TO UNLOCK");wrapEl.appendChild(el);if(onClick)wrapEl.onclick=onClick;return wrapEl;}
 function makeArenaSlot(a,cls,idx,onClick){const wrapEl=document.createElement("div");wrapEl.className="slot-wrap "+cls;const name=document.createElement("b");name.className="slot-name";name.textContent=a.name;wrapEl.appendChild(name);const el=document.createElement("div");el.className="slot "+cls;const art=document.createElement("div");art.className="arena-art";art.style.background=a.color;art.style.backgroundImage="url('"+a.file+"')";art.style.backgroundSize="contain";art.style.backgroundPosition="center center";art.style.backgroundRepeat="no-repeat";el.appendChild(art);decorateSlot(el,arenaLocked(idx));wrapEl.appendChild(el);if(onClick)wrapEl.onclick=onClick;return wrapEl;}
-const AMMO_NAMES=["NUDE PIX","EPT TEST","PRISON SHOE","FUD RADIO","TOOL BOX","COCKTAIL","TOMBSTONE","FUSION REACTOR","HOT DOG","SKULL & BONES","OIL BARREL","MULLEN DRAGONFLY","GLOBE","WFUD PODIUM","MICROPHONE","STREET BIKE","BOW","TABLET","TRASH BAG","HAIR DRYER"];
+const AMMO_NAMES=["NUDE PIX","EPT TEST","PRISON SHOE","FUD RADIO","TOOL BOX","COCKTAIL","TOMBSTONE","FUSION REACTOR","HOT DOG","SKULL & BONES","OIL BARREL","MULLEN DRAGONFLY","GLOBE","WFUD PODIUM","MICROPHONE","STREET BIKE","BOW","TABLET","TRASH BAG","HAIR DRYER","ENERGY SPELL"];
 const WHERE_NOW={
   "Stonks 6-7":"Took a night desk and now draws lines on other people’s candles. Still calls every dip healthy.",
   "Ventifa":"Clocked out of the ward and into a clinic that does not ask names. Still patches strangers. Still no bedside manner.",
@@ -1190,7 +1198,8 @@ const WHERE_NOW={
   "Grox":"The dojo lights stayed on. Went back to the mat. Never joined the arcade board.",
   "Trashed Panda":"The grooming table is still sticky. Left a mask in the drain and took the treats.",
   "That Badger Girl":"The salon lights stayed on. Left the chair spinning and the dryer running.",
-  "Platinum Meow":"The neon alleys still know the name. Left a bow string humming and the city lights on."
+ "Platinum Meow":"The neon alleys still know the name. Left a bow string humming and the city lights on.",
+  "Dark Fud 420":"The tower lights stayed on. Left the spellbook open and the ENERGY SPELL still humming in the air."
 };
 function paintAmmo(id,idx){const box=document.getElementById(id);if(!box)return;box.innerHTML="";const list=playableIndexes();if(!list.length)return;const at=Math.max(0,list.indexOf(idx)),n=list.length;[list[wrap(at-1,n)],list[at],list[wrap(at+1,n)]].forEach(function(i,slot){const cell=document.createElement("div");cell.style.cssText="display:flex;flex-direction:column;align-items:center;gap:3px;width:72px";const img=document.createElement("img");img.alt=AMMO_NAMES[i]||"";img.className=slot===1?"center":"side";bindSrcList(img,FIGHTERS[i].objects);cell.appendChild(img);if(slot===1){const cap=document.createElement("b");cap.textContent=AMMO_NAMES[i]||"";cap.style.cssText="font-size:7px;color:#ffd54f;text-align:center;line-height:1;white-space:nowrap;width:100%;margin:2px 0 0;padding:0";cell.style.width="104px";cell.appendChild(cap);}box.appendChild(cell);});}
 function renderFighterCarousel(){const box=document.getElementById("fighterCarousel"),dots=document.getElementById("fighterDots");box.innerHTML="";dots.innerHTML="";const list=playableIndexes();if(list.indexOf(selectedFighter)<0)selectedFighter=list[0]||0;const n=list.length,at=Math.max(0,list.indexOf(selectedFighter)),L=list[wrap(at-1,n)],R=list[wrap(at+1,n)];box.appendChild(makeFighterSlot(FIGHTERS[L],"side left",L,function(){shiftFighter(-1);}));box.appendChild(makeFighterSlot(FIGHTERS[selectedFighter],"center",selectedFighter));box.appendChild(makeFighterSlot(FIGHTERS[R],"side right",R,function(){shiftFighter(1);}));list.forEach(function(i){const d=document.createElement("i");if(i===selectedFighter)d.className="on";dots.appendChild(d);});paintAmmo("fighterAmmo",selectedFighter);warmNeighbors(selectedFighter);}
@@ -1595,7 +1604,9 @@ function finishLiquidate(by){
   liquidateOn=false;liquidateSeq="";
   if(liquidateTimer){clearInterval(liquidateTimer);liquidateTimer=null;}
   bgm.pause();
-  playPose(by,"idle");
+  const isDarkFud=FIGHTERS[by==="you"?selectedFighter:cpuFighter].name==="Dark Fud 420";
+  if(isDarkFud)playPose(by,"summon");
+  else playPose(by,"idle");
   playPose(by==="you"?"cpu":"you","loser");
   const stage=document.getElementById("stage"),ammo=document.createElement("img");
   ammo.className="toss liquid-pin";ammo.id="liquidPin";
@@ -1611,17 +1622,18 @@ function finishLiquidate(by){
   setTimeout(function(){
     ammo.style.top=pinTop+"px";ammo.style.left=pinLeft+"px";
     eruptMoney(loser);
-    setTimeout(function(){
-      playPose(by,"victory");
+     setTimeout(function(){
+      if(!isDarkFud)playPose(by,"victory");
       document.getElementById("winFlashKo").textContent="WINNER";
       document.getElementById("winFlashName").textContent=by==="you"?playerLabel():opponentLabel();
       document.getElementById("winFlashSub").textContent="";
       document.getElementById("winFlash").classList.add("show","top");
-      setTimeout(function(){
+    setTimeout(function(){
+        if(isDarkFud)playPose(by,"victory");
         document.getElementById("winFlash").classList.remove("show");
         if(sfxLiquidateEl){sfxLiquidateEl.pause();try{sfxLiquidateEl.currentTime=0;}catch(e){}}
         const pin=document.getElementById("liquidPin");if(pin&&pin.parentNode)pin.parentNode.removeChild(pin);clearEruptMoney();
-        if(doneFn)doneFn();
+        setTimeout(function(){if(doneFn)doneFn();},isDarkFud?800:0);
       },12100);
     },1800);
   },1100);
