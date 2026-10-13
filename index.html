@@ -1687,13 +1687,9 @@ function bindUtil(id,fn){
   if(!el)return;
   el.onclick=null;
   el.style.touchAction="manipulation";
-  let last=0;
   el.addEventListener("pointerup",function(e){
     e.preventDefault();
     e.stopPropagation();
-    const now=Date.now();
-    if(now-last<280)return;
-    last=now;
     fn();
   });
 }
