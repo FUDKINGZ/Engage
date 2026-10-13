@@ -152,7 +152,8 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 #fighters .slot,#opponents .slot{aspect-ratio:4/5;width:100%;height:auto;flex:none}
 .slot-wrap.side .slot{opacity:.9;filter:none;background:transparent;border-color:transparent;box-shadow:none}
 .slot-wrap.center .slot{border-color:#ffd54f;box-shadow:0 0 22px rgba(255,213,79,.45)}
-.slot img,.slot .arena-art{width:100%;flex:1;min-height:0;object-fit:contain;object-position:center bottom;display:block;background:transparent}
+.slot img,.slot .arena-art{width:100%;flex:1;min-height:0;object-fit:contain;object-position:center bottom;display:block;background:transparent;opacity:0}
+.slot img.loaded,.slot .arena-art.loaded{opacity:1}
 .slot .arena-art{object-fit:cover}
 .slot.locked img,.slot.locked .arena-art{filter:grayscale(1) brightness(.38)}
 .lock-tag{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);background:rgba(0,0,0,.78);color:#ffd54f;border:1px solid #886;font-size:11px;font-weight:900;padding:7px 10px;border-radius:8px;text-align:center;width:max-content;max-width:92%;white-space:normal;line-height:1.15}
@@ -254,8 +255,10 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 .fighter-img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:none;background:transparent!important;transform:none}
 #cpu .fighter-img{transform:scaleX(-1)}
 .fighter.hit{filter:none}
-#you .fighter-img[data-pose="knee"]{transform:scale(1);transform-origin:center bottom}
-#cpu .fighter-img[data-pose="knee"]{transform:scaleX(-1) scale(1);transform-origin:center bottom}
+.fighter:has(.fighter-img[data-pose="knee"]){width:165px!important;height:192px!important;aspect-ratio:auto!important;max-width:165px!important;max-height:192px!important;bottom:11%}
+.fighter-img[data-pose="knee"]{width:165px!important;height:192px!important;max-width:165px!important;max-height:192px!important;object-fit:contain;object-position:center bottom}
+#you .fighter-img[data-pose="knee"]{transform:none;transform-origin:center bottom}
+#cpu .fighter-img[data-pose="knee"]{transform:scaleX(-1);transform-origin:center bottom}
 #you.punchL{transform:translateX(12%) rotate(-5deg)}
 #you.punchR{transform:translateX(16%) rotate(3deg)}
 #you.kickL{transform:translateX(11%) rotate(7deg)}
@@ -562,7 +565,7 @@ input[type=file].hidden-file{display:none}
    </div>
    <div id="fightGap"><img id="fightBanner" src="./fight_banner.png" alt=""></div>
   </section>
-<div class="fine-print"><span>BUILD:10.10~2134</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.13~0220</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 </div>
 <script>
 const ROOT="./",ARENA_DIR=ROOT+"arenas/",FIGHTER_DIR=ROOT+"fighters/",TITLECARD_DIR=ROOT+"titlecards/",OBJECT_DIR=ROOT+"objects/",AUDIO=ROOT+"audio/";
@@ -1092,14 +1095,17 @@ function spendThrow(who){throwAmmo[who]=Math.max(0,(throwAmmo[who]||0)-1);if(thr
 function bindSrcList(img,list){
   const urls=unique(list);
   if(!urls.length)return;
-  if(img.dataset.list===urls[0]&&img.src)return;
+  if(img.dataset.list===urls[0]&&img.src){img.classList.add("loaded");return;}
   img.dataset.list=urls[0]||"";
+  img.classList.remove("loaded");
+  img.alt="";
   let i=0;
   const next=new Image();
   next.decoding="async";
   next.onload=function(){
     img.src=next.src;
     img.style.display="block";
+    img.classList.add("loaded");
   };
   next.onerror=function(){
     i+=1;
@@ -1107,6 +1113,7 @@ function bindSrcList(img,list){
       next.src=urls[i];
       return;
     }
+    img.classList.add("loaded");
   };
   next.src=urls[0];
 }
