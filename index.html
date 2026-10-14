@@ -1002,13 +1002,14 @@ function startWalkLoop(){
     if(document.hidden||lastScreen!=="fight"||!isMoving()||(!liquidateOn&&(paused||over||announcing))){
       stopWalkLoop();return;
     }
-  if(pushingNow())playerPush();
-    else{
-      if(dragWho==="cpu")stopDragSfx();
-      const youImg=document.getElementById("youFile");
-      if(youImg&&!youBlocking&&youImg.dataset.pose!=="walk"&&youImg.dataset.pose!=="block"&&youImg.dataset.pose!=="throw")playPose("you","walk");
-      if(keysDown.ArrowRight||keysDown.KeyL||keysDown.KeyR||moveHold.right)nudgeYou(runHold.right?1.4:0.7);
+    if(pushingNow()){
+      playerPush();
+      return;
     }
+    if(dragWho==="cpu")stopDragSfx();
+    const youImg=document.getElementById("youFile");
+    if(youImg&&!youBlocking&&youImg.dataset.pose!=="walk"&&youImg.dataset.pose!=="block"&&youImg.dataset.pose!=="throw")playPose("you","walk");
+    if(keysDown.ArrowRight||keysDown.KeyL||keysDown.KeyR||moveHold.right)nudgeYou(runHold.right?1.4:0.7);
     if(keysDown.ArrowLeft||keysDown.KeyS||moveHold.left)nudgeYou(runHold.left?-1.4:-0.7);
   },32);
 }
