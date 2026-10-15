@@ -149,7 +149,8 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .slot-wrap.center .slot-name{font-size:12px;color:#ffd54f}
 .slot-wrap.side .slot-name{display:none}
 .slot{position:relative;width:100%;flex:1;min-height:0;border:2px solid #2a3344;border-radius:14px;background:#121826;overflow:hidden;display:flex;flex-direction:column}
-#fighters .slot,#oppo#fighters .slot,#opponents .slot{aspect-ratio:6/6;width:100%;height:auto;flex:none}nents .slot{aspect-ratio:4/5;width:100%;height:auto;flex:none}
+#fighters .slot,#opponents .slot{aspect-ratio:6/6;width:100%;height:auto;flex:none}
+#opponents .slot{aspect-ratio:4/5;width:100%;height:auto;flex:none}
 .slot-wrap.side .slot{opacity:.9;filter:none;background:transparent;border-color:transparent;box-shadow:none}
 .slot-wrap.center .slot{border-color:#ffd54f;box-shadow:0 0 22px rgba(255,213,79,.45)}
 .slot img{width:100%;flex:1;min-height:0;object-fit:contain;object-position:center bottom;display:block;background:transparent;opacity:0}
@@ -1836,7 +1837,6 @@ function clearSel(){
     if(s && s.removeAllRanges) s.removeAllRanges();
   }catch(e){}
 }
-
 function preventSelect(el){
   if(!el || el.dataset.selLock) return;
   el.dataset.selLock = "1";
@@ -1849,13 +1849,11 @@ function preventSelect(el){
   el.addEventListener("touchstart", block, {passive:false});
   el.addEventListener("contextmenu", block, {passive:false});
 }
-
 function capture(el, e){
   try{
     if(el.setPointerCapture && e.pointerId != null) el.setPointerCapture(e.pointerId);
   }catch(err){}
 }
-
 function bindAttack(id, type){
   const el = document.getElementById(id);
   if(!el) return;
@@ -1866,13 +1864,11 @@ function bindAttack(id, type){
     playerMove(type);
   }, {passive:false});
 }
-
 bindAttack("lp", "punchL");
 bindAttack("rp", "punchR");
 bindAttack("lk", "kickL");
 bindAttack("rk", "kickR");
 bindAttack("th", "throw");
-
 const bk = document.getElementById("bk");
 if(bk){
   preventSelect(bk);
@@ -1887,7 +1883,6 @@ if(bk){
   bk.addEventListener("pointercancel", endBlock);
   bk.addEventListener("lostpointercapture", endBlock);
 }
-
 function bindMove(id, side){
   const el = document.getElementById(id);
   if(!el) return;
@@ -1914,23 +1909,22 @@ function bindMove(id, side){
   el.addEventListener("pointercancel", up);
   el.addEventListener("lostpointercapture", up);
 }
-
 bindMove("moveL", "left");
 bindMove("moveR", "right");
-
-function bindUtil(id, fn){
-  const el = document.getElementById(id);
-  if(!el) return;
-  el.style.touchAction = "manipulation";
-  el.addEventListener("pointerup", function(e){
+function bindUtil(id,fn){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.onclick=null;
+  el.style.touchAction="manipulation";
+  el.addEventListener("pointerup",function(e){
     e.preventDefault();
+    e.stopPropagation();
     fn();
-  }, {passive:false});
+  });
 }
-
-bindUtil("muteMusic", toggleMuteMusic);
-bindUtil("muteFx", toggleMuteFx);
-bindUtil("pauseBtn", togglePause);
+bindUtil("muteMusic",toggleMuteMusic);
+bindUtil("muteFx",toggleMuteFx);
+bindUtil("pauseBtn",togglePause);
 
 // Container-level prevention (replaces global selectstart / selectionchange listeners)
 const pad = document.querySelector("#controls .pad-wrap");
