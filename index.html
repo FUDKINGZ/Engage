@@ -566,7 +566,7 @@ input[type=file].hidden-file{display:none}
    </div>
    <div id="fightGap"><img id="fightBanner" src="./fight_banner.png" alt=""></div>
   </section>
-<div class="fine-print"><span>BUILD:10.14~0147</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.14~2101</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 </div>
 <script>
 const ROOT="./",ARENA_DIR=ROOT+"arenas/",FIGHTER_DIR=ROOT+"fighters/",TITLECARD_DIR=ROOT+"titlecards/",OBJECT_DIR=ROOT+"objects/",AUDIO=ROOT+"audio/";
@@ -576,7 +576,9 @@ const MAX=100,PUNCH_DMG=1,KICK_DMG=1.5,THROW_DMG=2.5,BLOCK_HEAL=0.5,HIT_GAP=42;
 const HS_STORE="ft_gains",SKILL_STORE="ft_skill",ARCADE_SKILL_STORE="ft_arcade_skill",ROSTER_STORE="ft_roster",ROUNDS_STORE="ft_rounds";
 const POSE_MS=420,HS_LIMIT=10,ANNOUNCE_MS=800,WIN_FLASH_MS=4200,ROUND_WIN_HOLD_MS=4000,FINAL_KO_HOLD_MS=4000;
 const THROW_MS=640,POWER_MAX=100,POWER_PUNCH=22,POWER_KICK=28,COMBO_WINDOW=900,COMBO_BONUS=12,THROWS_PER_POWER=3;
-const ROUND_SECS=120,YOU_HOME=6,YOU_MIN=2,YOU_MAX=62,CPU_HOME=6,CPU_MIN=2,CPU_MAX=62,TILT_DEAD=7,TILT_SCALE=28,ARCADE_ROUNDS=2,CASH_W=29,CASH_H=26,TOSS_SIZE=55;
+const ROUND_SECS=120,YOU_HOME=6,YOU_MIN=2,YOU_MAX=58,CPU_HOME=6,CPU_MIN=2,CPU_MAX=58,TILT_DEAD=7,TILT_SCALE=28,ARCADE_ROUNDS=2,CASH_W=29,CASH_H=26,TOSS_SIZE=55;
+const BODY_WIDTH_PCT=26;   // effective visual mass width (% of stage)
+const MELEE_REACH_PCT=8;   // extra reach beyond body edge for punches/kicks
 const ROUND_CALLS=["3","2","1","READY","FIGHT!"],TITLE_MENUS={fighters:1,opponents:1,invite:1,scores:1,roster:1,crown:1,credits:1,guide:1,stockcred:1,soundtrack:1,gate:1};
 const KEEP_ARENA_MUSIC={fight:1};
 const POSE_LABEL={punchL:"left punch",punchR:"right punch",kickL:"left kick",kickR:"right kick",throw:"throw",block:"block",victory:"victory",loser:"loser",walk:"walk"};
@@ -989,8 +991,8 @@ function resetWalk(){
   applyYouPos();
   applyCpuPos();
 }
-function fighterSpan(){return 32;}
-function meetGap(){return 68;}
+function bodyWidthPct(){return BODY_WIDTH_PCT;}
+function meetGap(){return 100 - bodyWidthPct();}  // hard chest-to-chest limit
 function nudgeCpu(dir){
   if(paused||over||announcing||lastScreen!=="fight") return;
   const step=dir*(fighterStat("cpu","speed")/5)*(dir>0?1.35:1);
@@ -1028,12 +1030,43 @@ function cpuEngage(){
   if(r<0.40){nudgeCpu(1.15);return "press";}
   return "stand";
 }
+function nudgeCpu(dir){
+  if(paused||over||announcing||lastScreen!=="fight") return;
+  const step=dir*(fighterStat("cpu","speed")/5)*(dir>0?1.35:1);
+  if(step===0) return;
+  const limit=meetGap();
+  if(step>0){
+    const room=Math.max(CPU_MIN,limit-youPos);
+    if(cpuPos+step<=room){
+      cpuPos=Math.max(CPU_MIN,Math.min(CPU_MAX,cpuPos+step));
+      if(dragWho) stopDragSfx();
+    }else{
+      const before=youPos;
+      cpuPos=Math.max(CPU_MIN,Math.min(CPU_MAX,room));
+      const overflow=Math.max(0,step-(room-Math.min(cpuPos,room)));
+      youPos=Math.max(YOU_MIN,youPos-overflow);
+      applyYouPos();
+      if(youPos<before-0.01) startDragSfx("you");
+      else if(dragWho) stopDragSfx();
+    }
+  }else{
+    cpuPos=Math.max(CPU_MIN,Math.min(CPU_MAX,cpuPos+step));
+    if(dragWho) stopDragSfx();
+  }
+  boxCache=null;
+  applyCpuPos();
+  const cpuImg=document.getElementById("cpuFile");
+  if(cpuImg&&cpuImg.dataset.pose!=="block"&&cpuImg.dataset.pose!=="punchL"&&cpuImg.dataset.pose!=="punchR"&&cpuImg.dataset.pose!=="kickL"&&cpuImg.dataset.pose!=="kickR"&&cpuImg.dataset.pose!=="throw"){
+    playPose("cpu","walk");
+  }
+}
 function nudgeYou(dir){
   if(lastScreen!=="fight"||(!liquidateOn&&(paused||over||announcing))) return;
   const step=dir*(fighterStat("you","speed")/5);
   if(step===0) return;
+  const limit=meetGap();
   if(step>0){
-    const room=Math.max(YOU_MIN,meetGap()-cpuPos);
+    const room=Math.max(YOU_MIN,limit-cpuPos);
     youPos=Math.max(YOU_MIN,Math.min(YOU_MAX,Math.min(youPos+step,room)));
   }else{
     youPos=Math.max(YOU_MIN,Math.min(YOU_MAX,youPos+step));
@@ -1041,6 +1074,36 @@ function nudgeYou(dir){
   if(dragWho) stopDragSfx();
   boxCache=null;
   applyYouPos();
+}
+let stageWidthCache=0;
+function stageWidth(){
+  if(!stageWidthCache){
+    const s=document.getElementById("stage");
+    stageWidthCache=s?s.getBoundingClientRect().width:500;
+  }
+  return stageWidthCache||500;
+}
+function measureBox(id){
+  const el=document.getElementById(id);
+  if(!el) return {left:0,right:0,top:0,bottom:0,mid:0};
+  const r=el.getBoundingClientRect();
+  const halfBody=(stageWidth()*bodyWidthPct()/100)/2;
+  const mid=r.left+r.width/2;
+  return {left:mid-halfBody,right:mid+halfBody,top:r.top+r.height*0.18,bottom:r.bottom-r.height*0.08,mid:mid};
+}
+function bodyBox(who){
+  const now=Date.now();
+  if(!boxCache||now-boxAt>40){
+    boxCache={you:measureBox("you"),cpu:measureBox("cpu")};
+    boxAt=now;
+  }
+  return boxCache[who];
+}
+function inMeleeRange(from){
+  const a=bodyBox("you"),b=bodyBox("cpu");
+  const gap=a.right<b.left?b.left-a.right:(b.right<a.left?a.left-b.right:0);
+  const reachPx=(stageWidth()*MELEE_REACH_PCT)/100;
+  return gap<=reachPx;
 }
 function pushingNow(){return youBlocking && (moveHold.right || keysDown.ArrowRight || keysDown.KeyL || keysDown.KeyR);}
 function playerPush(){
@@ -1074,18 +1137,27 @@ function noteRun(side){
   if(now-(runTap[side]||0)<280) runHold[side]=true;
   runTap[side]=now;
 }
+let walkRafId = null;
+let lastWalkTs = 0;
+const youFileEl = document.getElementById("youFile"); // cache once at init if possible
+
 function startWalkLoop(){
-  if(walkTimer) return;
+  if(walkRafId) return;
   walkLocked = true;
-  walkTimer = setInterval(function(){
+  lastWalkTs = performance.now();
+  function walkFrame(ts){
     if(document.hidden || lastScreen !== "fight" || (!liquidateOn && (paused || over || announcing))) {
       stopWalkLoop();
       return;
     }
+    const dt = Math.min(32, ts - lastWalkTs);
+    lastWalkTs = ts;
+    const scale = dt / 28; // keep similar speed to old 28ms tick
+
     if(pushingNow()){
-      const youImg = document.getElementById("youFile");
-      if(youImg && youImg.dataset.pose !== "pushnwalk") playPose("you","pushnwalk");
+      if(youFileEl && youFileEl.dataset.pose !== "pushnwalk") playPose("you","pushnwalk");
       playerPush();
+      walkRafId = requestAnimationFrame(walkFrame);
       return;
     }
     if(!isMoving()){
@@ -1093,27 +1165,27 @@ function startWalkLoop(){
       return;
     }
     if(dragWho === "cpu") stopDragSfx();
-    const youImg = document.getElementById("youFile");
-    if(youImg && !youBlocking && youImg.dataset.pose !== "walk" && youImg.dataset.pose !== "throw" && youImg.dataset.pose !== "pushnwalk") playPose("you","walk");
+    if(youFileEl && !youBlocking && youFileEl.dataset.pose !== "walk" && youFileEl.dataset.pose !== "throw" && youFileEl.dataset.pose !== "pushnwalk") playPose("you","walk");
     if(keysDown.ArrowRight || keysDown.KeyL || keysDown.KeyR || moveHold.right){
-      nudgeYou(runHold.right ? 1.4 : 0.8);
+      nudgeYou((runHold.right ? 1.4 : 0.8) * scale);
     }
     if(keysDown.ArrowLeft || keysDown.KeyS || moveHold.left){
-      nudgeYou(runHold.left ? -1.4 : -0.8);
+      nudgeYou((runHold.left ? -1.4 : -0.8) * scale);
     }
-  }, 28);
+    walkRafId = requestAnimationFrame(walkFrame);
+  }
+  walkRafId = requestAnimationFrame(walkFrame);
 }
 function stopWalkLoop(){
   walkLocked=false;
-  if(walkTimer){
-    clearInterval(walkTimer);
-    walkTimer=null;
+  if(walkRafId){
+    cancelAnimationFrame(walkRafId);
+    walkRafId=null;
   }
   if(dragWho) stopDragSfx();
   if(isMoving()) return;
-  const youImg=document.getElementById("youFile");
-  if(youImg&&(youImg.dataset.pose==="pushnwalk"||youImg.dataset.pose==="walk")&&!youBlocking) playPose("you","idle");
-else if(youImg&&youImg.dataset.pose==="pushnwalk"&&youBlocking) playPose("you","block");
+  if(youFileEl&&(youFileEl.dataset.pose==="pushnwalk"||youFileEl.dataset.pose==="walk")&&!youBlocking) playPose("you","idle");
+  else if(youFileEl&&youFileEl.dataset.pose==="pushnwalk"&&youBlocking) playPose("you","block");
 }
 function healthColor(ratio){const t=Math.max(0,Math.min(1,ratio));let r,g,b;if(t>0.5){const u=(t-0.5)/0.5;r=Math.round(255+(0-255)*u);g=Math.round(152+(200-152)*u);b=Math.round(0+(83-0)*u);}else{const u=t/0.5;r=255;g=Math.round(23+(152-23)*u);b=Math.round(68+(0-68)*u);}return"linear-gradient(180deg, rgba(255,255,255,.35), transparent 40%), rgb("+r+","+g+","+b+")";}
 function loadHighScores(){try{const list=JSON.parse(localStorage.getItem(HS_STORE)||"[]");return Array.isArray(list)?list:[];}catch(e){return[];}}
@@ -1758,106 +1830,114 @@ function goTitle(){
   refreshMuteButtons();
   show("title");
 }
-function clearSel(){try{const s=window.getSelection&&window.getSelection();if(s&&s.removeAllRanges)s.removeAllRanges();}catch(e){}}
-function antiSelect(el){
-  if(!el||el.dataset.selLock)return;
-  el.dataset.selLock="1";
-  el.setAttribute("draggable","false");
-  el.setAttribute("unselectable","on");
-  el.style.webkitUserSelect="none";
-  el.style.userSelect="none";
-  el.style.webkitTouchCallout="none";
-  el.style.touchAction="none";
-  function block(e){e.preventDefault();clearSel();}
-  el.addEventListener("touchstart",block,{passive:false});
-  el.addEventListener("touchmove",block,{passive:false});
-  el.addEventListener("selectstart",block,{passive:false});
-  el.addEventListener("dragstart",block,{passive:false});
-  el.addEventListener("contextmenu",block,{passive:false});
-  el.addEventListener("gesturestart",block,{passive:false});
+function clearSel(){
+  try{
+    const s = window.getSelection && window.getSelection();
+    if(s && s.removeAllRanges) s.removeAllRanges();
+  }catch(e){}
 }
-function bindAtk(id,type){
-  const el=document.getElementById(id);
-  if(!el)return;
-  antiSelect(el);
-  el.addEventListener("pointerdown",function(e){
+
+function preventSelect(el){
+  if(!el || el.dataset.selLock) return;
+  el.dataset.selLock = "1";
+  el.setAttribute("draggable", "false");
+  el.style.touchAction = "none";
+  el.style.userSelect = "none";
+  el.style.webkitUserSelect = "none";
+  el.style.webkitTouchCallout = "none";
+  const block = function(e){ e.preventDefault(); clearSel(); };
+  el.addEventListener("touchstart", block, {passive:false});
+  el.addEventListener("contextmenu", block, {passive:false});
+}
+
+function capture(el, e){
+  try{
+    if(el.setPointerCapture && e.pointerId != null) el.setPointerCapture(e.pointerId);
+  }catch(err){}
+}
+
+function bindAttack(id, type){
+  const el = document.getElementById(id);
+  if(!el) return;
+  preventSelect(el);
+  el.addEventListener("pointerdown", function(e){
     e.preventDefault();
     clearSel();
-    try{if(el.setPointerCapture&&e.pointerId!=null)el.setPointerCapture(e.pointerId);}catch(err){}
     playerMove(type);
-  });
+  }, {passive:false});
 }
-bindAtk("lp","punchL");
-bindAtk("rp","punchR");
-bindAtk("lk","kickL");
-bindAtk("rk","kickR");
-bindAtk("th","throw");
-const bk=document.getElementById("bk");
-antiSelect(bk);
-bk.addEventListener("pointerdown",function(e){
-  e.preventDefault();
-  clearSel();
-  try{if(bk.setPointerCapture&&e.pointerId!=null)bk.setPointerCapture(e.pointerId);}catch(err){}
-  if(liquidateOn||(!paused&&!over&&!announcing))setBlock("you",true);
-});
-function endBlock(){setBlock("you",false);}
-bk.addEventListener("pointerup",endBlock);
-bk.addEventListener("pointerleave",endBlock);
-bk.addEventListener("pointercancel",endBlock);
-function bindMoveBtn(id,side){
-  const el=document.getElementById(id);
+
+bindAttack("lp", "punchL");
+bindAttack("rp", "punchR");
+bindAttack("lk", "kickL");
+bindAttack("rk", "kickR");
+bindAttack("th", "throw");
+
+const bk = document.getElementById("bk");
+if(bk){
+  preventSelect(bk);
+  function endBlock(){ setBlock("you", false); }
+  bk.addEventListener("pointerdown", function(e){
+    e.preventDefault();
+    clearSel();
+    capture(bk, e);
+    if(liquidateOn || (!paused && !over && !announcing)) setBlock("you", true);
+  }, {passive:false});
+  bk.addEventListener("pointerup", endBlock);
+  bk.addEventListener("pointercancel", endBlock);
+  bk.addEventListener("lostpointercapture", endBlock);
+}
+
+function bindMove(id, side){
+  const el = document.getElementById(id);
   if(!el) return;
-  antiSelect(el);
+  preventSelect(el);
   function down(e){
     e.preventDefault();
-    e.stopPropagation();
     clearSel();
-    try{ if(el.setPointerCapture&&e.pointerId!=null) el.setPointerCapture(e.pointerId); }catch(err){}
-    if(liquidateOn&&side==="left") noteLiquidate("L");
+    capture(el, e);
+    if(liquidateOn && side === "left") noteLiquidate("L");
     noteRun(side);
-    moveHold[side]=true;
+    moveHold[side] = true;
     el.classList.add("held");
-    if(side==="right"&&youBlocking) playPose("you","pushnwalk");
+    if(side === "right" && youBlocking) playPose("you", "pushnwalk");
     startWalkLoop();
   }
-  function up(e){
-    if(e){ e.preventDefault(); e.stopPropagation(); }
-    moveHold[side]=false;
-    runHold[side]=false;
+  function up(){
+    moveHold[side] = false;
+    runHold[side] = false;
     el.classList.remove("held");
     if(!isMoving()) stopWalkLoop();
   }
-  el.addEventListener("pointerdown",down,{passive:false});
-  el.addEventListener("pointerup",up,{passive:false});
-  el.addEventListener("pointerleave",up,{passive:false});
-  el.addEventListener("pointercancel",up,{passive:false});
-  el.addEventListener("lostpointercapture",up,{passive:false});
+  el.addEventListener("pointerdown", down, {passive:false});
+  el.addEventListener("pointerup", up);
+  el.addEventListener("pointercancel", up);
+  el.addEventListener("lostpointercapture", up);
 }
-bindMoveBtn("moveL","left");
-bindMoveBtn("moveR","right");
-function bindUtil(id,fn){
-  const el=document.getElementById(id);
-  if(!el)return;
-  el.onclick=null;
-  el.style.touchAction="manipulation";
-  el.addEventListener("pointerup",function(e){
+
+bindMove("moveL", "left");
+bindMove("moveR", "right");
+
+function bindUtil(id, fn){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.style.touchAction = "manipulation";
+  el.addEventListener("pointerup", function(e){
     e.preventDefault();
-    e.stopPropagation();
     fn();
-  });
+  }, {passive:false});
 }
-bindUtil("muteMusic",toggleMuteMusic);
-bindUtil("muteFx",toggleMuteFx);
-bindUtil("pauseBtn",togglePause);
-/* controls lock removed so MUSIC PAUSE SFX can click */
-antiSelect(document.querySelector("#controls .pad-wrap"));
-document.addEventListener("selectstart",function(e){
-  if(e.target&&e.target.closest&&e.target.closest(".util-row"))return;if(lastScreen==="fight"){e.preventDefault();clearSel();return false;}
-  const t=e.target;if(t&&t.closest&&t.closest("#controls")){e.preventDefault();clearSel();return false;}
-},{passive:false});
-document.addEventListener("selectionchange",function(){
-  if(lastScreen==="fight")clearSel();
-});
+
+bindUtil("muteMusic", toggleMuteMusic);
+bindUtil("muteFx", toggleMuteFx);
+bindUtil("pauseBtn", togglePause);
+
+// Container-level prevention (replaces global selectstart / selectionchange listeners)
+const pad = document.querySelector("#controls .pad-wrap");
+if(pad){
+  preventSelect(pad);
+  pad.addEventListener("selectstart", function(e){ e.preventDefault(); clearSel(); }, {passive:false});
+}
 document.getElementById("enterArenaBtn").addEventListener("pointerdown",function(e){e.preventDefault();e.stopPropagation();enterArena();});
 document.getElementById("enterArenaBtn").addEventListener("click",function(e){e.preventDefault();e.stopPropagation();});
 document.getElementById("introCrt").addEventListener("pointerdown",function(e){if(!introStarted||!introCanSkip)return;if(e.target&&e.target.closest&&e.target.closest("#enterArenaBtn,#coinPanel"))return;onIntroInput();});
