@@ -1666,7 +1666,7 @@ if(!isDarkFudWinner && !matchOver()){
   const winName=FIGHTERS[winner==="you"?selectedFighter:cpuFighter].name;
   playPose(winner, winName==="Stonks 6-7"?"taunt":"victory");
 }
-sfxP2Ugh();matchScore+=dollarsLeft("you");matchXp+=10+(youWonRound?25:0)+effectiveSkill();if(youWonRound)roundWins.you+=1;else roundWins.cpu+=1;updateRoundHud();playPose(youWonRound?"cpu":"you",matchOver()?"loser":"knee");if(!matchOver()){
+sfxP2Ugh();matmatchScore+=dollarsLeft("you");chScore+=dollarsLeft("you");matchXp+=10+(youWonRound?25:0)+effectiveSkill();if(youWonRound)roundWins.you+=1;else roundWins.cpu+=1;updateRoundHud();playPose(yoif(matchOver()){playPose(youWonRound?"cpu":"you","loser");sfxP2Ugh();}else playPose(youWonRound?"cpu":"you","knee");if(!matchOver()){uWonRound?"cpu":"you",matchOver()?"loser":"knee");if(!matchOver()){
   if(currentRound===1){
     pauseBgm();
     if(sfxRound1SusEl&&!mutedFx){
