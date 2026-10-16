@@ -252,11 +252,10 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #fight.quake #you,#fight.quake #cpu{animation:fighterQuake 2.2s linear}
 @keyframes quake{0%,100%{transform:translate(0,0)}8%{transform:translate(-10px,6px)}16%{transform:translate(12px,-8px)}24%{transform:translate(-8px,-5px)}32%{transform:translate(9px,7px)}40%{transform:translate(-12px,3px)}48%{transform:translate(7px,-9px)}56%{transform:translate(-6px,8px)}64%{transform:translate(11px,-4px)}72%{transform:translate(-9px,5px)}80%{transform:translate(6px,-6px)}88%{transform:translate(-4px,3px)}}
 @keyframes fighterQuake{0%,100%{transform:translate(0,0) rotate(0)}12%{transform:translate(-6px,4px) rotate(-2deg)}28%{transform:translate(8px,-5px) rotate(2deg)}44%{transform:translate(-7px,3px) rotate(-1deg)}60%{transform:translate(5px,-4px) rotate(2deg)}76%{transform:translate(-4px,2px) rotate(-1deg)}}
-.fighter{position:absolute;bottom:28px;width:auto;max-width:47.5%;height:72.5%;aspect-ratio:auto;max-height:72.5%;transform-origin:center bottom;z-index:4}
-.fighter-img{width:auto;height:100%;max-width:100%;object-fit:contain;object-position:center bottom;display:none;background:transparent!important;transform:none}
+.fighter{position:absolute;bottom:28px;width:auto;max-width:42%;height:72.5%;aspect-ratio:auto;max-height:72.5%;transform-origin:center bottom;z-index:4;overflow:visible}
+.fighter-img{width:100%;height:100%;max-width:100%;object-fit:contain;object-position:center bottom;display:none;background:transparent!important;transform:none}
 #you{left:6%}
 #cpu{right:6%}
-.fighter-img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:none;background:transparent!important;transform:none}
 #cpu .fighter-img{transform:scaleX(-1)}
 .fighter.hit{filter:none}
 #you.punchL{transform:translateX(12%) rotate(-5deg)}
@@ -573,13 +572,14 @@ input[type=file].hidden-file{display:none}
 const ROOT="./",ARENA_DIR=ROOT+"arenas/",FIGHTER_DIR=ROOT+"fighters/",TITLECARD_DIR=ROOT+"titlecards/",OBJECT_DIR=ROOT+"objects/",AUDIO=ROOT+"audio/";
 const TITLE_TRACK=AUDIO+"title/maintitle.mp3",INTRO_BED=AUDIO+"intro/intro-boot.wav";
 const ROSTER=ROOT+"title screen.jpg",ROSTER_FILE=ROOT+"roster.json";
-const MAX=100,PUNCH_DMG=1,KICK_DMG=1.5,THROW_DMG=2.5,BLOCK_HEAL=0.5,HIT_GAP=42;
+const MAX=100,PUNCH_DMG=1,KICK_DMG=1.5,THROW_DMG=2.5,BLOCK_HEAL=0.5;
 const HS_STORE="ft_gains",SKILL_STORE="ft_skill",ARCADE_SKILL_STORE="ft_arcade_skill",ROSTER_STORE="ft_roster",ROUNDS_STORE="ft_rounds";
 const POSE_MS=420,HS_LIMIT=10,ANNOUNCE_MS=800,WIN_FLASH_MS=4200,ROUND_WIN_HOLD_MS=4000,FINAL_KO_HOLD_MS=4000;
 const THROW_MS=640,POWER_MAX=100,POWER_PUNCH=22,POWER_KICK=28,COMBO_WINDOW=900,COMBO_BONUS=12,THROWS_PER_POWER=3;
 const ROUND_SECS=120,YOU_HOME=6,YOU_MIN=2,YOU_MAX=58,CPU_HOME=6,CPU_MIN=2,CPU_MAX=58,TILT_DEAD=7,TILT_SCALE=28,ARCADE_ROUNDS=2,CASH_W=29,CASH_H=26,TOSS_SIZE=55;
-const BODY_WIDTH_PCT=26;   // effective visual mass width (% of stage)
-const MELEE_REACH_PCT=8;   // extra reach beyond body edge for punches/kicks
+const BODY_WIDTH_PCT=34;   // solid mass ≈ opaque figure in 42% sprite slot (hard stop)
+const MELEE_REACH_PCT=5;   // short reach past body edge — punches/kicks only
+const CONTACT_EPS=0.15;    // plant tight; no float gap, no phase
 const ROUND_CALLS=["3","2","1","READY","FIGHT!"],TITLE_MENUS={fighters:1,opponents:1,invite:1,scores:1,roster:1,crown:1,credits:1,guide:1,stockcred:1,soundtrack:1,gate:1};
 const KEEP_ARENA_MUSIC={fight:1};
 const POSE_LABEL={punchL:"left punch",punchR:"right punch",kickL:"left kick",kickR:"right kick",throw:"throw",block:"block",victory:"victory",loser:"loser",walk:"walk"};
@@ -992,13 +992,107 @@ function resetWalk(){
   applyYouPos();
   applyCpuPos();
 }
-// Minimal bodyBox for money / throw positioning (does not affect collision)
 let boxCache=null,boxAt=0;
+// ===== SOLID MASS PHYSICS =====
+const PUSH_FORCE = 0.85;
+
+function bodyWidthPct(){return BODY_WIDTH_PCT;}
+function meetGap(){return 100 - bodyWidthPct() + CONTACT_EPS;}
+function bodiesTouching(){
+  return (youPos + cpuPos) >= (meetGap() - CONTACT_EPS);
+}
+function resolveBodyContact(){
+  // One solid plane: youPos + cpuPos must never exceed meetGap()
+  const limit = meetGap();
+  if(youPos + cpuPos <= limit) return;
+  const excess = youPos + cpuPos - limit;
+  youPos = Math.max(YOU_MIN, youPos - excess * 0.5);
+  cpuPos = Math.max(CPU_MIN, cpuPos - excess * 0.5);
+  if(youPos + cpuPos > limit){
+    youPos = Math.max(YOU_MIN, Math.min(YOU_MAX, limit - cpuPos));
+  }
+  if(youPos + cpuPos > limit){
+    cpuPos = Math.max(CPU_MIN, Math.min(CPU_MAX, limit - youPos));
+  }
+}
+function nudgeCpu(dir){
+  if(paused||over||announcing||lastScreen!=="fight") return;
+  const step=dir*(fighterStat("cpu","speed")/5)*(dir>0?1.35:1);
+  if(step===0) return;
+  const limit=meetGap();
+  if(step>0){
+    const maxCpu = Math.max(CPU_MIN, limit - youPos);
+    const beforeYou = youPos;
+    if(cpuPos + step <= maxCpu){
+      cpuPos = Math.max(CPU_MIN, Math.min(CPU_MAX, cpuPos + step));
+      if(dragWho) stopDragSfx();
+    }else{
+      cpuPos = Math.max(CPU_MIN, Math.min(CPU_MAX, maxCpu));
+      const push = Math.min(Math.abs(step), 0.4);
+      youPos = Math.max(YOU_MIN, youPos - push);
+      if(youPos < beforeYou - 0.01) startDragSfx("you");
+      else if(dragWho) stopDragSfx();
+    }
+  }else{
+    cpuPos = Math.max(CPU_MIN, Math.min(CPU_MAX, cpuPos + step));
+    if(dragWho) stopDragSfx();
+  }
+  resolveBodyContact();
+  boxCache = null;
+  applyCpuPos();
+  applyYouPos();
+  const cpuImg = document.getElementById("cpuFile");
+  if(cpuImg && cpuImg.dataset.pose!=="block" && cpuImg.dataset.pose!=="punchL" && cpuImg.dataset.pose!=="punchR" && cpuImg.dataset.pose!=="kickL" && cpuImg.dataset.pose!=="kickR" && cpuImg.dataset.pose!=="throw" && cpuImg.dataset.pose!=="pushnwalk"){
+    playPose("cpu","walk");
+  }
+}
+function cpuEngage(){
+  if(paused||over||announcing||lastScreen!=="fight")return "stand";
+  if(!inMeleeRange()){nudgeCpu(1.4);return "approach";}
+  const r=Math.random();
+  if(r<0.22){nudgeCpu(-1.2);return "retreat";}
+  if(r<0.40){nudgeCpu(1.15);return "press";}
+  return "stand";
+}
+function nudgeYou(dir){
+  if(lastScreen!=="fight"||(!liquidateOn&&(paused||over||announcing))) return;
+  const step=dir*(fighterStat("you","speed")/5);
+  if(step===0) return;
+  const limit=meetGap();
+  if(step>0){
+    const maxYou = Math.max(YOU_MIN, limit - cpuPos);
+    youPos = Math.max(YOU_MIN, Math.min(YOU_MAX, Math.min(youPos + step, maxYou)));
+  }else{
+    youPos = Math.max(YOU_MIN, Math.min(YOU_MAX, youPos + step));
+  }
+  resolveBodyContact();
+  if(dragWho) stopDragSfx();
+  boxCache = null;
+  applyYouPos();
+  applyCpuPos();
+}
+let stageWidthCache=0;
+function stageWidth(){
+  if(!stageWidthCache){
+    const s=document.getElementById("stage");
+    stageWidthCache=s?s.getBoundingClientRect().width:500;
+  }
+  return stageWidthCache||500;
+}
 function measureBox(id){
+  // Body mass = BODY_WIDTH_PCT centered on fighter — not full GIF/frame width
   const el=document.getElementById(id);
   if(!el) return {left:0,right:0,top:0,bottom:0,mid:0};
   const r=el.getBoundingClientRect();
-  return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,mid:r.left+r.width/2};
+  const halfBody=(stageWidth()*bodyWidthPct()/100)/2;
+  const mid=r.left + r.width/2;
+  return {
+    left: mid - halfBody,
+    right: mid + halfBody,
+    top: r.top + r.height*0.18,
+    bottom: r.bottom - r.height*0.05,
+    mid: mid
+  };
 }
 function bodyBox(who){
   const now=Date.now();
@@ -1008,117 +1102,46 @@ function bodyBox(who){
   }
   return boxCache[who];
 }
-// ===== SOLID MASS PHYSICS =====
-const PUSH_FORCE = 0.85;
-
-function bodyWidthPct(){ return BODY_WIDTH_PCT; }
-function meetGap(){ return 100 - BODY_WIDTH_PCT; }
-
-function stageWidth(){
-  const s = document.getElementById("stage");
-  return s ? s.getBoundingClientRect().width : 500;
-}
-
-function getMassBoxes(){
-  const sw = stageWidth();
-  const half = (sw * BODY_WIDTH_PCT / 100) / 2;
-  const youEl = document.getElementById("you");
-  const cpuEl = document.getElementById("cpu");
-  if(!youEl || !cpuEl) return null;
-  const yr = youEl.getBoundingClientRect();
-  const cr = cpuEl.getBoundingClientRect();
-  const youMid = yr.left + yr.width / 2;
-  const cpuMid = cr.left + cr.width / 2;
-  return {
-    you: { left: youMid - half, right: youMid + half, mid: youMid },
-    cpu: { left: cpuMid - half, right: cpuMid + half, mid: cpuMid },
-    stageWidth: sw
-  };
-}
-
-function gapBetween(){
-  const boxes = getMassBoxes();
-  if(!boxes) return 999;
-  const a = boxes.you, b = boxes.cpu;
-  return a.right < b.left ? b.left - a.right : (b.right < a.left ? a.left - b.right : 0);
-}
-
 function inMeleeRange(from){
-  const gap = gapBetween();
-  const reach = (stageWidth() * MELEE_REACH_PCT) / 100;
-  return gap <= reach;
+  // Contact against the body edge + short arm reach (punches land on body, not behind)
+  const a=bodyBox("you"), b=bodyBox("cpu");
+  const gap = a.right < b.left ? b.left - a.right : (b.right < a.left ? a.left - b.right : 0);
+  const reachPx = (stageWidth() * MELEE_REACH_PCT) / 100;
+  return gap <= reachPx;
 }
-
-function clampPositions(){
-  const limit = meetGap();
-  if(youPos + cpuPos > limit){
-    const excess = (youPos + cpuPos) - limit;
-    if(moveHold.right || keysDown.ArrowRight || keysDown.KeyL || keysDown.KeyR){
-      cpuPos = Math.max(CPU_MIN, cpuPos - excess);
-    } else {
-      youPos = Math.max(YOU_MIN, youPos - excess);
-    }
-  }
-  youPos = Math.max(YOU_MIN, Math.min(YOU_MAX, youPos));
-  cpuPos = Math.max(CPU_MIN, Math.min(CPU_MAX, cpuPos));
-}
-
-function nudgeYou(dir){
-  if(lastScreen !== "fight" || (!liquidateOn && (paused || over || announcing))) return;
-  const step = dir * (fighterStat("you","speed") / 5);
-  if(step === 0) return;
-  youPos += step;
-  clampPositions();
-  if(dragWho) stopDragSfx();
-  applyYouPos();
-  applyCpuPos();
-}
-
-function nudgeCpu(dir){
-  if(paused || over || announcing || lastScreen !== "fight") return;
-  const step = dir * (fighterStat("cpu","speed") / 5) * (dir > 0 ? 1.25 : 1);
-  if(step === 0) return;
-  cpuPos += step;
-  clampPositions();
-  if(dragWho) stopDragSfx();
-  applyCpuPos();
-  applyYouPos();
-  const cpuImg = document.getElementById("cpuFile");
-  if(cpuImg && !["block","punchL","punchR","kickL","kickR","throw","pushnwalk"].includes(cpuImg.dataset.pose)){
-    playPose("cpu","walk");
-  }
-}
-
 function pushingNow(){return youBlocking && (moveHold.right || keysDown.ArrowRight || keysDown.KeyL || keysDown.KeyR);}
-
-function playerPush(){
+function playerPush(scale){
   if(liquidateOn || paused || over || announcing || !youBlocking) return;
+  const s = (scale==null || isNaN(scale)) ? 1 : Math.max(0.25, Math.min(1.5, scale));
   const youImg = document.getElementById("youFile");
   if(youImg && youImg.dataset.pose !== "pushnwalk") playPose("you","pushnwalk");
 
-  if(!inMeleeRange("you")){
-    nudgeYou(0.75);
+  const limit = meetGap();
+  const gap = limit - (youPos + cpuPos);
+  const walkStep = (fighterStat("you","speed")/5) * 0.55 * s;
+
+  if(gap > CONTACT_EPS){
+    if(dragWho === "cpu") stopDragSfx();
+    const maxYou = Math.max(YOU_MIN, limit - cpuPos);
+    youPos = Math.max(YOU_MIN, Math.min(YOU_MAX, Math.min(youPos + walkStep, maxYou)));
+    resolveBodyContact();
+    boxCache = null;
+    applyYouPos();
+    applyCpuPos();
     return;
   }
 
+  const n = 0.35 * s;
   const before = cpuPos;
-  cpuPos = Math.max(CPU_MIN, cpuPos - PUSH_FORCE);
-  youPos = Math.min(YOU_MAX, youPos + PUSH_FORCE * 0.35);
-  clampPositions();
+  cpuPos = Math.max(CPU_MIN, cpuPos - n);
+  const maxYou = Math.max(YOU_MIN, limit - cpuPos);
+  youPos = Math.max(YOU_MIN, Math.min(YOU_MAX, Math.min(youPos + walkStep * 0.25, maxYou)));
+  resolveBodyContact();
+  boxCache = null;
   applyYouPos();
   applyCpuPos();
-
   if(cpuPos < before - 0.01) startDragSfx("cpu");
   else if(dragWho === "cpu") stopDragSfx();
-}
-
-function cpuEngage(){
-  if(paused||over||announcing||lastScreen!=="fight")return "stand";
-  if(!inMeleeRange()){nudgeCpu(1.4);return "approach";}
-  const r=Math.random();
-  if(r<0.22){nudgeCpu(-1.2);return "retreat";}
-  if(r<0.40){nudgeCpu(1.15);return "press";}
-  return "stand";
 }
 function tiltAxis(e){const type=(screen.orientation&&screen.orientation.type)||"";if(type.indexOf("landscape")===0){const b=e.beta;if(b==null||isNaN(b))return null;return type.indexOf("secondary")>=0?-b:b;}const g=e.gamma;if(g==null||isNaN(g))return null;return g;}
 function onTilt(e){if(paused||over||announcing||lastScreen!=="fight")return;const axis=tiltAxis(e);if(axis==null)return;if(!tiltReady){tiltCenter=axis;tiltReady=true;return;}const delta=axis-tiltCenter;if(Math.abs(delta)<TILT_DEAD)return;nudgeYou(Math.max(-1.15,Math.min(1.15,(delta-Math.sign(delta)*TILT_DEAD)/TILT_SCALE)));}
@@ -1132,44 +1155,42 @@ function noteRun(side){
   if(now-(runTap[side]||0)<280) runHold[side]=true;
   runTap[side]=now;
 }
-let walkRafId = null;
-let lastWalkTs = 0;
-const youFileEl = document.getElementById("youFile"); // cache once at init if possible
-
+let walkRafId=null;
+let lastWalkTs=0;
+const youFileEl=document.getElementById("youFile");
 function startWalkLoop(){
   if(walkRafId) return;
-  walkLocked = true;
-  lastWalkTs = performance.now();
+  walkLocked=true;
+  lastWalkTs=performance.now();
   function walkFrame(ts){
-    if(document.hidden || lastScreen !== "fight" || (!liquidateOn && (paused || over || announcing))) {
+    if(document.hidden||lastScreen!=="fight"||(!liquidateOn&&(paused||over||announcing))){
       stopWalkLoop();
       return;
     }
-    const dt = Math.min(32, ts - lastWalkTs);
-    lastWalkTs = ts;
-    const scale = dt / 28; // keep similar speed to old 28ms tick
-
+    const dt=Math.min(32,ts-lastWalkTs);
+    lastWalkTs=ts;
+    const scale=dt/28;
     if(pushingNow()){
-      if(youFileEl && youFileEl.dataset.pose !== "pushnwalk") playPose("you","pushnwalk");
-      playerPush();
-      walkRafId = requestAnimationFrame(walkFrame);
+      if(youFileEl&&youFileEl.dataset.pose!=="pushnwalk") playPose("you","pushnwalk");
+      playerPush(scale);
+      walkRafId=requestAnimationFrame(walkFrame);
       return;
     }
     if(!isMoving()){
       stopWalkLoop();
       return;
     }
-    if(dragWho === "cpu") stopDragSfx();
-    if(youFileEl && !youBlocking && youFileEl.dataset.pose !== "walk" && youFileEl.dataset.pose !== "throw" && youFileEl.dataset.pose !== "pushnwalk") playPose("you","walk");
-    if(keysDown.ArrowRight || keysDown.KeyL || keysDown.KeyR || moveHold.right){
-      nudgeYou((runHold.right ? 1.4 : 0.8) * scale);
+    if(dragWho==="cpu") stopDragSfx();
+    if(youFileEl&&!youBlocking&&youFileEl.dataset.pose!=="walk"&&youFileEl.dataset.pose!=="throw"&&youFileEl.dataset.pose!=="pushnwalk") playPose("you","walk");
+    if(keysDown.ArrowRight||keysDown.KeyL||keysDown.KeyR||moveHold.right){
+      nudgeYou((runHold.right?1.4:0.8)*scale);
     }
-    if(keysDown.ArrowLeft || keysDown.KeyS || moveHold.left){
-      nudgeYou((runHold.left ? -1.4 : -0.8) * scale);
+    if(keysDown.ArrowLeft||keysDown.KeyS||moveHold.left){
+      nudgeYou((runHold.left?-1.4:-0.8)*scale);
     }
-    walkRafId = requestAnimationFrame(walkFrame);
+    walkRafId=requestAnimationFrame(walkFrame);
   }
-  walkRafId = requestAnimationFrame(walkFrame);
+  walkRafId=requestAnimationFrame(walkFrame);
 }
 function stopWalkLoop(){
   walkLocked=false;
@@ -1639,6 +1660,7 @@ function pushBack(who,px){
   const pct=px/3.9;
   if(who==="you")youPos=Math.max(YOU_MIN,youPos-pct);
   else cpuPos=Math.max(CPU_MIN,cpuPos-pct);
+  resolveBodyContact();
   boxCache=null;
   applyYouPos();
   applyCpuPos();
