@@ -155,7 +155,8 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .slot-wrap.center .slot{border-color:#ffd54f;box-shadow:0 0 22px rgba(255,213,79,.45)}
 .slot img{width:100%;flex:1;min-height:0;object-fit:contain;object-position:center bottom;display:block;background:transparent;opacity:0}
 .slot img.loaded{opacity:1}
-.slot .arena-art{width:100%;flex:1;min-height:0;object-fit:cover;object-position:center center;display:block;background:transparent;opacity:1}
+.slot .arena-art{width:100%;flex:1;min-height:0;object-fit:contain;object-position:center bottom;display:block;background:transparent;opacity:1}
+.slot .arena-art{object-fit:cover}
 .slot.locked img,.slot.locked .arena-art{filter:grayscale(1) brightness(.38)}
 .lock-tag{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);background:rgba(0,0,0,.78);color:#ffd54f;border:1px solid #886;font-size:11px;font-weight:900;padding:7px 10px;border-radius:8px;text-align:center;width:max-content;max-width:92%;white-space:normal;line-height:1.15}
 .opp-wrap,.liquid-wrap{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px;padding:2px 6px;overflow:hidden}
@@ -241,6 +242,7 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #fight{position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden;background:#05070d;padding-top:env(safe-area-inset-top);align-items:center}
 #fight.screen.active{display:flex}
 #stage{flex:0 0 auto;position:relative;overflow:hidden;background:#12080c;width:100%;aspect-ratio:500/362;max-height:min(calc(100dvh - 63px - 33px - 231px - env(safe-area-inset-bottom)), 362px);margin:0 auto;min-height:0}
+.arena-img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;pointer-events:none;position:absolute;inset:0;z-index:1}
 .arena-img{display:block;width:100%;height:100%;object-fit:fill;object-position:center center;pointer-events:none;position:absolute;inset:0;z-index:1}
 #fightU{display:block;width:100%;height:36px;min-height:36px;max-height:36px;margin:0;padding:0;background:#05070d;overflow:hidden;flex:none}
 #fightUBanner{display:block;width:100%;height:36px;margin:0;padding:0;pointer-events:none;object-fit:cover}
@@ -250,10 +252,11 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #fight.quake #you,#fight.quake #cpu{animation:fighterQuake 2.2s linear}
 @keyframes quake{0%,100%{transform:translate(0,0)}8%{transform:translate(-10px,6px)}16%{transform:translate(12px,-8px)}24%{transform:translate(-8px,-5px)}32%{transform:translate(9px,7px)}40%{transform:translate(-12px,3px)}48%{transform:translate(7px,-9px)}56%{transform:translate(-6px,8px)}64%{transform:translate(11px,-4px)}72%{transform:translate(-9px,5px)}80%{transform:translate(6px,-6px)}88%{transform:translate(-4px,3px)}}
 @keyframes fighterQuake{0%,100%{transform:translate(0,0) rotate(0)}12%{transform:translate(-6px,4px) rotate(-2deg)}28%{transform:translate(8px,-5px) rotate(2deg)}44%{transform:translate(-7px,3px) rotate(-1deg)}60%{transform:translate(5px,-4px) rotate(2deg)}76%{transform:translate(-4px,2px) rotate(-1deg)}}
-.fighter{position:absolute;bottom:28px;width:auto;max-width:42%;height:72.5%;aspect-ratio:auto;max-height:72.5%;transform-origin:center bottom;z-index:4;overflow:visible}
-.fighter-img{width:100%;height:100%;max-width:100%;object-fit:contain;object-position:center bottom;display:none;background:transparent!important;transform:none}
-#you{left:6%;z-index:4}
-#cpu{right:6%;z-index:4}
+.fighter{position:absolute;bottom:28px;width:auto;max-width:47.5%;height:72.5%;aspect-ratio:auto;max-height:72.5%;transform-origin:center bottom;z-index:4}
+.fighter-img{width:auto;height:100%;max-width:100%;object-fit:contain;object-position:center bottom;display:none;background:transparent!important;transform:none}
+#you{left:6%}
+#cpu{right:6%}
+.fighter-img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:none;background:transparent!important;transform:none}
 #cpu .fighter-img{transform:scaleX(-1)}
 .fighter.hit{filter:none}
 #you.punchL{transform:translateX(12%) rotate(-5deg)}
@@ -542,7 +545,7 @@ input[type=file].hidden-file{display:none}
     <div class="overlay" id="winFlash"><div class="ko" id="winFlashKo">WINNER</div><div id="winFlashName">YOU</div><p id="winFlashSub" style="color:#9ad7b2"></p></div>
     <div class="overlay" id="endOv"><div class="ko" id="endKo">K.O.</div><h2 id="endMsg">YOU WIN</h2><p id="endSub" style="color:#9ad7b2"></p><button class="btn btn-gold" id="endGold" onclick="openHighScores()">GAINS & STATS</button><button class="btn btn-dark" id="endTitle" onclick="goTitle()">TITLE SCREEN</button></div>
   </div>
-   <div id="fightU"><img id="fightUBanner" src="./controller/fight_u_banner.png" alt="" width="500" height="63"></div>
+   <div id="fightU"><img id="fightUBanner" src="./fight_u_banner.png" alt="" width="500" height="63"></div>
    <div id="controls">
      <div class="pad-wrap">
        <button type="button" class="move-btn" id="moveL" aria-label="Left"></button>
@@ -570,14 +573,16 @@ input[type=file].hidden-file{display:none}
 const ROOT="./",ARENA_DIR=ROOT+"arenas/",FIGHTER_DIR=ROOT+"fighters/",TITLECARD_DIR=ROOT+"titlecards/",OBJECT_DIR=ROOT+"objects/",AUDIO=ROOT+"audio/";
 const TITLE_TRACK=AUDIO+"title/maintitle.mp3",INTRO_BED=AUDIO+"intro/intro-boot.wav";
 const ROSTER=ROOT+"title screen.jpg",ROSTER_FILE=ROOT+"roster.json";
-const MAX=100,PUNCH_DMG=1,KICK_DMG=1.5,THROW_DMG=2.5,BLOCK_HEAL=0.5;
+const MAX=100,PUNCH_DMG=1,KICK_DMG=1.5,THROW_DMG=2.5,BLOCK_HEAL=0.5,HIT_GAP=42;
 const HS_STORE="ft_gains",SKILL_STORE="ft_skill",ARCADE_SKILL_STORE="ft_arcade_skill",ROSTER_STORE="ft_roster",ROUNDS_STORE="ft_rounds";
 const POSE_MS=420,HS_LIMIT=10,ANNOUNCE_MS=800,WIN_FLASH_MS=4200,ROUND_WIN_HOLD_MS=4000,FINAL_KO_HOLD_MS=4000;
 const THROW_MS=640,POWER_MAX=100,POWER_PUNCH=22,POWER_KICK=28,COMBO_WINDOW=900,COMBO_BONUS=12,THROWS_PER_POWER=3;
 const ROUND_SECS=120,YOU_HOME=6,YOU_MIN=2,YOU_MAX=58,CPU_HOME=6,CPU_MIN=2,CPU_MAX=58,TILT_DEAD=7,TILT_SCALE=28,ARCADE_ROUNDS=2,CASH_W=29,CASH_H=26,TOSS_SIZE=55;
+const BODY_WIDTH_PCT=26;   // effective visual mass width (% of stage)
+const MELEE_REACH_PCT=8;   // extra reach beyond body edge for punches/kicks
 const ROUND_CALLS=["3","2","1","READY","FIGHT!"],TITLE_MENUS={fighters:1,opponents:1,invite:1,scores:1,roster:1,crown:1,credits:1,guide:1,stockcred:1,soundtrack:1,gate:1};
 const KEEP_ARENA_MUSIC={fight:1};
-const POSE_LABEL={punchL:"left punch",punchR:"right punch",kickL:"left kick",kickR:"right kick",throw:"throw",block:"block",victory:"victory",loser:"loser",walk:"walk",taunt:"taunt",hit:"hit"};
+const POSE_LABEL={punchL:"left punch",punchR:"right punch",kickL:"left kick",kickR:"right kick",throw:"throw",block:"block",victory:"victory",loser:"loser",walk:"walk"};
 const THROW_OBJECTS=["phone.png","laptop.png","coffee.png","chart.png","newspaper.png","megaphone.png","bag.png","keyboard.png","coin.png","contract.png"];
 const INTRO_PAGES=["W.F.U.D. STUDIOS","PRESENTS","FUD KINGZ OF FINTWITS"],LOAD_HOLD_MS=3000;
 function unique(list){const seen={};return(list||[]).filter(function(u){if(!u||seen[u])return false;seen[u]=true;return true;});}
@@ -590,11 +595,9 @@ function liquidatedUrls(name){const n=String(name||"").trim().toLowerCase(),dir=
 function poseUrls(name,pose){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);let file="idle.gif";if(pose==="idle")file="idle.gif";else if(pose==="throw")file="throw.gif";else if(pose==="walk")file="walk.gif";else if(pose==="knee"){const kUrls=unique([dir+n+"_knee.gif",dir+"knee.gif",FIGHTER_DIR+n+"_knee.gif"]);return unique(kUrls.concat(selectUrls(name)));}
 else if(pose==="summon"){const sUrls=unique([dir+n+" summon.gif",dir+"summon.gif",FIGHTER_DIR+n+" summon.gif"]);return unique(sUrls.concat(selectUrls(name)));}
 else if(pose==="pushnwalk"){const pUrls=unique([dir+n+"_pushnwalk.gif",dir+"pushnwalk.gif",FIGHTER_DIR+n+"_pushnwalk.gif"]);return unique(pUrls.concat(poseUrls(name,"block"),poseUrls(name,"walk")));}
-else if(pose==="taunt"&&n==="stonks 6-7"){const tUrls=unique([dir+n+"_taunt.gif",dir+"taunt.gif",FIGHTER_DIR+n+"_taunt.gif"]);return unique(tUrls.concat(poseUrls(name,"victory")));}
-else if(pose==="hit"){const hUrls=unique([dir+n+"_hit.gif",dir+"hit.gif",FIGHTER_DIR+n+"_hit.gif"]);return unique(hUrls.concat(poseUrls(name,"idle")));}
 else file=String(POSE_LABEL[pose]||"idle").toLowerCase()+".gif";const urls=unique([dir+n+" "+file,dir+file,FIGHTER_DIR+n+" "+file]);if(pose==="walk")return unique(urls.concat([dir+n+" idle.gif",dir+"idle.gif",FIGHTER_DIR+n+" idle.gif"]));return unique(urls.concat(selectUrls(name)));}
 function objectUrls(name){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);return unique([dir+n+" object.png",dir+"object.png",OBJECT_DIR+n+" object.png",FIGHTER_DIR+n+" object.png"].concat(THROW_OBJECTS.map(function(f){return OBJECT_DIR+String(f).toLowerCase();})));}
-function decorateFighter(f){f.select=selectUrls(f.name);f.idle=poseUrls(f.name,"idle");f.walk=poseUrls(f.name,"walk");f.punchL=poseUrls(f.name,"punchL");f.punchR=poseUrls(f.name,"punchR");f.kickL=poseUrls(f.name,"kickL");f.kickR=poseUrls(f.name,"kickR");f.throw=poseUrls(f.name,"throw");f.block=poseUrls(f.name,"block");f.victory=poseUrls(f.name,"victory");f.loser=poseUrls(f.name,"loser");f.knee=poseUrls(f.name,"knee");f.summon=poseUrls(f.name,"summon");f.pushnwalk=poseUrls(f.name,"pushnwalk");f.taunt=poseUrls(f.name,"taunt");f.hit=poseUrls(f.name,"hit");f.liquidated=liquidatedUrls(f.name);f.objects=objectUrls(f.name);return f;}
+function decorateFighter(f){f.select=selectUrls(f.name);f.idle=poseUrls(f.name,"idle");f.walk=poseUrls(f.name,"walk");f.punchL=poseUrls(f.name,"punchL");f.punchR=poseUrls(f.name,"punchR");f.kickL=poseUrls(f.name,"kickL");f.kickR=poseUrls(f.name,"kickR");f.throw=poseUrls(f.name,"throw");f.block=poseUrls(f.name,"block");f.victory=poseUrls(f.name,"victory");f.loser=poseUrls(f.name,"loser");f.knee=poseUrls(f.name,"knee");f.summon=poseUrls(f.name,"summon");f.pushnwalk=poseUrls(f.name,"pushnwalk");f.liquidated=liquidatedUrls(f.name);f.objects=objectUrls(f.name);return f;}
 const FIGHTERS=[{name:"Stonks 6-7",handle:"@Stonks67",tint:"#1a2333",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"punch",bio:"Chart gremlin. Light, short reach, twitch. Walk in, punch-punch, back out. Weak to kicks. Throws NUDE PIX early."},{name:"Ventifa",handle:"@Ventifa",tint:"#0d7377",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hands",bio:"Night-shift closer. Fastest hands. LP then RP, block the return, then kick. EPT TEST interrupts, it does not finish."},{name:"Davinstigator",handle:"@Davinstigator",tint:"#37474f",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"bait",bio:"Boarding-line loudmouth. Close the gap, stall in block, late kick. Weak to throws while blocking. PRISON SHOE waits for the commit."},{name:"Troll Bee",handle:"@TrollBee",tint:"#f9a825",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Smallest box, highest step. Circle, sting, never stand in kick range. FUD RADIO is spent on the first full meter."},{name:"Jose Brownstein",handle:"@JoseBrownstein",tint:"#8d6e63",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"kick",bio:"Shop boss. Hold center, kick, block, kick. Weak to speed in and out. TOOL BOX is a mid-range check."},{name:"Captn Jack Hashtag",handle:"@CaptnJack",tint:"#e65100",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sloppy",bio:"Rail-braced and sloppy. Random side, high whiff. COCKTAIL is often thrown from too far. Weak to a patient block."},{name:"WHOLLY MAC",handle:"@WhollyMac",tint:"#6d4c41",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"rush",bio:"Arrives first. Walk in, then a kick. Does not retreat. Weak to a block-heal loop. TOMBSTONE is the finisher."},{name:"Dev Root X",handle:"@DevRootX",tint:"#00bcd4",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"edge",bio:"Long reach, light body. Stay at the edge, kick, back up. Weak inside. FUSION REACTOR closes, then punches."},{name:"WHITE CASSEL",handle:"@WhiteCassel",tint:"#90a4ae",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"late",bio:"Diplomat until the cup is empty. Block early, then punch-kick. HOT DOG is the switch from peace to fight."},{name:"Fuzzled Raccoon",handle:"@FuzzledRacc",tint:"#4e342e",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"counter",bio:"Scavenger. Wait for a whiff, then punch. Does not open. SKULL & BONES is a counter throw."},{name:"Big Daddy Turk",handle:"@BigDaddyTurk",tint:"#1b5e20",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"plant",bio:"Heaviest stance, widest body. Plant, block, kick. Does not chase. OIL BARREL stops a walk-in."},{name:"Dragonfly Fairy",handle:"@DragonflyFairy",tint:"#e91e63",hidden:true,unlockCrowns:1,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hover",bio:"Hover. In, kick, out. Weak if pinned. MULLEN DRAGONFLY reopens space."},{name:"Bioweapon Bulldog",handle:"@BioBulldog",tint:"#6a1b9a",hidden:true,unlockCrowns:2,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"forward",bio:"Does not heel. Walk forward only, kick, no retreat. GLOBE is a shove at contact."},{name:"LIL OJ",handle:"@LilOJ",tint:"#ef6c00",hidden:true,unlockCrowns:3,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"question",bio:"Press room. Block, pause, punch. Weak to a kick during the pause. WFUD PODIUM is a setup throw."},{name:"Fud Daddy 420",handle:"@FudDaddy420",tint:"#2b6cb0",hidden:true,unlockCrowns:4,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"elder",bio:"Lets the player spend meter, blocks the throw, then kicks. Weak to a raw walk-in. MICROPHONE is the last word."},{name:"KING TROLL",handle:"@KingTroll",tint:"#b71c1c",hidden:true,unlockCrowns:5,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"boss",bio:"Boss. Punches a kicker, kicks a puncher, blocks a full meter. STREET BIKE punishes a whiff."},{name:"Platinum Meow",handle:"@PlatinumMeow",tint:"#c0c0c0",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Neon alley cat. Fast claws, precise shots. Circles then strikes. Weak if you hold block. BOW is the closer."},{name:"Grox",handle:"@Grox",tint:"#39ff14",exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hands",bio:"Exhibition only. Dojo build. Not on the arcade board."},
 {name:"Trashed Panda",handle:"@TrashedPanda",tint:"#5d4037",exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"counter",bio:"Exhibition only. Dumpster-diving panda who treats the grooming table like a ring. Wait for the spray, then swipe. Weak if you stay clean. TRASH BAG is the counter."},
 {name:"That Badger Girl",handle:"@ThatBadgerGirl",tint:"#4e342e",exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Exhibition only. Salon chair is her ring. She styles the hair, then styles the face. Weak if you stay still under the dryer. BADGER CLAW is the closer."},
@@ -989,111 +992,134 @@ function resetWalk(){
   applyYouPos();
   applyCpuPos();
 }
+// Minimal bodyBox for money / throw positioning (does not affect collision)
 let boxCache=null,boxAt=0;
-// Minimal movement only: % positions, one gap stop matched to visible sprite mass (~42% max-width)
-const BODY_STOP = 59;
-function meetLimit(){return 100-BODY_STOP;}
-function resolveOverlap(){
-  const lim=meetLimit();
-  if(youPos+cpuPos<=lim)return;
-  const over=youPos+cpuPos-lim;
-  youPos=Math.max(YOU_MIN,youPos-over*0.5);
-  cpuPos=Math.max(CPU_MIN,cpuPos-over*0.5);
-  if(youPos+cpuPos>lim)youPos=Math.max(YOU_MIN,Math.min(YOU_MAX,lim-cpuPos));
-  if(youPos+cpuPos>lim)cpuPos=Math.max(CPU_MIN,Math.min(CPU_MAX,lim-youPos));
+function measureBox(id){
+  const el=document.getElementById(id);
+  if(!el) return {left:0,right:0,top:0,bottom:0,mid:0};
+  const r=el.getBoundingClientRect();
+  return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,mid:r.left+r.width/2};
 }
-function nudgeYou(dir){
-  if(lastScreen!=="fight"||(!liquidateOn&&(paused||over||announcing)))return;
-  const step=dir*(fighterStat("you","speed") / 8);
-  if(!step)return;
-  if(step>0){
-    const maxYou=Math.max(YOU_MIN,meetLimit()-cpuPos);
-    youPos=Math.max(YOU_MIN,Math.min(YOU_MAX,Math.min(youPos+step,maxYou)));
-  }else{
-    youPos=Math.max(YOU_MIN,Math.min(YOU_MAX,youPos+step));
+function bodyBox(who){
+  const now=Date.now();
+  if(!boxCache||now-boxAt>40){
+    boxCache={you:measureBox("you"),cpu:measureBox("cpu")};
+    boxAt=now;
   }
-  resolveOverlap();
-  if(dragWho)stopDragSfx();
-  boxCache=null;
-  applyYouPos();
-  applyCpuPos();
+  return boxCache[who];
 }
-function nudgeCpu(dir){
-  if(paused||over||announcing||lastScreen!=="fight")return;
-  const step=dir*(fighterStat("cpu","speed")/5)*(dir>0?1.35:1);
-  if(!step)return;
-  if(step>0){
-    const maxCpu=Math.max(CPU_MIN,meetLimit()-youPos);
-    if(cpuPos+step<=maxCpu){
-      cpuPos=Math.max(CPU_MIN,Math.min(CPU_MAX,cpuPos+step));
-      if(dragWho)stopDragSfx();
-    }else{
-      const before=youPos;
-      cpuPos=Math.max(CPU_MIN,Math.min(CPU_MAX,maxCpu));
-      youPos=Math.max(YOU_MIN,youPos-Math.min(Math.abs(step),0.35));
-      if(youPos<before-0.01)startDragSfx("you");
-      else if(dragWho)stopDragSfx();
+// ===== SOLID MASS PHYSICS =====
+const PUSH_FORCE = 0.85;
+
+function bodyWidthPct(){ return BODY_WIDTH_PCT; }
+function meetGap(){ return 100 - BODY_WIDTH_PCT; }
+
+function stageWidth(){
+  const s = document.getElementById("stage");
+  return s ? s.getBoundingClientRect().width : 500;
+}
+
+function getMassBoxes(){
+  const sw = stageWidth();
+  const half = (sw * BODY_WIDTH_PCT / 100) / 2;
+  const youEl = document.getElementById("you");
+  const cpuEl = document.getElementById("cpu");
+  if(!youEl || !cpuEl) return null;
+  const yr = youEl.getBoundingClientRect();
+  const cr = cpuEl.getBoundingClientRect();
+  const youMid = yr.left + yr.width / 2;
+  const cpuMid = cr.left + cr.width / 2;
+  return {
+    you: { left: youMid - half, right: youMid + half, mid: youMid },
+    cpu: { left: cpuMid - half, right: cpuMid + half, mid: cpuMid },
+    stageWidth: sw
+  };
+}
+
+function gapBetween(){
+  const boxes = getMassBoxes();
+  if(!boxes) return 999;
+  const a = boxes.you, b = boxes.cpu;
+  return a.right < b.left ? b.left - a.right : (b.right < a.left ? a.left - b.right : 0);
+}
+
+function inMeleeRange(from){
+  const gap = gapBetween();
+  const reach = (stageWidth() * MELEE_REACH_PCT) / 100;
+  return gap <= reach;
+}
+
+function clampPositions(){
+  const limit = meetGap();
+  if(youPos + cpuPos > limit){
+    const excess = (youPos + cpuPos) - limit;
+    if(moveHold.right || keysDown.ArrowRight || keysDown.KeyL || keysDown.KeyR){
+      cpuPos = Math.max(CPU_MIN, cpuPos - excess);
+    } else {
+      youPos = Math.max(YOU_MIN, youPos - excess);
     }
-  }else{
-    cpuPos=Math.max(CPU_MIN,Math.min(CPU_MAX,cpuPos+step));
-    if(dragWho)stopDragSfx();
   }
-  resolveOverlap();
-  boxCache=null;
+  youPos = Math.max(YOU_MIN, Math.min(YOU_MAX, youPos));
+  cpuPos = Math.max(CPU_MIN, Math.min(CPU_MAX, cpuPos));
+}
+
+function nudgeYou(dir){
+  if(lastScreen !== "fight" || (!liquidateOn && (paused || over || announcing))) return;
+  const step = dir * (fighterStat("you","speed") / 5);
+  if(step === 0) return;
+  youPos += step;
+  clampPositions();
+  if(dragWho) stopDragSfx();
+  applyYouPos();
+  applyCpuPos();
+}
+
+function nudgeCpu(dir){
+  if(paused || over || announcing || lastScreen !== "fight") return;
+  const step = dir * (fighterStat("cpu","speed") / 5) * (dir > 0 ? 1.25 : 1);
+  if(step === 0) return;
+  cpuPos += step;
+  clampPositions();
+  if(dragWho) stopDragSfx();
   applyCpuPos();
   applyYouPos();
-  const cpuImg=document.getElementById("cpuFile");
-  if(cpuImg&&cpuImg.dataset.pose!=="block"&&cpuImg.dataset.pose!=="punchL"&&cpuImg.dataset.pose!=="punchR"&&cpuImg.dataset.pose!=="kickL"&&cpuImg.dataset.pose!=="kickR"&&cpuImg.dataset.pose!=="throw"&&cpuImg.dataset.pose!=="pushnwalk"){
+  const cpuImg = document.getElementById("cpuFile");
+  if(cpuImg && !["block","punchL","punchR","kickL","kickR","throw","pushnwalk"].includes(cpuImg.dataset.pose)){
     playPose("cpu","walk");
   }
 }
-function cpuEngage(){
-  if(paused||over||announcing||lastScreen!=="fight")return"stand";
-  if(!inMeleeRange()){nudgeCpu(1.4);return"approach";}
-  const r=Math.random();
-  if(r<0.22){nudgeCpu(-1.2);return"retreat";}
-  if(r<0.40){nudgeCpu(1.15);return"press";}
-  return"stand";
-}
-function bodyBox(who){
-  const el=document.getElementById(who==="you"?"you":"cpu");
-  if(!el)return{left:0,right:0,top:0,bottom:0,mid:0};
-  const r=el.getBoundingClientRect();
-  return{left:r.left,right:r.right,top:r.top+r.height*0.18,bottom:r.bottom-r.height*0.05,mid:r.left+r.width/2};
-}
-function inMeleeRange(){
-  return(youPos+cpuPos)>=(meetLimit()-8);
-}
-function pushingNow(){
-  return youBlocking&&(moveHold.right||keysDown.ArrowRight||keysDown.KeyL||keysDown.KeyR);
-}
-function playerPush(scale){
-  if(liquidateOn||paused||over||announcing||!youBlocking)return;
-  const s=(scale==null||isNaN(scale))?1:Math.max(0.25,Math.min(1.5,scale));
-  const youImg=document.getElementById("youFile");
-  if(youImg&&youImg.dataset.pose!=="pushnwalk")playPose("you","pushnwalk");
-  const lim=meetLimit();
-  const gap=lim-(youPos+cpuPos);
-  const walkStep=(fighterStat("you","speed")/5)*0.55*s;
-  if(gap>0.2){
-    if(dragWho==="cpu")stopDragSfx();
-    const maxYou=Math.max(YOU_MIN,lim-cpuPos);
-    youPos=Math.max(YOU_MIN,Math.min(YOU_MAX,Math.min(youPos+walkStep,maxYou)));
-  }else{
-    const before=cpuPos;
-    cpuPos=Math.max(CPU_MIN,cpuPos-0.35*s);
-    const maxYou=Math.max(YOU_MIN,lim-cpuPos);
-    youPos=Math.max(YOU_MIN,Math.min(YOU_MAX,Math.min(youPos+walkStep*0.25,maxYou)));
-    if(cpuPos<before-0.01)startDragSfx("cpu");
-    else if(dragWho==="cpu")stopDragSfx();
+
+function pushingNow(){return youBlocking && (moveHold.right || keysDown.ArrowRight || keysDown.KeyL || keysDown.KeyR);}
+
+function playerPush(){
+  if(liquidateOn || paused || over || announcing || !youBlocking) return;
+  const youImg = document.getElementById("youFile");
+  if(youImg && youImg.dataset.pose !== "pushnwalk") playPose("you","pushnwalk");
+
+  if(!inMeleeRange("you")){
+    nudgeYou(0.75);
+    return;
   }
-  resolveOverlap();
-  boxCache=null;
+
+  const before = cpuPos;
+  cpuPos = Math.max(CPU_MIN, cpuPos - PUSH_FORCE);
+  youPos = Math.min(YOU_MAX, youPos + PUSH_FORCE * 0.35);
+  clampPositions();
   applyYouPos();
   applyCpuPos();
-}
-function resolveBodyContact(){resolveOverlap();}
 
+  if(cpuPos < before - 0.01) startDragSfx("cpu");
+  else if(dragWho === "cpu") stopDragSfx();
+}
+
+function cpuEngage(){
+  if(paused||over||announcing||lastScreen!=="fight")return "stand";
+  if(!inMeleeRange()){nudgeCpu(1.4);return "approach";}
+  const r=Math.random();
+  if(r<0.22){nudgeCpu(-1.2);return "retreat";}
+  if(r<0.40){nudgeCpu(1.15);return "press";}
+  return "stand";
+}
 function tiltAxis(e){const type=(screen.orientation&&screen.orientation.type)||"";if(type.indexOf("landscape")===0){const b=e.beta;if(b==null||isNaN(b))return null;return type.indexOf("secondary")>=0?-b:b;}const g=e.gamma;if(g==null||isNaN(g))return null;return g;}
 function onTilt(e){if(paused||over||announcing||lastScreen!=="fight")return;const axis=tiltAxis(e);if(axis==null)return;if(!tiltReady){tiltCenter=axis;tiltReady=true;return;}const delta=axis-tiltCenter;if(Math.abs(delta)<TILT_DEAD)return;nudgeYou(Math.max(-1.15,Math.min(1.15,(delta-Math.sign(delta)*TILT_DEAD)/TILT_SCALE)));}
 async function enableTilt(){return false;}
@@ -1106,42 +1132,44 @@ function noteRun(side){
   if(now-(runTap[side]||0)<280) runHold[side]=true;
   runTap[side]=now;
 }
-let walkRafId=null;
-let lastWalkTs=0;
-const youFileEl=document.getElementById("youFile");
+let walkRafId = null;
+let lastWalkTs = 0;
+const youFileEl = document.getElementById("youFile"); // cache once at init if possible
+
 function startWalkLoop(){
   if(walkRafId) return;
-  walkLocked=true;
-  lastWalkTs=performance.now();
+  walkLocked = true;
+  lastWalkTs = performance.now();
   function walkFrame(ts){
-    if(document.hidden||lastScreen!=="fight"||(!liquidateOn&&(paused||over||announcing))){
+    if(document.hidden || lastScreen !== "fight" || (!liquidateOn && (paused || over || announcing))) {
       stopWalkLoop();
       return;
     }
-    const dt=Math.min(32,ts-lastWalkTs);
-    lastWalkTs=ts;
-    const scale=dt/28;
+    const dt = Math.min(32, ts - lastWalkTs);
+    lastWalkTs = ts;
+    const scale = dt / 28; // keep similar speed to old 28ms tick
+
     if(pushingNow()){
-      if(youFileEl&&youFileEl.dataset.pose!=="pushnwalk") playPose("you","pushnwalk");
-      playerPush(scale);
-      walkRafId=requestAnimationFrame(walkFrame);
+      if(youFileEl && youFileEl.dataset.pose !== "pushnwalk") playPose("you","pushnwalk");
+      playerPush();
+      walkRafId = requestAnimationFrame(walkFrame);
       return;
     }
     if(!isMoving()){
       stopWalkLoop();
       return;
     }
-    if(dragWho==="cpu") stopDragSfx();
-    if(youFileEl&&!youBlocking&&youFileEl.dataset.pose!=="walk"&&youFileEl.dataset.pose!=="throw"&&youFileEl.dataset.pose!=="pushnwalk") playPose("you","walk");
-    if(keysDown.ArrowRight||keysDown.KeyL||keysDown.KeyR||moveHold.right){
-      nudgeYou((runHold.right?1.4:0.8)*scale);
+    if(dragWho === "cpu") stopDragSfx();
+    if(youFileEl && !youBlocking && youFileEl.dataset.pose !== "walk" && youFileEl.dataset.pose !== "throw" && youFileEl.dataset.pose !== "pushnwalk") playPose("you","walk");
+    if(keysDown.ArrowRight || keysDown.KeyL || keysDown.KeyR || moveHold.right){
+      nudgeYou((runHold.right ? 1.4 : 0.8) * scale);
     }
-    if(keysDown.ArrowLeft||keysDown.KeyS||moveHold.left){
-      nudgeYou((runHold.left?-1.4:-0.8)*scale);
+    if(keysDown.ArrowLeft || keysDown.KeyS || moveHold.left){
+      nudgeYou((runHold.left ? -1.4 : -0.8) * scale);
     }
-    walkRafId=requestAnimationFrame(walkFrame);
+    walkRafId = requestAnimationFrame(walkFrame);
   }
-  walkRafId=requestAnimationFrame(walkFrame);
+  walkRafId = requestAnimationFrame(walkFrame);
 }
 function stopWalkLoop(){
   walkLocked=false;
@@ -1256,14 +1284,14 @@ function playPose(who,pose){
   clearTimeout(poseTimer[who]);
   if(who==="you"&&pose==="idle"&&walkLocked&&!youBlocking&&img.dataset.pose==="walk")return;
    if(img.dataset.pose===pose&&img.src){
-    if(!hold)poseTimer[who]=setTimeout(function(){playPose(who,"idle");},pose==="throw"?THROW_MS:POSE_MS);
+    if(!hold)poseTimer[who]=setTimeout(function(){if(!over&&!announcing&&!liquidateOn)playPose(who,"idle");},pose==="throw"?THROW_MS:POSE_MS);
     return;
   }
   if(hold&&img.dataset.pose===pose)return;
   img.dataset.pose=pose;
   bindSrcList(img,hold?list:list.concat(fighter.idle||[]));
   img.style.display="block";
-  if(!hold)poseTimer[who]=setTimeout(function(){if(!over&&!announcing&&!liquidateOn)playPose(who, "idle");},POSE_MS);
+  if(!hold)poseTimer[who]=setTimeout(function(){if(!over&&!announcing&&!liquidateOn)playPose(who,"idle");},POSE_MS);
 }
 function stopTitleMusic(){currentTrack="";bgm.pause();try{bgm.currentTime=0;}catch(e){}}
 function setTrack(src,playNow,restart){if(!src){stopTitleMusic();return;}const same=currentTrack===src;currentTrack=src;bgm.loop=true;const safe=encodeURI(src);if(!same){bgm.src=safe;try{bgm.load();}catch(e){}}else if(restart){try{bgm.currentTime=0;}catch(e){}}if(!playNow)return;if(same&&!restart&&!bgm.paused){playBgm();return;}playBgm();if(bgm.readyState<2)bgm.addEventListener("canplay",function(){playBgm();},{once:true});}
@@ -1611,7 +1639,6 @@ function pushBack(who,px){
   const pct=px/3.9;
   if(who==="you")youPos=Math.max(YOU_MIN,youPos-pct);
   else cpuPos=Math.max(CPU_MIN,cpuPos-pct);
-  resolveBodyContact();
   boxCache=null;
   applyYouPos();
   applyCpuPos();
@@ -1620,7 +1647,7 @@ function pushBack(who,px){
 }
 function applyDamage(from,to,dmg,type){dmg=dmg*(fighterStat(from,"strength")/5)*Math.max(0.25,2-fighterStat(to,"defense")/5);hp[to]=Math.max(0,hp[to]-dmg);if(fighterStat(to,"mass")!==5){const push=(5-fighterStat(to,"mass"))*0.12;if(to==="you")nudgeYou(push>0?-push:push);else nudgeCpu(push>0?-push:push);}breakCombo(to);if(type!=="throw")addPower(from,dmg>=KICK_DMG?POWER_KICK:POWER_PUNCH,type);flyMoney(to,moneyCountFor(dmg));updateMeters();if(hp[to]<=0||suddenDeath)finish(from);}
 function resolveHit(from,to,dmg,type){const defenderblocking=to==="you"?youBlocking:cpuBlocking;if(defenderblocking){breakCombo(from);losePower(from,12);sfxBlock();floats(to,"BLOCK","miss");floats(from,"SHORT","miss");return;}applyDamage(from,to,dmg,type);}
-function attack(from,to,type){if(!liquidateOn&&(over||paused||announcing))return;if(liquidateOn&&from!=="you")return;const el=document.getElementById(from==="you"?"you":"cpu");el.classList.add(type);playPose(from,type);setTimeout(function(){el.classList.remove(type);},160);const isKick=type==="kickL"||type==="kickR";setTimeout(function(){if(!liquidateOn&&(over||paused||announcing))return;if(!inMeleeRange()){breakCombo(from);losePower(from,8);sfxMiss();floats(to,"MISS","miss");return;}if(from==="you"&&!cpuBlocking&&Math.random()<0.12+fighterStat("cpu","defense")/40){setBlock("cpu",true);setTimeout(function(){if(!over)setBlock("cpu",false);},180);}if(isKick)sfxKick();else sfxPunch();resolveHit(from,to,isKick?KICK_DMG:PUNCH_DMG,type);},90);}
+function attack(from,to,type){if(!liquidateOn&&(over||paused||announcing))return;if(liquidateOn&&from!=="you")return;const el=document.getElementById(from==="you"?"you":"cpu");el.classList.add(type);playPose(from,type);setTimeout(function(){el.classList.remove(type);},160);const isKick=type==="kickL"||type==="kickR";setTimeout(function(){if(!liquidateOn&&(over||paused||announcing))return;if(!inMeleeRange(from)){breakCombo(from);losePower(from,8);sfxMiss();floats(to,"MISS","miss");return;}if(from==="you"&&!cpuBlocking&&Math.random()<0.12+fighterStat("cpu","defense")/40){setBlock("cpu",true);setTimeout(function(){if(!over)setBlock("cpu",false);},180);}if(isKick)sfxKick();else sfxPunch();resolveHit(from,to,isKick?KICK_DMG:PUNCH_DMG,type);},90);}
 function throwObject(from,to){if((!liquidateOn||from!=="you")&&(over||paused||announcing))return;if(!canThrow(from))return;spendThrow(from);const el=document.getElementById(from==="you"?"you":"cpu");el.classList.add("throw");playPose(from,"throw");setTimeout(function(){el.classList.remove("throw");},180);sfxThrow();const fighter=FIGHTERS[from==="you"?selectedFighter:cpuFighter];const stage=document.getElementById("stage"),img=document.createElement("img");img.className="toss";img.style.width=TOSS_SIZE+"px";img.style.height=TOSS_SIZE+"px";img.style.maxWidth=TOSS_SIZE+"px";img.style.maxHeight=TOSS_SIZE+"px";img.style.objectFit="contain";bindSrcList(img,fighter.objects);const start=bodyBox(from),dest=bodyBox(to),stageBox=stage.getBoundingClientRect(),half=TOSS_SIZE/2;img.style.left=(start.mid-stageBox.left-half)+"px";img.style.top=(start.top-stageBox.top-8)+"px";stage.appendChild(img);const endX=dest.mid-stageBox.left-half,endY=dest.top-stageBox.top+8;img.animate([{transform:"translate(0,0) rotate(0deg)"},{transform:"translate("+(endX-parseFloat(img.style.left))+"px,"+(endY-parseFloat(img.style.top))+"px) rotate(320deg)"}],{duration:THROW_MS,easing:"ease-in"});setTimeout(function(){img.remove();if(!liquidateOn&&(over||paused||announcing))return;const dmg=ammoDamage(),blocked=to==="you"?youBlocking:cpuBlocking;resolveHit(from,to,dmg,"throw");if(!blocked)pushBack(to,dmg>=3?24:(dmg>=2?16:8));if(from==="you"){const img=document.getElementById("youFile");if(img&&img.dataset.pose==="throw"){if(isMoving()&&!youBlocking)playPose("you","walk");else if(youBlocking)playPose("you","block");else playPose("you","idle");}}},THROW_MS);}
 function cpuStrike(tune){
   setBlock("cpu",false);
@@ -1662,11 +1689,8 @@ function backToExhibitionFighters(){clearTimeout(aiTimer);clearReadyTimer();clea
 function showFinalStats(win,record,king){document.getElementById("winFlash").classList.remove("show");document.getElementById("endKo").textContent=king?"FUD KING":"K.O.";document.getElementById("endMsg").textContent=king?"YOU ARE THE FUD KING":(win?"YOU WIN THE PIT":(mode==="arcade"?"ARCADE OVER":"MARGIN CALLED"));const gainsBtn=document.getElementById("endGold"),titleBtn=document.getElementById("endTitle");if(mode==="pvc"){document.getElementById("endSub").textContent="CONGRATULATIONS";if(gainsBtn){gainsBtn.style.display="";gainsBtn.textContent="EXHIBITION";gainsBtn.onclick=backToExhibitionFighters;}if(titleBtn)titleBtn.textContent="MAIN";}else{document.getElementById("endSub").textContent="$"+matchScore+" gains  •  "+profileCrowns(activePlayer())+" CROWNS  •  +"+matchXp+" XP  •  "+record+" vs L"+effectiveSkill();if(gainsBtn){gainsBtn.style.display="";gainsBtn.textContent="GAINS & STATS";gainsBtn.onclick=openHighScores;}if(titleBtn)titleBtn.textContent="TITLE SCREEN";}document.getElementById("endOv").classList.add("show");}
 function finish(winner){if(liquidateOn)return;over=true;announcing=false;clearTimeout(aiTimer);clearTimeout(poseTimer.you);clearTimeout(poseTimer.cpu);clearRoundTimer();setBlock("you",false);setBlock("cpu",false);const youWonRound=winner==="you";const isDarkFudWinner=FIGHTERS[winner==="you"?selectedFighter:cpuFighter].name==="Dark Fud 420";
 if(!matchOver()){resetWalk();}
-if(!isDarkFudWinner && !matchOver()){
-  const winName=FIGHTERS[winner==="you"?selectedFighter:cpuFighter].name;
-  playPose(winner, winName==="Stonks 6-7"?"taunt":"victory");
-}
-sfxP2Ugh();matmatchScore+=dollarsLeft("you");chScore+=dollarsLeft("you");matchXp+=10+(youWonRound?25:0)+effectiveSkill();if(youWonRound)roundWins.you+=1;else roundWins.cpu+=1;updateRoundHud();playPose(yoif(matchOver()){playPose(youWonRound?"cpu":"you","loser");sfxP2Ugh();}else playPose(youWonRound?"cpu":"you","knee");if(!matchOver()){uWonRound?"cpu":"you",matchOver()?"loser":"knee");if(!matchOver()){
+if(!isDarkFudWinner && !matchOver())playPose(winner,"victory");
+sfxP2Ugh();matchScore+=dollarsLeft("you");matchXp+=10+(youWonRound?25:0)+effectiveSkill();if(youWonRound)roundWins.you+=1;else roundWins.cpu+=1;updateRoundHud();playPose(youWonRound?"cpu":"you",matchOver()?"loser":"knee");if(!matchOver()){
   if(currentRound===1){
     pauseBgm();
     if(sfxRound1SusEl&&!mutedFx){
@@ -1696,8 +1720,6 @@ if(mode==="arcade"){
     arcadeKing=false;
   }
 }
-playPose(winner,"idle");
-clearTimeout(poseTimer[winner]);
 if(win){startLiquidate(function(){showPostFight(beaten,record,true);},"you");return;}
 startLiquidate(function(){showPostFight(beaten,record,false);},"cpu");
 }
@@ -1711,7 +1733,6 @@ function startLiquidate(done,by){
   liquidateDone=done;liquidateOn=true;liquidateSeq="";liquidateLeft=15;announcing=true;over=true;
  const isDark=FIGHTERS[by==="you"?selectedFighter:cpuFighter].name==="Dark Fud 420";
   playPose(by,"idle");
-  clearTimeout(poseTimer[by]);
   playPose(by==="you"?"cpu":"you","loser");
   bgm.pause();
   if(sfxLiquidateEl){sfxLiquidateEl.loop=false;try{sfxLiquidateEl.currentTime=0;}catch(e){}if(!mutedFx)sfxLiquidateEl.play().catch(function(){});}
