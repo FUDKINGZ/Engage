@@ -250,7 +250,7 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #fight.quake #you,#fight.quake #cpu{animation:fighterQuake 2.2s linear}
 @keyframes quake{0%,100%{transform:translate(0,0)}8%{transform:translate(-10px,6px)}16%{transform:translate(12px,-8px)}24%{transform:translate(-8px,-5px)}32%{transform:translate(9px,7px)}40%{transform:translate(-12px,3px)}48%{transform:translate(7px,-9px)}56%{transform:translate(-6px,8px)}64%{transform:translate(11px,-4px)}72%{transform:translate(-9px,5px)}80%{transform:translate(6px,-6px)}88%{transform:translate(-4px,3px)}}
 @keyframes fighterQuake{0%,100%{transform:translate(0,0) rotate(0)}12%{transform:translate(-6px,4px) rotate(-2deg)}28%{transform:translate(8px,-5px) rotate(2deg)}44%{transform:translate(-7px,3px) rotate(-1deg)}60%{transform:translate(5px,-4px) rotate(2deg)}76%{transform:translate(-4px,2px) rotate(-1deg)}}
-.fighter{position:absolute;bottom:28px;width:auto;max-width:42%;height:72.5%;aspect-ratio:auto;max-height:72.5%;transform-origin:center bottom;z-index:4;overflow:visible}
+.fighter{position:absolute;bottom:28px;width:auto;max-width:38.64%;height:66.7%;aspect-ratio:auto;max-height:66.7%;transform-origin:center bottom;z-index:4;overflow:visible}
 .fighter-img{width:100%;height:100%;max-width:100%;object-fit:contain;object-position:center bottom;display:none;background:transparent!important;transform:none}
 #you{left:6%;z-index:4}
 #cpu{right:6%;z-index:4}
@@ -277,13 +277,13 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 .fx.miss{color:#ffe082}
 .fx.combo{color:#ea80fc}
 @keyframes float{to{transform:translateY(-40px);opacity:0}}
-.power-wrap{position:absolute;bottom:10px;width:34%;z-index:7;pointer-events:none;font-family:"Courier New",Courier,monospace;padding:3px 4px;background:transparent;border:1px solid #39ff14;border-radius:999px;box-shadow:0 0 8px rgba(57,255,20,.55)}
+.power-wrap{position:absolute;bottom:10px;width:34%;z-index:7;pointer-events:none;font-family:"Courier New",Courier,monospace;padding:3px 4px;background:transparent;border:0;border-radius:999px;box-shadow:none}
 .power-wrap.p1{left:8px}
 .power-wrap.p2{right:8px;text-align:right}
-.ammo-count{position:absolute;top:50%;transform:translateY(-50%);min-width:18px;height:16px;padding:0 4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;line-height:1;color:#39ff14;background:transparent;border:1px solid #39ff14;border-radius:2px;box-shadow:0 0 8px rgba(57,255,20,.55);text-shadow:0 0 4px #39ff14;z-index:8}
+.ammo-count{position:absolute;top:50%;transform:translateY(-50%);min-width:18px;height:16px;padding:0 4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;line-height:1;color:#39ff14;background:transparent;border:1px solid #888;border-radius:2px;box-shadow:none;text-shadow:0 0 4px #39ff14;z-index:8}
 .power-wrap.p1 .ammo-count{left:calc(100% + 8px);right:auto}
 .power-wrap.p2 .ammo-count{right:calc(100% + 8px);left:auto}
-.ammo-count.on{color:#eaffea;background:rgba(57,255,20,.25);border-color:#39ff14;box-shadow:0 0 12px rgba(57,255,20,.75);text-shadow:0 0 6px #39ff14}
+.ammo-count.on{color:#eaffea;background:rgba(57,255,20,.25);border-color:#888;box-shadow:none;text-shadow:0 0 6px #39ff14}
 .power-wrap label{display:none}
 .power-bar{position:relative;height:14px;margin:0;display:flex;align-items:stretch;overflow:hidden;background:transparent;border:0;border-radius:999px;box-shadow:none;clip-path:none}
 .power-wrap.p2 .power-bar{border:0;box-shadow:none;clip-path:none}
@@ -297,7 +297,7 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 .power-bar .depth-mid{position:absolute;left:50%;top:-2px;bottom:-2px;width:2px;margin-left:-1px;background:#ffe082;box-shadow:0 0 8px #ffe082;z-index:2;pointer-events:none}
 .squeeze-flash{position:absolute;inset:0;display:none;align-items:center;justify-content:center;border-radius:999px;padding:0 4px;font-size:11px;font-weight:900;letter-spacing:.5px;line-height:1;white-space:nowrap;color:#fff;text-shadow:0 0 6px #39ff14,0 1px 0 #000;background:rgba(57,255,20,.25);box-shadow:0 0 12px rgba(57,255,20,.75);z-index:6;pointer-events:none}
 .power-wrap.squeeze .squeeze-flash{display:flex;animation:squeezeFlash .35s steps(2) infinite}
-.power-wrap.squeeze,.power-wrap.ready{border-color:#39ff14;box-shadow:0 0 12px rgba(57,255,20,.75)}
+.power-wrap.squeeze,.power-wrap.ready{border:0;box-shadow:none}
 @keyframes squeezeFlash{50%{opacity:.2}}
 #winFlashName{font-family:Impact,"Arial Black",system-ui,sans-serif;font-size:clamp(20px,6vw,35px);font-weight:900;color:#ffd54f;text-shadow:0 0 24px #ffb300;letter-spacing:3px;text-transform:uppercase;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);margin:0}
 #postBanner{white-space:pre-line;line-height:1.05}
@@ -438,12 +438,15 @@ input[type=file].hidden-file{display:none}
 <audio id="sfxPowerChime" src="./audio/sound fx/powerchime.wav" preload="auto" playsinline></audio>
 <audio id="sfxGrunt" src="./audio/sound fx/player1_grunt.wav" preload="auto" playsinline></audio>
 <audio id="sfxGrunt2" src="./audio/sound fx/player2_grunt.wav" preload="auto" playsinline></audio>
+<audio id="sfxGruntF" src="./audio/sound fx/player1_gruntf.wav" preload="auto" playsinline></audio>
+<audio id="sfxGrunt2F" src="./audio/sound fx/player2_gruntf.wav" preload="auto" playsinline></audio>
 <audio id="sfxLiquidate" src="./audio/sound fx/liquidate.mp3" preload="auto" playsinline></audio>
 <audio id="sfxLiquidateThem" src="./audio/sound fx/liquidate_them.wav" preload="auto" playsinline></audio>
 <audio id="sfxWhistleCrash" src="./audio/sound fx/whistle_crash.wav" preload="auto" playsinline></audio>
 <audio id="sfxDrag" src="./audio/sound fx/drag.wav" preload="auto" playsinline loop></audio>
 <audio id="sfxRound1Sus" src="./audio/sound fx/round1sus.mp3" preload="auto" playsinline></audio>
 <audio id="sfxP2Ugh" src="./audio/sound fx/p2ugh.wav" preload="auto" playsinline></audio>
+<audio id="sfxP2UghF" src="./audio/sound fx/p2ughf.wav" preload="auto" playsinline></audio>
 <input type="file" id="rosterFile" accept="application/json,.json" class="hidden-file"/>
 <section id="intro" class="screen active"><div class="crt" id="introCrt"><div class="coin-panel" id="coinPanel"><h2>FUD KINGZ OF FINTWITS</h2><div class="coin-slot-wrap"><div class="token" id="enterArenaBtn" aria-label="WFUD ARCADE, free play"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><path id="tokUp" d="M16,54 A34,34 0 0 1 84,54"/><path id="tokDn" d="M80,58 A30,30 0 0 1 20,58"/></defs><text fill="#5a3200" font-size="8" font-weight="900" letter-spacing="0.6"><textPath href="#tokUp" startOffset="50%" text-anchor="middle">WFUD ARCADE</textPath></text><text fill="#5a3200" font-size="7.2" font-weight="900" letter-spacing="0.8"><textPath href="#tokDn" startOffset="50%" text-anchor="middle">WFUD ARCADE</textPath></text><text x="50" y="56" text-anchor="middle" fill="#3a2200" font-size="11" font-weight="900" letter-spacing="0.4" stroke="#fff3bf" stroke-width="0.6">FREE PLAY</text></svg></div><div class="coin-slot" id="coinSlot"></div><div class="coin-hint">INSERT TOKEN</div></div></div><pre id="introText"></pre><div class="intro-skip">PRESS ANY KEY / TAP TO SKIP</div></div></section>
 <section id="title" class="screen menu">
@@ -590,15 +593,15 @@ function liquidatedUrls(name){const n=String(name||"").trim().toLowerCase(),dir=
 function poseUrls(name,pose){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);let file="idle.gif";if(pose==="idle")file="idle.gif";else if(pose==="throw")file="throw.gif";else if(pose==="walk")file="walk.gif";else if(pose==="knee"){const kUrls=unique([dir+n+"_knee.gif",dir+"knee.gif",FIGHTER_DIR+n+"_knee.gif"]);return unique(kUrls.concat(selectUrls(name)));}
 else if(pose==="summon"){const sUrls=unique([dir+n+" summon.gif",dir+"summon.gif",FIGHTER_DIR+n+" summon.gif"]);return unique(sUrls.concat(selectUrls(name)));}
 else if(pose==="pushnwalk"){const pUrls=unique([dir+n+"_pushnwalk.gif",dir+"pushnwalk.gif",FIGHTER_DIR+n+"_pushnwalk.gif"]);return unique(pUrls.concat(poseUrls(name,"block"),poseUrls(name,"walk")));}
-else if(pose==="taunt"&&n==="stonks 6-7"){const tUrls=unique([dir+n+"_taunt.gif",dir+"taunt.gif",FIGHTER_DIR+n+"_taunt.gif"]);return unique(tUrls.concat(poseUrls(name,"victory")));}
+else if(pose==="taunt"){const tUrls=unique([dir+n+"_taunt.gif",dir+"taunt.gif",FIGHTER_DIR+n+"_taunt.gif",dir+n+" taunt.gif",FIGHTER_DIR+n+" taunt.gif"]);return unique(tUrls.concat(poseUrls(name,"victory")));}
 else if(pose==="hit"){const hUrls=unique([dir+n+"_hit.gif",dir+"hit.gif",FIGHTER_DIR+n+"_hit.gif"]);return unique(hUrls.concat(poseUrls(name,"idle")));}
 else file=String(POSE_LABEL[pose]||"idle").toLowerCase()+".gif";const urls=unique([dir+n+" "+file,dir+file,FIGHTER_DIR+n+" "+file]);if(pose==="walk")return unique(urls.concat([dir+n+" idle.gif",dir+"idle.gif",FIGHTER_DIR+n+" idle.gif"]));return unique(urls.concat(selectUrls(name)));}
 function objectUrls(name){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);return unique([dir+n+" object.png",dir+"object.png",OBJECT_DIR+n+" object.png",FIGHTER_DIR+n+" object.png"].concat(THROW_OBJECTS.map(function(f){return OBJECT_DIR+String(f).toLowerCase();})));}
 function decorateFighter(f){f.select=selectUrls(f.name);f.idle=poseUrls(f.name,"idle");f.walk=poseUrls(f.name,"walk");f.punchL=poseUrls(f.name,"punchL");f.punchR=poseUrls(f.name,"punchR");f.kickL=poseUrls(f.name,"kickL");f.kickR=poseUrls(f.name,"kickR");f.throw=poseUrls(f.name,"throw");f.block=poseUrls(f.name,"block");f.victory=poseUrls(f.name,"victory");f.loser=poseUrls(f.name,"loser");f.knee=poseUrls(f.name,"knee");f.summon=poseUrls(f.name,"summon");f.pushnwalk=poseUrls(f.name,"pushnwalk");f.taunt=poseUrls(f.name,"taunt");f.hit=poseUrls(f.name,"hit");f.liquidated=liquidatedUrls(f.name);f.objects=objectUrls(f.name);return f;}
-const FIGHTERS=[{name:"Stonks 6-7",handle:"@Stonks67",tint:"#1a2333",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"punch",bio:"Chart gremlin. Light, short reach, twitch. Walk in, punch-punch, back out. Weak to kicks. Throws NUDE PIX early."},{name:"Ventifa",handle:"@Ventifa",tint:"#0d7377",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hands",bio:"Night-shift closer. Fastest hands. LP then RP, block the return, then kick. EPT TEST interrupts, it does not finish."},{name:"Davinstigator",handle:"@Davinstigator",tint:"#37474f",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"bait",bio:"Boarding-line loudmouth. Close the gap, stall in block, late kick. Weak to throws while blocking. PRISON SHOE waits for the commit."},{name:"Troll Bee",handle:"@TrollBee",tint:"#f9a825",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Smallest box, highest step. Circle, sting, never stand in kick range. FUD RADIO is spent on the first full meter."},{name:"Jose Brownstein",handle:"@JoseBrownstein",tint:"#8d6e63",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"kick",bio:"Shop boss. Hold center, kick, block, kick. Weak to speed in and out. TOOL BOX is a mid-range check."},{name:"Captn Jack Hashtag",handle:"@CaptnJack",tint:"#e65100",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sloppy",bio:"Rail-braced and sloppy. Random side, high whiff. COCKTAIL is often thrown from too far. Weak to a patient block."},{name:"WHOLLY MAC",handle:"@WhollyMac",tint:"#6d4c41",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"rush",bio:"Arrives first. Walk in, then a kick. Does not retreat. Weak to a block-heal loop. TOMBSTONE is the finisher."},{name:"Dev Root X",handle:"@DevRootX",tint:"#00bcd4",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"edge",bio:"Long reach, light body. Stay at the edge, kick, back up. Weak inside. FUSION REACTOR closes, then punches."},{name:"WHITE CASSEL",handle:"@WhiteCassel",tint:"#90a4ae",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"late",bio:"Diplomat until the cup is empty. Block early, then punch-kick. HOT DOG is the switch from peace to fight."},{name:"Fuzzled Raccoon",handle:"@FuzzledRacc",tint:"#4e342e",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"counter",bio:"Scavenger. Wait for a whiff, then punch. Does not open. SKULL & BONES is a counter throw."},{name:"Big Daddy Turk",handle:"@BigDaddyTurk",tint:"#1b5e20",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"plant",bio:"Heaviest stance, widest body. Plant, block, kick. Does not chase. OIL BARREL stops a walk-in."},{name:"Dragonfly Fairy",handle:"@DragonflyFairy",tint:"#e91e63",hidden:true,unlockCrowns:1,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hover",bio:"Hover. In, kick, out. Weak if pinned. MULLEN DRAGONFLY reopens space."},{name:"Bioweapon Bulldog",handle:"@BioBulldog",tint:"#6a1b9a",hidden:true,unlockCrowns:2,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"forward",bio:"Does not heel. Walk forward only, kick, no retreat. GLOBE is a shove at contact."},{name:"LIL OJ",handle:"@LilOJ",tint:"#ef6c00",hidden:true,unlockCrowns:3,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"question",bio:"Press room. Block, pause, punch. Weak to a kick during the pause. WFUD PODIUM is a setup throw."},{name:"Fud Daddy 420",handle:"@FudDaddy420",tint:"#2b6cb0",hidden:true,unlockCrowns:4,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"elder",bio:"Lets the player spend meter, blocks the throw, then kicks. Weak to a raw walk-in. MICROPHONE is the last word."},{name:"KING TROLL",handle:"@KingTroll",tint:"#b71c1c",hidden:true,unlockCrowns:5,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"boss",bio:"Boss. Punches a kicker, kicks a puncher, blocks a full meter. STREET BIKE punishes a whiff."},{name:"Platinum Meow",handle:"@PlatinumMeow",tint:"#c0c0c0",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Neon alley cat. Fast claws, precise shots. Circles then strikes. Weak if you hold block. BOW is the closer."},{name:"Grox",handle:"@Grox",tint:"#39ff14",exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hands",bio:"Exhibition only. Dojo build. Not on the arcade board."},
-{name:"Trashed Panda",handle:"@TrashedPanda",tint:"#5d4037",exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"counter",bio:"Exhibition only. Dumpster-diving panda who treats the grooming table like a ring. Wait for the spray, then swipe. Weak if you stay clean. TRASH BAG is the counter."},
-{name:"That Badger Girl",handle:"@ThatBadgerGirl",tint:"#4e342e",exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Exhibition only. Salon chair is her ring. She styles the hair, then styles the face. Weak if you stay still under the dryer. BADGER CLAW is the closer."},
-{name:"Dark Fud 420",handle:"@DarkFud420",tint:"#6b21a8",exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Exhibition only. Wizard of the pit. Casts ENERGY SPELL from the tower. Weak if you close the gap and hold block."}].map(decorateFighter);
+const FIGHTERS=[{name:"Stonks 6-7",handle:"@Stonks67",tint:"#1a2333",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"punch",bio:"Chart gremlin. Light, short reach, twitch. Walk in, punch-punch, back out. Weak to kicks. Throws NUDE PIX early."},{name:"Ventifa",handle:"@Ventifa",tint:"#0d7377",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hands",bio:"Night-shift closer. Fastest hands. LP then RP, block the return, then kick. EPT TEST interrupts, it does not finish."},{name:"Davinstigator",handle:"@Davinstigator",tint:"#37474f",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"bait",bio:"Boarding-line loudmouth. Close the gap, stall in block, late kick. Weak to throws while blocking. PRISON SHOE waits for the commit."},{name:"Troll Bee",handle:"@TrollBee",tint:"#f9a825",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Smallest box, highest step. Circle, sting, never stand in kick range. FUD RADIO is spent on the first full meter."},{name:"Jose Brownstein",handle:"@JoseBrownstein",tint:"#8d6e63",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"kick",bio:"Shop boss. Hold center, kick, block, kick. Weak to speed in and out. TOOL BOX is a mid-range check."},{name:"Captn Jack Hashtag",handle:"@CaptnJack",tint:"#e65100",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sloppy",bio:"Rail-braced and sloppy. Random side, high whiff. COCKTAIL is often thrown from too far. Weak to a patient block."},{name:"WHOLLY MAC",handle:"@WhollyMac",tint:"#6d4c41",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"rush",bio:"Arrives first. Walk in, then a kick. Does not retreat. Weak to a block-heal loop. TOMBSTONE is the finisher."},{name:"Dev Root X",handle:"@DevRootX",tint:"#00bcd4",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"edge",bio:"Long reach, light body. Stay at the edge, kick, back up. Weak inside. FUSION REACTOR closes, then punches."},{name:"WHITE CASSEL",handle:"@WhiteCassel",tint:"#90a4ae",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"late",bio:"Diplomat until the cup is empty. Block early, then punch-kick. HOT DOG is the switch from peace to fight."},{name:"Fuzzled Raccoon",handle:"@FuzzledRacc",tint:"#4e342e",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"counter",bio:"Scavenger. Wait for a whiff, then punch. Does not open. SKULL & BONES is a counter throw."},{name:"Big Daddy Turk",handle:"@BigDaddyTurk",tint:"#1b5e20",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"plant",bio:"Heaviest stance, widest body. Plant, block, kick. Does not chase. OIL BARREL stops a walk-in."},{name:"Dragonfly Fairy",handle:"@DragonflyFairy",tint:"#e91e63",female:true,hidden:true,unlockCrowns:1,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hover",bio:"Hover. In, kick, out. Weak if pinned. MULLEN DRAGONFLY reopens space."},{name:"Bioweapon Bulldog",handle:"@BioBulldog",tint:"#6a1b9a",hidden:true,unlockCrowns:2,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"forward",bio:"Does not heel. Walk forward only, kick, no retreat. GLOBE is a shove at contact."},{name:"LIL OJ",handle:"@LilOJ",tint:"#ef6c00",hidden:true,unlockCrowns:3,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"question",bio:"Press room. Block, pause, punch. Weak to a kick during the pause. WFUD PODIUM is a setup throw."},{name:"Fud Daddy 420",handle:"@FudDaddy420",tint:"#2b6cb0",hidden:true,unlockCrowns:4,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"elder",bio:"Lets the player spend meter, blocks the throw, then kicks. Weak to a raw walk-in. MICROPHONE is the last word."},{name:"KING TROLL",handle:"@KingTroll",tint:"#b71c1c",hidden:true,unlockCrowns:5,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"boss",bio:"Boss. Punches a kicker, kicks a puncher, blocks a full meter. STREET BIKE punishes a whiff."},{name:"Platinum Meow",handle:"@PlatinumMeow",tint:"#c0c0c0",female:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Neon alley cat. Fast claws, precise shots. Circles then strikes. Weak if you hold block. BOW is the closer."},{name:"Grox",handle:"@Grox",tint:"#39ff14",exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hands",bio:"Exhibition only. Dojo build. Not on the arcade board."},
+{name:"Trashed Panda",handle:"@TrashedPanda",tint:"#5d4037",female:true,exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"counter",bio:"Exhibition only. Dumpster-diving panda who treats the grooming table like a ring. Wait for the spray, then swipe. Weak if you stay clean. TRASH BAG is the counter."},
+{name:"That Badger Girl",handle:"@ThatBadgerGirl",tint:"#4e342e",female:true,exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Exhibition only. Salon chair is her ring. She styles the hair, then styles the face. Weak if you stay still under the dryer. BADGER CLAW is the closer."},
+{name:"Dark Fud 420",handle:"@DarkFud420",tint:"#6b21a8",exhibitionOnly:true,spriteScale:1.3,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Exhibition only. Wizard of the pit. Casts ENERGY SPELL from the tower. Weak if you close the gap and hold block."}].map(decorateFighter);
 function fighterStat(who,key){const f=FIGHTERS[who==="you"?selectedFighter:cpuFighter];const n=f&&f[key];return (n==null||n===""||isNaN(n))?5:Number(n);}
 const MAIN_COUNT=11,HIDDEN_INDEXES=[11,12,13,14,15],FINAL_INDEX=15;
 const MEMBERS=FIGHTERS.filter(function(f){return!f.hidden;}).map(function(f,i){return{handle:f.handle,name:f.name,fighter:i,color:f.tint};});
@@ -644,8 +647,8 @@ let youPos=YOU_HOME,cpuPos=CPU_HOME,tiltOn=false,tiltCenter=0,tiltReady=false,ke
 let liquidateOn=false,liquidateTimer=null,liquidateLeft=15,liquidateSeq="",liquidateDone=null;
 let walkTimer=null,readyToFight=false,runHold={left:false,right:false},runTap={left:0,right:0};
 const bgm=document.getElementById("bgm"),introSfx=document.getElementById("introSfx");
-const sfxPunchEl=document.getElementById("sfxPunch"),sfxKickEl=document.getElementById("sfxKick"),sfxThrowEl=document.getElementById("sfxThrow"),sfxDragEl=document.getElementById("sfxDrag"),sfxGruntEl=document.getElementById("sfxGrunt"),sfxGrunt2El=document.getElementById("sfxGrunt2"),sfxLiquidateEl=document.getElementById("sfxLiquidate"),sfxLiquidateThemEl=document.getElementById("sfxLiquidateThem"),sfxPowerChimeEl=document.getElementById("sfxPowerChime"),sfxWhistleCrashEl=document.getElementById("sfxWhistleCrash");
-const sfxRound1SusEl=document.getElementById("sfxRound1Sus"),sfxP2UghEl=document.getElementById("sfxP2Ugh");
+const sfxPunchEl=document.getElementById("sfxPunch"),sfxKickEl=document.getElementById("sfxKick"),sfxThrowEl=document.getElementById("sfxThrow"),sfxDragEl=document.getElementById("sfxDrag"),sfxGruntEl=document.getElementById("sfxGrunt"),sfxGrunt2El=document.getElementById("sfxGrunt2"),sfxGruntFEl=document.getElementById("sfxGruntF"),sfxGrunt2FEl=document.getElementById("sfxGrunt2F"),sfxLiquidateEl=document.getElementById("sfxLiquidate"),sfxLiquidateThemEl=document.getElementById("sfxLiquidateThem"),sfxPowerChimeEl=document.getElementById("sfxPowerChime"),sfxWhistleCrashEl=document.getElementById("sfxWhistleCrash");
+const sfxRound1SusEl=document.getElementById("sfxRound1Sus"),sfxP2UghEl=document.getElementById("sfxP2Ugh"),sfxP2UghFEl=document.getElementById("sfxP2UghF");
 let dragWho="";
 document.getElementById("rosterArt").src=ROSTER;
 function wrap(i,n){return(i+n)%n;}
@@ -915,7 +918,9 @@ function playFile(el){if(mutedFx||!el)return;try{el.currentTime=0;}catch(e){}el.
 function sfxPunch(){playFile(sfxPunchEl);}
 function sfxKick(){playFile(sfxKickEl);}
 function sfxThrow(){playFile(sfxThrowEl);}
-function sfxGrunt(who){playFile(who==="cpu"?sfxGrunt2El:sfxGruntEl);}
+function fighterIsFemale(who){const f=FIGHTERS[who==="you"?selectedFighter:cpuFighter];return !!(f&&f.female);}
+function sfxGrunt(who){if(who==="cpu")playFile(fighterIsFemale("cpu")?sfxGrunt2FEl:sfxGrunt2El);else playFile(fighterIsFemale("you")?sfxGruntFEl:sfxGruntEl);}
+function sfxP2UghFor(who){playFile(fighterIsFemale(who)?sfxP2UghFEl:sfxP2UghEl);}
 function startDragSfx(who){
   if(mutedFx||!sfxDragEl)return;
   dragWho=who||"cpu";
@@ -937,7 +942,7 @@ function sfxMiss(){playTone(160,0.07,"square",0.05);}
 function sfxBlock(){playTone(740,0.06,"triangle",0.1);playTone(1180,0.05,"square",0.05);}
 function sfxPowerReady(){playFile(sfxPowerChimeEl);playTone(620,0.1,"triangle",0.1);playTone(880,0.12,"square",0.07);}
 function sfxWhistleCrash(){playFile(sfxWhistleCrashEl);}
-function sfxP2Ugh(){playFile(sfxP2UghEl);}
+function sfxP2Ugh(){sfxP2UghFor("cpu");}
 function setIntroText(t){document.getElementById("introText").innerHTML=t+'<span class="cursor"> </span>';}
 function stopTitleSong(){bgm.pause();}
 function stopIntroBed(){introSfx.pause();try{introSfx.currentTime=0;}catch(e){}}
@@ -1252,7 +1257,7 @@ function playPose(who,pose){
   const img=document.getElementById(who==="you"?"youFile":"cpuFile");
   if(!img)return;
   const list=(fighter[pose]&&fighter[pose].length)?fighter[pose]:fighter.select;
-  const hold=pose==="idle"||pose==="walk"||pose==="block"||pose==="victory"||pose==="loser"||pose==="knee"||pose==="summon"||pose==="pushnwalk"||pose==="throw";
+  const hold=pose==="idle"||pose==="walk"||pose==="block"||pose==="victory"||pose==="loser"||pose==="knee"||pose==="summon"||pose==="pushnwalk"||pose==="throw"||pose==="taunt";
   clearTimeout(poseTimer[who]);
   if(who==="you"&&pose==="idle"&&walkLocked&&!youBlocking&&img.dataset.pose==="walk")return;
    if(img.dataset.pose===pose&&img.src){
@@ -1356,7 +1361,13 @@ function preloadMatchPair(){
     if(arena.music)preloadUrl(arena.music);
   }
 }
-function applyFighterArt(){const mine=FIGHTERS[selectedFighter],theirs=FIGHTERS[cpuFighter],me=activePlayer();preloadMatchPair();const youImg=document.getElementById("youFile"),cpuImg=document.getElementById("cpuFile");youImg.dataset.pose="";cpuImg.dataset.pose="";youImg.style.display="none";cpuImg.style.display="none";function rosterTag(p){if(!p)return"@PLAYER";return normHandle(p.handle||p.name||"")||"@PLAYER";}const p2Tag=(mode==="arcade"||mode==="pvc")?"@GROXai":((mode==="one"&&invitedMember)?rosterTag(invitedMember):"@GROXai");document.getElementById("p1Name").textContent=mine.name;document.getElementById("p2Name").textContent=theirs.name;document.getElementById("p1Profile").textContent=rosterTag(me);document.getElementById("p2Profile").textContent=p2Tag;playPose("you","idle");playPose("cpu","idle");}
+function applyFighterArt(){const mine=FIGHTERS[selectedFighter],theirs=FIGHTERS[cpuFighter],me=activePlayer();preloadMatchPair();const youImg=document.getElementById("youFile"),cpuImg=document.getElementById("cpuFile");youImg.dataset.pose="";cpuImg.dataset.pose="";youImg.style.display="none";cpuImg.style.display="none";
+const youScale=(mine&&mine.spriteScale)?mine.spriteScale:1;
+const cpuScale=(theirs&&theirs.spriteScale)?theirs.spriteScale:1;
+youImg.style.transform="scale("+youScale+")";
+youImg.style.transformOrigin="center bottom";
+cpuImg.style.transform="scaleX(-1) scale("+cpuScale+")";
+cpuImg.style.transformOrigin="center bottom";function rosterTag(p){if(!p)return"@PLAYER";return normHandle(p.handle||p.name||"")||"@PLAYER";}const p2Tag=(mode==="arcade"||mode==="pvc")?"@GROXai":((mode==="one"&&invitedMember)?rosterTag(invitedMember):"@GROXai");document.getElementById("p1Name").textContent=mine.name;document.getElementById("p2Name").textContent=theirs.name;document.getElementById("p1Profile").textContent=rosterTag(me);document.getElementById("p2Profile").textContent=p2Tag;playPose("you","idle");playPose("cpu","idle");}
 function applyArena(){const a=ARENAS[selectedArena],stage=document.getElementById("stage"),img=document.getElementById("arenaImg");preloadUrl(a.file);stage.style.backgroundColor=a.color;stage.style.backgroundImage="none";if(img)img.src=a.file;playArenaMusic(false);}
 function pickRandomCpu(){const pool=[];const limit=mode==="pvc"?FIGHTERS.length:MAIN_COUNT;for(let i=0;i<limit;i++)if(i!==selectedFighter&&!fighterLocked(i))pool.push(i);if(!pool.length)return wrap((selectedFighter+1)%FIGHTERS.length,FIGHTERS.length);return pool[Math.floor(Math.random()*pool.length)];}
 function buildArcadeQueue(){
@@ -1662,11 +1673,11 @@ function backToExhibitionFighters(){clearTimeout(aiTimer);clearReadyTimer();clea
 function showFinalStats(win,record,king){document.getElementById("winFlash").classList.remove("show");document.getElementById("endKo").textContent=king?"FUD KING":"K.O.";document.getElementById("endMsg").textContent=king?"YOU ARE THE FUD KING":(win?"YOU WIN THE PIT":(mode==="arcade"?"ARCADE OVER":"MARGIN CALLED"));const gainsBtn=document.getElementById("endGold"),titleBtn=document.getElementById("endTitle");if(mode==="pvc"){document.getElementById("endSub").textContent="CONGRATULATIONS";if(gainsBtn){gainsBtn.style.display="";gainsBtn.textContent="EXHIBITION";gainsBtn.onclick=backToExhibitionFighters;}if(titleBtn)titleBtn.textContent="MAIN";}else{document.getElementById("endSub").textContent="$"+matchScore+" gains  •  "+profileCrowns(activePlayer())+" CROWNS  •  +"+matchXp+" XP  •  "+record+" vs L"+effectiveSkill();if(gainsBtn){gainsBtn.style.display="";gainsBtn.textContent="GAINS & STATS";gainsBtn.onclick=openHighScores;}if(titleBtn)titleBtn.textContent="TITLE SCREEN";}document.getElementById("endOv").classList.add("show");}
 function finish(winner){if(liquidateOn)return;over=true;announcing=false;clearTimeout(aiTimer);clearTimeout(poseTimer.you);clearTimeout(poseTimer.cpu);clearRoundTimer();setBlock("you",false);setBlock("cpu",false);const youWonRound=winner==="you";const isDarkFudWinner=FIGHTERS[winner==="you"?selectedFighter:cpuFighter].name==="Dark Fud 420";
 if(!matchOver()){resetWalk();}
-if(!isDarkFudWinner && !matchOver()){
-  const winName=FIGHTERS[winner==="you"?selectedFighter:cpuFighter].name;
-  playPose(winner, winName==="Stonks 6-7"?"taunt":"victory");
+const willEndMatch=(youWonRound&&roundWins.you+1>=winsNeeded())||(!youWonRound&&roundWins.cpu+1>=winsNeeded())||currentRound>=maxRounds();
+if(!willEndMatch){
+  playPose(winner,"taunt");
 }
-sfxP2Ugh();matmatchScore+=dollarsLeft("you");chScore+=dollarsLeft("you");matchXp+=10+(youWonRound?25:0)+effectiveSkill();if(youWonRound)roundWins.you+=1;else roundWins.cpu+=1;updateRoundHud();playPose(yoif(matchOver()){playPose(youWonRound?"cpu":"you","loser");sfxP2Ugh();}else playPose(youWonRound?"cpu":"you","knee");if(!matchOver()){uWonRound?"cpu":"you",matchOver()?"loser":"knee");if(!matchOver()){
+matchScore+=dollarsLeft("you");matchXp+=10+(youWonRound?25:0)+effectiveSkill();if(youWonRound)roundWins.you+=1;else roundWins.cpu+=1;updateRoundHud();if(matchOver()){const fallWho=youWonRound?"cpu":"you";playPose(fallWho,"loser");sfxP2UghFor(fallWho);}else playPose(youWonRound?"cpu":"you","knee");if(!matchOver()){
   if(currentRound===1){
     pauseBgm();
     if(sfxRound1SusEl&&!mutedFx){
@@ -1696,8 +1707,15 @@ if(mode==="arcade"){
     arcadeKing=false;
   }
 }
+const youEl=document.getElementById("you"),cpuEl=document.getElementById("cpu");
+if(youEl)youEl.classList.remove("punchL","punchR","kickL","kickR","throw","hit");
+if(cpuEl)cpuEl.classList.remove("punchL","punchR","kickL","kickR","throw","hit");
+clearTimeout(poseTimer.you);clearTimeout(poseTimer.cpu);
+const youImg=document.getElementById("youFile"),cpuImg=document.getElementById("cpuFile");
+if(youImg)youImg.dataset.pose="";
+if(cpuImg)cpuImg.dataset.pose="";
 playPose(winner,"idle");
-clearTimeout(poseTimer[winner]);
+playPose(winner==="you"?"cpu":"you","loser");
 if(win){startLiquidate(function(){showPostFight(beaten,record,true);},"you");return;}
 startLiquidate(function(){showPostFight(beaten,record,false);},"cpu");
 }
@@ -1710,9 +1728,15 @@ function startLiquidate(done,by){
   by=by==="cpu"?"cpu":"you";
   liquidateDone=done;liquidateOn=true;liquidateSeq="";liquidateLeft=15;announcing=true;over=true;
  const isDark=FIGHTERS[by==="you"?selectedFighter:cpuFighter].name==="Dark Fud 420";
-  playPose(by,"idle");
-  clearTimeout(poseTimer[by]);
-  playPose(by==="you"?"cpu":"you","loser");
+clearTimeout(poseTimer.you);clearTimeout(poseTimer.cpu);
+const youEl2=document.getElementById("you"),cpuEl2=document.getElementById("cpu");
+if(youEl2)youEl2.classList.remove("punchL","punchR","kickL","kickR","throw","hit");
+if(cpuEl2)cpuEl2.classList.remove("punchL","punchR","kickL","kickR","throw","hit");
+const youImg2=document.getElementById("youFile"),cpuImg2=document.getElementById("cpuFile");
+if(youImg2)youImg2.dataset.pose="";
+if(cpuImg2)cpuImg2.dataset.pose="";
+playPose(by,"idle");
+playPose(by==="you"?"cpu":"you","loser");
   bgm.pause();
   if(sfxLiquidateEl){sfxLiquidateEl.loop=false;try{sfxLiquidateEl.currentTime=0;}catch(e){}if(!mutedFx)sfxLiquidateEl.play().catch(function(){});}
   cueLiquidateThem();
