@@ -125,15 +125,15 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .vs-name{grid-row:1;font-family:Impact,"Arial Black",system-ui,sans-serif;font-size:clamp(13px,3.6vw,20px);font-weight:900;letter-spacing:1.6px;text-transform:uppercase;color:#ffd54f;text-shadow:0 0 12px #ffb300,0 2px 0 #000;text-align:center}
 .vs-name.p1{grid-column:1}
 .vs-name.p2{grid-column:3}
-.vs-card{grid-row:2;background:#121826;border:2px solid #2a3344;border-radius:14px;overflow:hidden}
+.vs-card{grid-row:2;background:#121826;border:2px solid #2a3344;border-radius:14px;overflow:hidden;aspect-ratio:1/1;width:100%;max-width:220px;margin:0 auto}
 .vs-card.p1{grid-column:1}
 .vs-card.p2{grid-column:3}
-.vs-card img{width:100%;height:28vh;max-height:220px;object-fit:contain;object-position:center bottom;display:block;background:transparent}
+.vs-card img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;background:transparent}
 .vs-card.p2 img{transform:scaleX(-1)}
 .vs-mark{grid-column:2;grid-row:2;font-family:Impact,"Arial Black",system-ui,sans-serif;font-size:clamp(22px,8vw,36px);font-weight:900;color:#ffd54f;text-shadow:0 0 16px #ffb300}
-#matchup .vs-row{position:relative;align-items:end;min-height:28vh;overflow:hidden;border:2px solid #ffd54f;border-radius:14px;box-shadow:0 0 22px rgba(255,213,79,.45)}
+#matchup .vs-row{position:relative;align-items:end;min-height:0;overflow:hidden;border:2px solid #ffd54f;border-radius:14px;box-shadow:0 0 22px rgba(255,213,79,.45)}
 #matchup .vs-name{position:relative;z-index:2;align-self:start;padding-top:6px;text-shadow:0 0 12px #ffb300,0 2px 0 #000,0 0 8px #000}
-#matchup .vs-card{background:transparent;border:0;border-radius:0;overflow:visible;box-shadow:none}
+#matchup .vs-card{background:transparent;border:0;border-radius:0;overflow:visible;box-shadow:none;aspect-ratio:1/1;width:100%;max-width:220px;margin:0 auto}
 #matchup .vs-mark{z-index:2;align-self:center}
 #matchup .match-arena-name{margin-top:8px}
 .carousel-wrap{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:6px 4px 0}
@@ -250,8 +250,8 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #fight.quake #you,#fight.quake #cpu{animation:fighterQuake 2.2s linear}
 @keyframes quake{0%,100%{transform:translate(0,0)}8%{transform:translate(-10px,6px)}16%{transform:translate(12px,-8px)}24%{transform:translate(-8px,-5px)}32%{transform:translate(9px,7px)}40%{transform:translate(-12px,3px)}48%{transform:translate(7px,-9px)}56%{transform:translate(-6px,8px)}64%{transform:translate(11px,-4px)}72%{transform:translate(-9px,5px)}80%{transform:translate(6px,-6px)}88%{transform:translate(-4px,3px)}}
 @keyframes fighterQuake{0%,100%{transform:translate(0,0) rotate(0)}12%{transform:translate(-6px,4px) rotate(-2deg)}28%{transform:translate(8px,-5px) rotate(2deg)}44%{transform:translate(-7px,3px) rotate(-1deg)}60%{transform:translate(5px,-4px) rotate(2deg)}76%{transform:translate(-4px,2px) rotate(-1deg)}}
-.fighter{position:absolute;bottom:7.5%;width:auto;max-width:38.64%;height:66.7%;aspect-ratio:auto;max-height:66.7%;transform-origin:center bottom;z-index:4;overflow:visible}
-.fighter-img{width:100%;height:100%;max-width:100%;object-fit:contain;object-position:center bottom;display:none;background:transparent!important;transform:none}
+.fighter{position:absolute;bottom:7.5%;width:auto;max-width:46%;height:78%;aspect-ratio:auto;max-height:78%;transform-origin:center bottom;z-index:4;overflow:visible}
+.fighter-img{width:auto;height:100%;max-width:none;object-fit:contain;object-position:center bottom;display:none;background:transparent!important;transform:none}
 #you{left:6%;z-index:4}
 #cpu{right:6%;z-index:4}
 #cpu .fighter-img{transform:scaleX(-1)}
