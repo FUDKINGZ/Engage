@@ -20,6 +20,13 @@ html,body{margin:0;width:100%;height:100%;height:100dvh;overflow:hidden;font-fam
 .screen.active{display:flex}
 #postfight{overflow:visible;contain:none}
 .fixed-390.screen.active{display:flex!important;flex-direction:column;align-items:stretch;width:100%;height:100%;left:0;right:0;margin:0;overflow:hidden}
+#fighters.fixed-390.screen.active,
+#opponents.fixed-390.screen.active,
+#arenas.fixed-390.screen.active,
+#matchup.fixed-390.screen.active{
+height:min(590px,100dvh);
+max-height:min(590px,100dvh);
+}
 .fixed-390 .brand{display:block;position:relative;z-index:5;width:100%;height:auto;min-height:0;flex:none;margin:0;padding:calc(6px + env(safe-area-inset-top)) 0 0;overflow:visible}
 .fixed-390 .brand .brand-logo{display:block;width:100%;max-width:100%;height:auto;flex:none;margin:0;padding:0;object-fit:contain}
 .fixed-390 .menu-btns.tok-row{display:flex;width:100%;flex:none;margin:0;box-sizing:border-box;justify-content:space-between;align-items:center;padding:6px 12px calc(30px + env(safe-area-inset-bottom))}
@@ -236,8 +243,9 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 .round-pips i.won{background:#ffd54f}
 .clock-wrap{display:flex;align-items:center;justify-content:center;padding:0 4px 10px;min-width:52px}
 #roundClock{font-size:15px;font-weight:900;color:#ffe082}
-#roundClock.low{color:#ff1744}
-#roundClock.sd{color:#ea80fc;font-size:9px}
+#roundClock.low{color:#ff1744;animation:clockFlash .55s steps(2) infinite}
+#roundClock.sd{color:#ea80fc;font-size:9px;animation:none}
+@keyframes clockFlash{50%{opacity:.2}}
 #fight{position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden;background:#05070d;padding-top:env(safe-area-inset-top);align-items:center}
 #fight.screen.active{display:flex}
 #stage{flex:0 0 auto;position:relative;overflow:hidden;background:#12080c;width:100%;aspect-ratio:500/362;max-height:min(62dvh, 362px);margin:0 auto;min-height:0}
@@ -337,8 +345,8 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 .move-btn{position:relative;top:auto;bottom:auto;left:auto;right:auto;width:100%;height:100%;border:0;border-radius:0;padding:0;background-color:transparent;background-repeat:no-repeat;background-position:center;background-size:57px 57px;cursor:pointer;touch-action:none!important;-ms-touch-action:none;-webkit-user-select:none!important;-moz-user-select:none!important;-ms-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important;-webkit-user-drag:none!important;user-drag:none!important;-webkit-tap-highlight-color:transparent;outline:none}
 .move-btn:active,.move-btn.held{filter:brightness(1.15)}
 #fightUtil{display:block;width:100%;height:33px;min-height:33px;max-height:33px;margin:0;padding:0;background:#1a1f28;box-sizing:border-box;position:relative;z-index:6;flex:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
-.util-row{display:grid;grid-template-columns:56px 1fr 56px;width:100%;height:33px;min-height:33px;max-height:33px;justify-items:center;align-items:center;gap:0;padding:0 14px 7px;margin:0;border:0;background:transparent;line-height:1;box-sizing:border-box;position:relative;z-index:2}
-.util-row .tiny-mute,.util-row #pauseBtn{margin:0;padding:4px 8px;border-radius:8px;height:24px;box-sizing:border-box;white-space:nowrap}
+.util-row{display:grid;grid-template-columns:56px 1fr 56px;width:100%;height:33px;min-height:33px;max-height:33px;justify-items:center;align-items:center;gap:0;padding:0 14px;margin:0;border:0;background:transparent;line-height:1;box-sizing:border-box;position:relative;z-index:2}
+.util-row .tiny-mute,.util-row #pauseBtn{margin:0;padding:4px 8px;border-radius:8px;height:24px;box-sizing:border-box;white-space:nowrap;align-self:center}
 #muteMusic,#pauseBtn,#muteFx{position:relative;grid-row:1;margin:0;justify-self:center}
 #muteMusic{grid-column:1;justify-self:start}
 #pauseBtn{grid-column:2}
@@ -467,8 +475,7 @@ input[type=file].hidden-file{display:none}
     <button class="btn btn-dark" onclick="openStockCred()">STOCK CRED</button>
     <button class="btn btn-dark" onclick="show('guide')">GUIDE</button>
   </div>
-  <div id="mainBanner"><img src="./main_banner.png" alt="" width="780" height="120"></div>
-</section>
+  </section>
 <section id="gate" class="screen menu"><div class="frame-390"><div class="brand"><img class="brand-logo" src="./title header.jpg" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p id="gateHint">ROSTER / WALLET</p></div><div class="roster-body"><div class="form-card"><div class="form-label">PROFILE — REQUIRED</div><div class="form-row" style="margin-top:8px"><input id="gateName" placeholder="Player name"/><input id="gateHandle" placeholder="@handle"/></div><div class="form-label" style="margin-top:10px">TOKEN WALLET — REQUIRED</div><div class="form-row"><input id="gateWallet" placeholder="Wallet address"/></div><div class="form-row"><button type="button" id="gateSave" onclick="saveGateProfile()" disabled>SAVE</button></div><div class="sent-note" id="gateNote"></div><div class="form-label" style="margin-top:10px">SAVED RUNS</div><div class="pit-list" id="gateSaves"></div><p class="post-sub">Save a profile and a wallet before Arcade or 1 On 1. Exhibition does not use this gate. The wallet line is an identifier only. No payment is taken here. A win in Arcade writes a run here. Open one to restart that character on the next opponent.</p></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="show('title')" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="22" font-weight="900" letter-spacing="3.2">BACK</text></svg></button><button type="button" class="tok-btn gold" id="gateEnter" onclick="enterGatedMode()" aria-label="Enter" disabled><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="16" font-weight="900" letter-spacing="2">ENTER</text></svg></button></div></div></section>
 <section id="roster" class="screen menu fixed-390"><div class="brand"><img class="brand-logo" src="./title header.jpg" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>PLAYER ROSTER</p></div><div class="roster-body"><div class="form-card"><div class="form-label">NEW / UPDATE PROFILE</div><div class="form-row" style="margin-top:8px"><input id="rosterName" placeholder="Player name"/><input id="rosterHandle" placeholder="@handle"/></div><div class="form-row"><button type="button" onclick="saveRosterProfile()">SAVE PROFILE</button><button type="button" onclick="exportRosterFile()">SAVE FILE</button><button type="button" onclick="document.getElementById('rosterFile').click()">LOAD FILE</button></div><div class="sent-note" id="rosterNote"></div></div><div class="member-list" id="rosterList"></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="show('title')" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="22" font-weight="900" letter-spacing="3.2">BACK</text></svg></button></div></section>
 <section id="scores" class="screen menu fixed-390 back-left"><div class="brand"><img class="brand-logo" src="./title header.jpg" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>GALLERY</p></div><div class="carousel-wrap"><div class="match-arena-name" id="galleryName">ART</div><img id="galleryView" alt="" style="width:100%;max-width:100%;height:42vh;object-fit:contain;background:rgba(0,0,0,.28);border:1px solid #334;border-radius:14px"><div class="nav-row"><button type="button" onclick="shiftGallery(-1)"><span class="arr">‹</span><span class="arr">‹</span><span class="arr">‹</span></button><button type="button" onclick="shiftGallery(1)"><span class="arr">›</span><span class="arr">›</span><span class="arr">›</span></button></div><div class="dots" id="galleryDots"></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="show('title')" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="22" font-weight="900" letter-spacing="3.2">BACK</text></svg></button></div></section>
@@ -575,7 +582,7 @@ input[type=file].hidden-file{display:none}
    </div>
    <div id="fightGap"><img id="fightBanner" src="./fight_banner.png" alt=""></div>
   </section>
-<div class="fine-print"><span>BUILD:10.17~0135</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.17~0357</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 </div>
 <script>
 const ROOT="./",ARENA_DIR=ROOT+"arenas/",FIGHTER_DIR=ROOT+"fighters/",TITLECARD_DIR=ROOT+"titlecards/",OBJECT_DIR=ROOT+"objects/",AUDIO=ROOT+"audio/";
@@ -1219,10 +1226,19 @@ function openGallery(){renderGallery();show("scores");}
 function openPopularityBoard(){openGallery();}
 function clearHighScores(){writeHighScores([]);rosterData.players.forEach(function(p){p.scores=[];p.xp=0;p.crowns=0;p.fights=0;p.wins=0;p.losses=0;p.points=0;p.fighters=emptyFighterBook();});persistRoster();lastScoreId="";renderHighScores();}
 function formatClock(secs){const s=Math.max(0,secs|0),m=Math.floor(s/60),r=s%60;return m+":"+(r<10?"0":"")+r;}
-function updateTimerHud(){const el=document.getElementById("roundClock");if(suddenDeath){el.textContent="SUDDEN DEATH";el.className="sd";return;}el.textContent=formatClock(roundTimeLeft);el.className=roundTimeLeft<=15?"low":"";}
+function updateTimerHud(){const el=document.getElementById("roundClock");if(suddenDeath){el.textContent="SUDDEN DEATH";el.className="sd";return;}el.textContent=formatClock(roundTimeLeft);el.className=roundTimeLeft<=30?"low":"";}
 function clearRoundTimer(){if(roundTimer){clearInterval(roundTimer);roundTimer=null;}}
 function startRoundTimer(){clearRoundTimer();if(suddenDeath){updateTimerHud();return;}roundTimeLeft=ROUND_SECS;updateTimerHud();roundTimer=setInterval(function(){if(paused||over||announcing)return;roundTimeLeft-=1;updateTimerHud();if(roundTimeLeft<=0)onTimeExpired();},1000);}
-function onTimeExpired(){clearRoundTimer();if(over)return;if(hp.you===hp.cpu){enterSuddenDeath();return;}finish(hp.you>hp.cpu?"you":"cpu");}
+function onTimeExpired(){
+  clearRoundTimer();
+  if(over)return;
+  if(hp.you===hp.cpu){
+    sfxRoundBell();
+    enterSuddenDeath();
+    return;
+  }
+  finish(hp.you>hp.cpu?"you":"cpu");
+}
 function enterSuddenDeath(){suddenDeath=true;updateTimerHud();document.getElementById("winFlashKo").textContent="TIME UP";document.getElementById("winFlashName").textContent="SUDDEN DEATH";document.getElementById("winFlashSub").textContent="";document.getElementById("winFlash").classList.add("show");announcing=true;if(winFlashTimer)clearTimeout(winFlashTimer);winFlashTimer=setTimeout(function(){winFlashTimer=null;document.getElementById("winFlash").classList.remove("show");announcing=false;},1600);}
 function paintPips(id,wins){const box=document.getElementById(id);if(!box)return;box.innerHTML="";const rtl=id==="p2Pips";box.style.direction=rtl?"rtl":"ltr";box.style.flexDirection="row";box.style.justifyContent=rtl?"flex-end":"flex-start";for(let i=0;i<winsNeeded();i++){const d=document.createElement("i");if(i<wins)d.className="won";box.appendChild(d);}}
 function updateRoundHud(){paintPips("p1Pips",roundWins.you);paintPips("p2Pips",roundWins.cpu);updateTimerHud();}
