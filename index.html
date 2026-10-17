@@ -14,7 +14,7 @@ html,body{margin:0;width:100%;height:100%;height:100dvh;overflow:hidden;font-fam
 #title.screen.active{display:flex;flex-direction:column;align-items:stretch;height:100%;min-height:0;background:#071018;background-image:none}
 #title .menu-art{flex:none;display:flex;width:100%;min-width:0;height:auto;min-height:0;max-height:none;align-items:flex-start;justify-content:center;overflow:hidden}
 #title .menu-art img.roster{width:100%;max-width:100%;height:auto;max-height:none;min-width:0;min-height:0;object-fit:contain;object-position:center top}
-#title .menu-btns.tight{flex:none;width:100%;min-width:0;max-width:100%;padding:0 12px calc(28px + env(safe-area-inset-bottom))}
+#title .menu-btns.tight{flex:none;width:100%;min-width:0;max-width:100%;padding:10px 12px calc(28px + env(safe-area-inset-bottom));background:#1a1f28;border-radius:14px 14px 0 0;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
 #mainBanner{display:none}
 .screen{position:absolute;inset:0;display:none;flex-direction:column;contain:layout paint}
 .screen.active{display:flex}
@@ -336,7 +336,7 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #bk:active,#th:active{transform:scale(.92)}
 .move-btn{position:relative;top:auto;bottom:auto;left:auto;right:auto;width:100%;height:100%;border:0;border-radius:0;padding:0;background-color:transparent;background-repeat:no-repeat;background-position:center;background-size:57px 57px;cursor:pointer;touch-action:none!important;-ms-touch-action:none;-webkit-user-select:none!important;-moz-user-select:none!important;-ms-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important;-webkit-user-drag:none!important;user-drag:none!important;-webkit-tap-highlight-color:transparent;outline:none}
 .move-btn:active,.move-btn.held{filter:brightness(1.15)}
-#fightUtil{display:block;width:100%;height:33px;min-height:33px;max-height:33px;margin:0;padding:0;background:transparent;box-sizing:border-box;position:relative;z-index:6;flex:none}
+#fightUtil{display:block;width:100%;height:33px;min-height:33px;max-height:33px;margin:0;padding:0;background:#1a1f28;box-sizing:border-box;position:relative;z-index:6;flex:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
 .util-row{display:grid;grid-template-columns:56px 1fr 56px;width:100%;height:33px;min-height:33px;max-height:33px;justify-items:center;align-items:center;gap:0;padding:0 14px 7px;margin:0;border:0;background:transparent;line-height:1;box-sizing:border-box;position:relative;z-index:2}
 .util-row .tiny-mute,.util-row #pauseBtn{margin:0;padding:4px 8px;border-radius:8px;height:24px;box-sizing:border-box;white-space:nowrap}
 #muteMusic,#pauseBtn,#muteFx{position:relative;grid-row:1;margin:0;justify-self:center}
@@ -574,7 +574,7 @@ input[type=file].hidden-file{display:none}
    </div>
    <div id="fightGap"><img id="fightBanner" src="./fight_banner.png" alt=""></div>
   </section>
-<div class="fine-print"><span>BUILD:10.16~2238</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.17~0126</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 </div>
 <script>
 const ROOT="./",ARENA_DIR=ROOT+"arenas/",FIGHTER_DIR=ROOT+"fighters/",TITLECARD_DIR=ROOT+"titlecards/",OBJECT_DIR=ROOT+"objects/",AUDIO=ROOT+"audio/";
