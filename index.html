@@ -575,7 +575,7 @@ input[type=file].hidden-file{display:none}
    </div>
    <div id="fightGap"><img id="fightBanner" src="./fight_banner.png" alt=""></div>
   </section>
-<div class="fine-print"><span>BUILD:10.18~0633</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.18~0650</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 </div>
 <script>
 const ROOT="./",ARENA_DIR=ROOT+"arenas/",FIGHTER_DIR=ROOT+"fighters/",TITLECARD_DIR=ROOT+"titlecards/",OBJECT_DIR=ROOT+"objects/",AUDIO=ROOT+"audio/";
@@ -1828,15 +1828,7 @@ function cpuStrike(tune){
   else if(bias==="boss")pool=lastKind.you==="K"?["punchL","punchR"]:["kickL","kickR"];
   attack("cpu","you",pool[Math.floor(Math.random()*pool.length)]);
 }
-function scheduleAI(){
-  clearTimeout(aiTimer);
-  if(over||paused||announcing)return;
-  const tune=skillTune();
-  const rush=!inMeleeRange();
-  aiTimer=setTimeout(function(){
-    if(over||paused||announcing)return;
-    const move=cpuEngage();
-    if(move==="approach"){scheduleAI();return;}
+function scheduleAI(){clearTimeout(aiTimer);if(over||paused||announcing)return;const tune=skillTune();const rush=!inMeleeRange();aiTimer=setTimeout(function(){if(over||paused||announcing)return;const move=cpuEngage();if(move==="approach"){scheduleAI();return;}
     if(!canThrow("cpu")&&inMeleeRange()&&Math.random()<tune.blockChance*(cpuWantsGuard()?1.4:0.7)){
       setBlock("cpu",true);
       setTimeout(function(){if(!over)setBlock("cpu",false);cpuStrike(tune);},Math.min(280,tune.blockMs));
@@ -1851,7 +1843,7 @@ function scheduleAI(){
     scheduleAI();
   },rush?160:tune.minDelay+Math.random()*tune.span);
 }
-function restartExhibition(){if(mode!=="pvc")return;paused=false;document.getElementById("pauseOv").classList.remove("show");readyToFight=true;startFight(true);const a=ARENAS[selectedArena];if(a&&a.music)setTrack(a.music,true,true);}
+function restartExhibition(){if(mode!=="pvc")return;paused=false;document.getElementById("pauseOv").classList.remove("show");readyToFight=true;resetWalk();startFight(true);const a=ARENAS[selectedArena];if(a&&a.music)setTrack(a.music,true,true);}
 function togglePause(){if(over||announcing)return;paused=!paused;const restart=document.getElementById("pauseRestart");if(restart)restart.style.display=(paused&&mode==="pvc")?"":"none";const saveBtn=document.getElementById("pauseSave");if(saveBtn){saveBtn.style.display=(paused&&mode==="arcade")?"":"none";saveBtn.disabled=!!pauseSaveLocked;saveBtn.textContent=pauseSaveLocked?"SAVED":"SAVE";}document.getElementById("pauseOv").classList.toggle("show",paused);if(paused){setBlock("you",false);pauseBgm();}else{playBgm();scheduleAI();tiltReady=false;}}
 function backToExhibitionFighters(){clearTimeout(aiTimer);clearReadyTimer();clearRoundTimer();stopWalkLoop();if(winFlashTimer){clearTimeout(winFlashTimer);winFlashTimer=null;}paused=over=announcing=false;readyToFight=false;setBlock("you",false);mode="pvc";invitedMember=null;renderFighterCarousel();show("fighters");}
 function showFinalStats(win,record,king){document.getElementById("winFlash").classList.remove("show");document.getElementById("endKo").textContent=king?"FUD KING":"K.O.";document.getElementById("endMsg").textContent=king?"YOU ARE THE FUD KING":(win?"YOU WIN THE PIT":(mode==="arcade"?"ARCADE OVER":"MARGIN CALLED"));const gainsBtn=document.getElementById("endGold"),titleBtn=document.getElementById("endTitle");if(mode==="pvc"){document.getElementById("endSub").textContent="CONGRATULATIONS";if(gainsBtn){gainsBtn.style.display="";gainsBtn.textContent="EXHIBITION";gainsBtn.onclick=backToExhibitionFighters;}if(titleBtn)titleBtn.textContent="MAIN";}else{document.getElementById("endSub").textContent="$"+matchScore+" gains  •  "+profileCrowns(activePlayer())+" CROWNS  •  +"+matchXp+" XP  •  "+record+" vs L"+effectiveSkill();if(gainsBtn){gainsBtn.style.display="";gainsBtn.textContent="GAINS & STATS";gainsBtn.onclick=openHighScores;}if(titleBtn)titleBtn.textContent="TITLE SCREEN";}document.getElementById("endOv").classList.add("show");}
