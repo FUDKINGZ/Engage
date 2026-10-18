@@ -257,15 +257,15 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #cpu{right:6%;z-index:4}
 #cpu .fighter-img{transform:scaleX(-1)}
 .fighter.hit{filter:none}
-#you.punchL{transform:translateX(12%) rotate(-5deg)}
-#you.punchR{transform:translateX(16%) rotate(3deg)}
-#you.kickL{transform:translateX(11%) rotate(7deg)}
-#you.kickR{transform:translateX(14%) translateY(-4%) rotate(-8deg)}
+#you.punchL{transform:translateX(14%) rotate(-5deg)}
+#you.punchR{transform:translateX(18%) rotate(3deg)}
+#you.kickL{transform:translateX(13%) rotate(7deg)}
+#you.kickR{transform:translateX(16%) translateY(-4%) rotate(-8deg)}
 #you.throw{transform:translateX(8%) rotate(-8deg)}
-#cpu.punchL{transform:translateX(-12%) rotate(5deg)}
-#cpu.punchR{transform:translateX(-16%) rotate(-3deg)}
-#cpu.kickL{transform:translateX(-11%) rotate(-7deg)}
-#cpu.kickR{transform:translateX(-14%) translateY(-4%) rotate(8deg)}
+#cpu.punchL{transform:translateX(-14%) rotate(5deg)}
+#cpu.punchR{transform:translateX(-18%) rotate(-3deg)}
+#cpu.kickL{transform:translateX(-13%) rotate(-7deg)}
+#cpu.kickR{transform:translateX(-16%) translateY(-4%) rotate(8deg)}
 #cpu.throw{transform:translateX(-8%) rotate(8deg)}
 .toss,.cash{position:absolute;object-fit:contain;object-position:center;pointer-events:none;z-index:8;filter:drop-shadow(0 8px 12px #000);image-rendering:auto;opacity:0}
 .toss.loaded,.cash.loaded{opacity:1}
@@ -575,7 +575,7 @@ input[type=file].hidden-file{display:none}
    </div>
    <div id="fightGap"><img id="fightBanner" src="./fight_banner.png" alt=""></div>
   </section>
-<div class="fine-print"><span>BUILD:10.17~2123</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.18~0327</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 </div>
 <script>
 const ROOT="./",ARENA_DIR=ROOT+"arenas/",FIGHTER_DIR=ROOT+"fighters/",TITLECARD_DIR=ROOT+"titlecards/",OBJECT_DIR=ROOT+"objects/",AUDIO=ROOT+"audio/";
@@ -1008,7 +1008,7 @@ function resetWalk(){
 }
 let boxCache=null,boxAt=0;
 // Minimal movement only: % positions, one gap stop matched to visible sprite mass (~42% max-width)
-const BODY_STOP = 59;
+const BODY_STOP = 46; // lower = closer allowed; tuned so visible masses can touch
 function meetLimit(){return 100-BODY_STOP;}
 function resolveOverlap(){
   const lim=meetLimit();
@@ -1079,7 +1079,23 @@ function bodyBox(who){
   return{left:r.left,right:r.right,top:r.top+r.height*0.18,bottom:r.bottom-r.height*0.05,mid:r.left+r.width/2};
 }
 function inMeleeRange(){
-  return(youPos+cpuPos)>=(meetLimit()-8);
+  const youEl = document.getElementById("you");
+  const cpuEl = document.getElementById("cpu");
+  if(!youEl || !cpuEl) return (youPos + cpuPos) >= (meetLimit() - 4);
+  const you = youEl.getBoundingClientRect();
+  const cpu = cpuEl.getBoundingClientRect();
+  // Inset ~22% on each side so we ignore transparent padding and measure near the visible mass
+  const youInset = you.width * 0.22;
+  const cpuInset = cpu.width * 0.22;
+  const youLeft = you.left + youInset;
+  const youRight = you.right - youInset;
+  const cpuLeft = cpu.left + cpuInset;
+  const cpuRight = cpu.right - cpuInset;
+  const gap = youRight < cpuLeft ? cpuLeft - youRight
+            : (cpuRight < youLeft ? youLeft - cpuRight : 0);
+  // Tight threshold: only register when the approximated visible masses are nearly touching
+  // (attack translates still help the limbs reach)
+  return gap <= 12;
 }
 function pushingNow(){
   return youBlocking&&(moveHold.right||keysDown.ArrowRight||keysDown.KeyL||keysDown.KeyR);
