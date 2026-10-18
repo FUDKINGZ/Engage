@@ -1699,7 +1699,7 @@ function announceRound(){
   readyTimer=setInterval(function(){
     announceIdx+=1;
     if(announceIdx===1){playPose("you","idle");playPose("cpu","idle");}
-    if(announceIdx>=calls.length){clearReadyTimer();fightLive();return;}
+    if(announceIdx>=calls.length){clearReadyTimer();sfxRoundBell();fightLive();return;}
     setAnnounceCall(calls[announceIdx]);
   },ANNOUNCE_MS);
 }
