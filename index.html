@@ -575,7 +575,7 @@ input[type=file].hidden-file{display:none}
    </div>
    <div id="fightGap"><img id="fightBanner" src="./fight_banner.png" alt=""></div>
   </section>
-<div class="fine-print"><span>BUILD:10.18~0327</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.18~0633</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 </div>
 <script>
 const ROOT="./",ARENA_DIR=ROOT+"arenas/",FIGHTER_DIR=ROOT+"fighters/",TITLECARD_DIR=ROOT+"titlecards/",OBJECT_DIR=ROOT+"objects/",AUDIO=ROOT+"audio/";
@@ -744,7 +744,7 @@ function arcadeArenaIndex(){
     "Platinum Meow":"Anime City",
     "Dark Fud 420":"Wizards Castle"
   };
-  const who=FIGHTERS[(mode==="arcade")?selectedOpponent:selectedFighter];
+  const who=FIGHTERS[(mode==="arcade"||mode==="pvc")?selectedOpponent:selectedFighter];
   const want=who&&homes[who.name];
   const i=want?ARENAS.findIndex(function(a){return a.name===want;}):-1;
   return i>=0?i:0;
@@ -766,7 +766,21 @@ if(mode==="arcade"){
   if(skillLabel)skillLabel.style.display=showCpu?"":"none";
   if(roundBox)roundBox.style.display=readyToFight?"none":"";
 }const matchVs=document.getElementById("matchVs"),matchHint=document.getElementById("matchHint");const matchEl=document.getElementById("matchup");if(mode==="arcade"||readyToFight){if(matchEl)matchEl.classList.add("arena-on");if(matchVs)matchVs.style.display="";if(matchHint)matchHint.textContent="MATCH UP";arenaLine.textContent=arena.name;setTokWords("matchNextUp","matchNextDn","ENTER ARENA");paintMatchupBg(arena);preloadMatchPair();}else{if(matchEl)matchEl.classList.remove("arena-on");if(matchVs)matchVs.style.display="none";if(matchHint)matchHint.textContent="CHOOSE CPU LEVEL";arenaLine.textContent="";setTokWords("matchNextUp","matchNextDn","CHOOSE ARENA");paintMatchupBg(null);}renderSkillRow();}
-function goMatchup(){if(mode!=="arcade"&&fighterLocked(selectedOpponent))return;if(mode==="pvc"||mode==="arcade")cpuFighter=selectedOpponent;if(mode==="arcade"){selectedArena=arcadeArenaIndex();readyToFight=true;renderMatchup();show("matchup");}else{readyToFight=false;renderArenaCarousel();show("arenas");}}
+function goMatchup(){
+  if(mode!=="arcade"&&fighterLocked(selectedOpponent))return;
+  if(mode==="pvc"||mode==="arcade")cpuFighter=selectedOpponent;
+  if(mode==="arcade"){
+    selectedArena=arcadeArenaIndex();
+    readyToFight=true;
+    renderMatchup();
+    show("matchup");
+  }else{
+    if(mode==="pvc") selectedArena=arcadeArenaIndex();
+    readyToFight=false;
+    renderArenaCarousel();
+    show("arenas");
+  }
+}
 function fromMatchupNext(){if(mode==="arcade"||readyToFight){startFight(true);return;}readyToFight=true;renderMatchup();}
 function backFromMatchup(){
   if(mode==="arcade"){readyToFight=false;show("fighters");return;}
@@ -998,13 +1012,63 @@ function applyCpuPos(){
   const el=document.getElementById("cpu");
   if(el) el.style.right=Math.max(CPU_MIN,Math.min(CPU_MAX,cpuPos))+"%";
 }
-function resetWalk(){
-  youPos=YOU_HOME;
-  cpuPos=CPU_HOME;
-  tiltReady=false;
-  boxCache=null;
-  applyYouPos();
-  applyCpuPos();
+function walkBackToHome(done){
+  const targetYou = YOU_HOME, targetCpu = CPU_HOME;
+  let last = performance.now();
+  function step(now){
+    const dt = Math.min(32, now - last);
+    last = now;
+    const scale = dt / 28;
+    // match normal walk speed (the 0.8 * scale * (speed/8) used in the fight)
+    const stepSize = 0.8 * scale * (3 / 8);
+    let arrived = true;
+    if(Math.abs(youPos - targetYou) > 0.12){
+      youPos += Math.sign(targetYou - youPos) * Math.min(stepSize, Math.abs(targetYou - youPos));
+      arrived = false;
+    }
+    if(Math.abs(cpuPos - targetCpu) > 0.12){
+      cpuPos += Math.sign(targetCpu - cpuPos) * Math.min(stepSize, Math.abs(targetCpu - cpuPos));
+      arrived = false;
+    }
+    applyYouPos();
+    applyCpuPos();
+    if(arrived){
+      youPos = targetYou;
+      cpuPos = targetCpu;
+      applyYouPos();
+      applyCpuPos();
+      if(done) done();
+    }else{
+      requestAnimationFrame(step);
+    }
+  }
+  requestAnimationFrame(step);
+}
+function knockLoserHome(who, done){
+  const isYou = who === "you";
+  const target = isYou ? YOU_HOME : CPU_HOME;
+  let last = performance.now();
+  function step(now){
+    const dt = Math.min(32, now - last);
+    last = now;
+    const scale = dt / 28;
+    // a bit stronger than normal walk so it reads as a knockback
+    const stepSize = 1.6 * scale;
+    const pos = isYou ? youPos : cpuPos;
+    if(Math.abs(pos - target) > 0.2){
+      if(isYou) youPos += Math.sign(target - youPos) * Math.min(stepSize, Math.abs(target - youPos));
+      else cpuPos += Math.sign(target - cpuPos) * Math.min(stepSize, Math.abs(target - cpuPos));
+      applyYouPos();
+      applyCpuPos();
+      requestAnimationFrame(step);
+    }else{
+      if(isYou) youPos = target; else cpuPos = target;
+      applyYouPos();
+      applyCpuPos();
+      if(done) done();
+    }
+  }
+  requestAnimationFrame(step);
 }
 let boxCache=null,boxAt=0;
 // Minimal movement only: % positions, one gap stop matched to visible sprite mass (~42% max-width)
@@ -1577,7 +1641,16 @@ function afterYourFighter(){
   renderOpponentScreen();
   show("opponents");
 }
-function goArenas(){if(mode==="pvc")cpuFighter=selectedOpponent;readyToFight=false;renderArenaCarousel();show("arenas");}
+function goArenas(){
+  if(mode==="pvc"){
+    cpuFighter=selectedOpponent;
+    // open on the opponent's home arena (player can still carousel)
+    selectedArena=arcadeArenaIndex();
+  }
+  readyToFight=false;
+  renderArenaCarousel();
+  show("arenas");
+}
 function afterArena(){if(arenaLocked(selectedArena))return;readyToFight=false;if(mode==="pvc")cpuFighter=selectedOpponent;preloadMatchPair();renderMatchup();show("matchup");}
 function backFromArenas(){readyToFight=false;if(mode==="pvc"){renderOpponentScreen();show("opponents");return;}if(mode==="one"){show("fighters");return;}show("fighters");}
 function clearReadyTimer(){if(readyTimer){clearInterval(readyTimer);readyTimer=null;}}
@@ -1591,7 +1664,7 @@ function setAnnounceCall(word){
     playBgm();
   }
 }
-function resetRoundState(){hp.you=MAX;hp.cpu=MAX;paused=over=false;announcing=false;youBlocking=cpuBlocking=false;suddenDeath=false;roundTimeLeft=ROUND_SECS;resetCombo();updatePowerMeters();resetWalk();document.getElementById("pauseOv").classList.remove("show");document.getElementById("roundOv").classList.remove("show");document.getElementById("winFlash").classList.remove("show");document.getElementById("endOv").classList.remove("show");updateMeters();updateRoundHud();}
+function resetRoundState(){hp.you=MAX;hp.cpu=MAX;paused=over=false;announcing=false;youBlocking=cpuBlocking=false;suddenDeath=false;roundTimeLeft=ROUND_SECS;resetCombo();updatePowerMeters();document.getElementById("pauseOv").classList.remove("show");document.getElementById("roundOv").classList.remove("show");document.getElementById("winFlash").classList.remove("show");document.getElementById("endOv").classList.remove("show");updateMeters();updateRoundHud();}
 function fightLive(){
   announcing=false;paused=false;over=false;
   document.getElementById("roundOv").classList.remove("show");
@@ -1782,55 +1855,84 @@ function restartExhibition(){if(mode!=="pvc")return;paused=false;document.getEle
 function togglePause(){if(over||announcing)return;paused=!paused;const restart=document.getElementById("pauseRestart");if(restart)restart.style.display=(paused&&mode==="pvc")?"":"none";const saveBtn=document.getElementById("pauseSave");if(saveBtn){saveBtn.style.display=(paused&&mode==="arcade")?"":"none";saveBtn.disabled=!!pauseSaveLocked;saveBtn.textContent=pauseSaveLocked?"SAVED":"SAVE";}document.getElementById("pauseOv").classList.toggle("show",paused);if(paused){setBlock("you",false);pauseBgm();}else{playBgm();scheduleAI();tiltReady=false;}}
 function backToExhibitionFighters(){clearTimeout(aiTimer);clearReadyTimer();clearRoundTimer();stopWalkLoop();if(winFlashTimer){clearTimeout(winFlashTimer);winFlashTimer=null;}paused=over=announcing=false;readyToFight=false;setBlock("you",false);mode="pvc";invitedMember=null;renderFighterCarousel();show("fighters");}
 function showFinalStats(win,record,king){document.getElementById("winFlash").classList.remove("show");document.getElementById("endKo").textContent=king?"FUD KING":"K.O.";document.getElementById("endMsg").textContent=king?"YOU ARE THE FUD KING":(win?"YOU WIN THE PIT":(mode==="arcade"?"ARCADE OVER":"MARGIN CALLED"));const gainsBtn=document.getElementById("endGold"),titleBtn=document.getElementById("endTitle");if(mode==="pvc"){document.getElementById("endSub").textContent="CONGRATULATIONS";if(gainsBtn){gainsBtn.style.display="";gainsBtn.textContent="EXHIBITION";gainsBtn.onclick=backToExhibitionFighters;}if(titleBtn)titleBtn.textContent="MAIN";}else{document.getElementById("endSub").textContent="$"+matchScore+" gains  •  "+profileCrowns(activePlayer())+" CROWNS  •  +"+matchXp+" XP  •  "+record+" vs L"+effectiveSkill();if(gainsBtn){gainsBtn.style.display="";gainsBtn.textContent="GAINS & STATS";gainsBtn.onclick=openHighScores;}if(titleBtn)titleBtn.textContent="TITLE SCREEN";}document.getElementById("endOv").classList.add("show");}
-function finish(winner){if(liquidateOn)return;over=true;announcing=false;clearTimeout(aiTimer);clearTimeout(poseTimer.you);clearTimeout(poseTimer.cpu);clearRoundTimer();setBlock("you",false);setBlock("cpu",false);sfxRoundBell();const youWonRound=winner==="you";const isDarkFudWinner=FIGHTERS[winner==="you"?selectedFighter:cpuFighter].name==="Dark Fud 420";
-if(!matchOver()){resetWalk();}
+function finish(winner){if(liquidateOn)return;over=true;announcing=false;clearTimeout(aiTimer);clearTimeout(poseTimer.you);clearTimeout(poseTimer.cpu);clearRoundTimer();setBlock("you",false);setBlock("cpu",false);sfxRoundBell();const youWonRound=winner==="you";
 const willEndMatch=(youWonRound&&roundWins.you+1>=winsNeeded())||(!youWonRound&&roundWins.cpu+1>=winsNeeded())||currentRound>=maxRounds();
-if(!willEndMatch){
-  playPose(winner,"taunt");
-}
-matchScore+=dollarsLeft("you");matchXp+=10+(youWonRound?25:0)+effectiveSkill();if(youWonRound)roundWins.you+=1;else roundWins.cpu+=1;updateRoundHud();if(matchOver()){const fallWho=youWonRound?"cpu":"you";playPose(fallWho,"loser");sfxP2UghFor(fallWho);}else playPose(youWonRound?"cpu":"you","knee");if(!matchOver()){
-  if(currentRound===1){
-    pauseBgm();
-    if(sfxRound1SusEl&&!mutedFx){
-      try{sfxRound1SusEl.currentTime=0;}catch(e){}
-      sfxRound1SusEl.loop=true;
-      sfxRound1SusEl.play().catch(function(){});
+  matchScore += dollarsLeft("you");
+  matchXp += 10 + (youWonRound ? 25 : 0) + effectiveSkill();
+  if(youWonRound) roundWins.you += 1; else roundWins.cpu += 1;
+  updateRoundHud();
+
+  if(!willEndMatch){
+    // midround path (unchanged)
+    sfxRoundBell();
+    playPose("you","idle");
+    playPose("cpu","idle");
+    setTimeout(function(){
+      playPose("you","walk");
+      playPose("cpu","walk");
+      walkBackToHome(function(){
+        playPose(winner, "taunt");
+        playPose(youWonRound ? "cpu" : "you", "knee");
+        if(currentRound === 1){
+          pauseBgm();
+          if(sfxRound1SusEl && !mutedFx){
+            try{ sfxRound1SusEl.currentTime = 0; }catch(e){}
+            sfxRound1SusEl.loop = true;
+            sfxRound1SusEl.play().catch(function(){});
+          }
+        }
+        holdRoundWinner(youWonRound);
+      });
+    }, 400);
+    return;
+  }
+  // ---- match-ending KO path ----
+  const win = roundWins.you > roundWins.cpu;
+  if(win) matchXp += 50;
+  const record = roundWins.you + "-" + roundWins.cpu;
+  lastArcadeRecord = record;
+  const beaten = FIGHTERS[cpuFighter].name;
+  saveHighScore({id:String(Date.now()),name:playerLabel(),fighter:FIGHTERS[selectedFighter].name,score:matchScore,xp:matchXp,wins:roundWins.you,record:record+"  L"+effectiveSkill(),when:Date.now()},win);
+  lastBeatenName = beaten;
+  if(mode==="arcade"){
+    if(win){
+      arcadeBeaten[cpuFighter]=true;
+      if(arcadeIndex<arcadeQueue.length&&arcadeQueue[arcadeIndex]===cpuFighter)arcadeIndex+=1;
+      if(cpuFighter===FINAL_INDEX||arcadeIndex>=arcadeQueue.length){
+        arcadeKing=true;
+        awardCrown();
+        bumpArcadeSkill();
+      }
+      pauseSaveLocked=false;
+      const saveBtn=document.getElementById("pauseSave");
+      if(saveBtn){saveBtn.disabled=false;saveBtn.textContent="SAVE";saveBtn.onclick=saveOrResumeArcade;}
+      if(typeof syncLiquidSave==="function")syncLiquidSave();
+    }else{
+      arcadeKing=false;
     }
   }
-  holdRoundWinner(youWonRound);
-  return;
-}const win=roundWins.you>roundWins.cpu;if(win)matchXp+=50;const record=roundWins.you+"-"+roundWins.cpu;lastArcadeRecord=record;const beaten=FIGHTERS[cpuFighter].name;saveHighScore({id:String(Date.now()),name:playerLabel(),fighter:FIGHTERS[selectedFighter].name,score:matchScore,xp:matchXp,wins:roundWins.you,record:record+"  L"+effectiveSkill(),when:Date.now()},win);
-lastBeatenName=beaten;
-if(mode==="arcade"){
-  if(win){
-    arcadeBeaten[cpuFighter]=true;
-    if(arcadeIndex<arcadeQueue.length&&arcadeQueue[arcadeIndex]===cpuFighter)arcadeIndex+=1;
-    if(cpuFighter===FINAL_INDEX||arcadeIndex>=arcadeQueue.length){
-      arcadeKing=true;
-      awardCrown();
-      bumpArcadeSkill();
+  // clear attack classes so winner is not stuck in the final hit pose
+  const youEl=document.getElementById("you"), cpuEl=document.getElementById("cpu");
+  if(youEl) youEl.classList.remove("punchL","punchR","kickL","kickR","throw","hit");
+  if(cpuEl) cpuEl.classList.remove("punchL","punchR","kickL","kickR","throw","hit");
+  clearTimeout(poseTimer.you);
+  clearTimeout(poseTimer.cpu);
+  const youImg=document.getElementById("youFile"), cpuImg=document.getElementById("cpuFile");
+  if(youImg) youImg.dataset.pose="";
+  if(cpuImg) cpuImg.dataset.pose="";
+  const fallWho = youWonRound ? "cpu" : "you";
+  // knock loser home, then start Liquidation (winner is free to input the combo)
+  knockLoserHome(fallWho, function(){
+    playPose(fallWho, "loser");
+    sfxP2UghFor(fallWho);
+    playPose(winner, "idle");
+    if(win){
+      startLiquidate(function(){ showPostFight(beaten, record, true); }, "you");
+    }else{
+      startLiquidate(function(){ showPostFight(beaten, record, false); }, "cpu");
     }
-    pauseSaveLocked=false;
-    const saveBtn=document.getElementById("pauseSave");
-    if(saveBtn){saveBtn.disabled=false;saveBtn.textContent="SAVE";saveBtn.onclick=saveOrResumeArcade;}
-    if(typeof syncLiquidSave==="function")syncLiquidSave();
-  }else{
-    arcadeKing=false;
-  }
+  });
 }
-const youEl=document.getElementById("you"),cpuEl=document.getElementById("cpu");
-if(youEl)youEl.classList.remove("punchL","punchR","kickL","kickR","throw","hit");
-if(cpuEl)cpuEl.classList.remove("punchL","punchR","kickL","kickR","throw","hit");
-clearTimeout(poseTimer.you);clearTimeout(poseTimer.cpu);
-const youImg=document.getElementById("youFile"),cpuImg=document.getElementById("cpuFile");
-if(youImg)youImg.dataset.pose="";
-if(cpuImg)cpuImg.dataset.pose="";
-playPose(winner,"idle");
-playPose(winner==="you"?"cpu":"you","loser");
-if(win){startLiquidate(function(){showPostFight(beaten,record,true);},"you");return;}
-startLiquidate(function(){showPostFight(beaten,record,false);},"cpu");
-}
-let liquidateCallTimer=null;
 function cueLiquidateThem(){if(liquidateCallTimer)clearTimeout(liquidateCallTimer);liquidateCallTimer=setTimeout(function(){liquidateCallTimer=null;if(mutedFx||!sfxLiquidateThemEl)return;try{sfxLiquidateThemEl.currentTime=0;}catch(e){}sfxLiquidateThemEl.play().catch(function(){});},1000);}
 function clearLiquidate(){liquidateOn=false;liquidateSeq="";if(liquidateTimer){clearInterval(liquidateTimer);liquidateTimer=null;}if(liquidateCallTimer){clearTimeout(liquidateCallTimer);liquidateCallTimer=null;}if(sfxLiquidateEl){sfxLiquidateEl.pause();try{sfxLiquidateEl.currentTime=0;}catch(e){}}if(sfxLiquidateThemEl){sfxLiquidateThemEl.pause();try{sfxLiquidateThemEl.currentTime=0;}catch(e){}}if(sfxRound1SusEl){sfxRound1SusEl.pause();sfxRound1SusEl.loop=false;try{sfxRound1SusEl.currentTime=0;}catch(e){}}}
 function noteLiquidate(step){if(!liquidateOn)return;liquidateSeq=(liquidateSeq+step).slice(-3);if(liquidateSeq==="LLJ")finishLiquidate();}
@@ -1874,7 +1976,6 @@ function finishLiquidate(by){
   liquidateSeq="";
   if(liquidateTimer){clearInterval(liquidateTimer);liquidateTimer=null;}
   bgm.pause();
-  resetWalk();
   const isDarkFud=FIGHTERS[by==="you"?selectedFighter:cpuFighter].name==="Dark Fud 420";
   playPose(by==="you"?"cpu":"you","loser");
   const stage=document.getElementById("stage");
