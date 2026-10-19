@@ -511,7 +511,7 @@ input[type=file].hidden-file{display:none}
 <p class="post-sub">3 Davinstigator<br>Arena - Airport Terminal<br>Song - Through The Noise.mp3<br>Ammo - PRISON SHOE<br>Bio - Boarding-line loudmouth. He misses flights on purpose if the argument is better. The terminal is his ring, and every delay is an invitation.</p>
 <p class="post-sub">4 Troll Bee<br>Arena - Gold Vault<br>Song - Fud Kingz [Arena 5150].mp3<br>Ammo - FUD RADIO<br>Bio - Small, loud, and always in the bullion. He stings the count, buzzes the cameras, and leaves the vault humming. Do not swat.</p>
 <p class="post-sub">5 Jose Brownstein<br>Arena - Joses Work Shop<br>Song - Open Mic Overlords.mp3<br>Ammo - TOOL BOX<br>Bio - Shop boss. He can rebuild a motor before lunch and a jaw before the paint dries. The workbench is clean. The visitors are not.</p>
-<p class="post-sub">6 Captn Jack Hashtag<br>Arena - Deck Of Ship<br>Song - Fucks With Fud.mp3<br>Ammo - COCKTAIL<br>Bio - Deckhand who captains the comments and nothing else. He steers by rumor, braces on the rail, and throws whatever is not tied down.</p>
+<p class="post-sub">6 Captn Jack Hashtag<br>Arena - Deck Of Ship<br>Song - Tip Of The Fedora.mp3<br>Ammo - COCKTAIL<br>Bio - Deckhand who captains the comments and nothing else. He steers by rumor, braces on the rail, and throws whatever is not tied down.</p>
 <p class="post-sub">7 OFFICER SANCHEZ<br>Arena - Crime Scene<br>Song - X-Austive Journey.mp3<br>Ammo - TOMBSTONE<br>Bio - Tape, chalk, and a bad habit of arriving first. He does not solve the scene. He becomes it, then asks who else wants a look.</p>
 <p class="post-sub">8 Dev Root X<br>Arena - WFUD Satellite<br>Song - Open Mic Fights.mp3<br>Ammo - FUSION REACTOR<br>Bio - Uplink tech with a long reach. He debugs people from orbit, then drops in when the signal is not enough.</p>
 <p class="post-sub">9 WHITE CASSEL<br>Arena - Back Yard Party<br>Song - Boom Boom Pow!.mp3<br>Ammo - HOT DOG<br>Bio - Yard diplomat until the speaker cuts. He keeps the peace with a cup in his hand, and ends it when the cup is empty.</p>
@@ -576,7 +576,7 @@ input[type=file].hidden-file{display:none}
    </div>
    <div id="fightGap"><img id="fightBanner" src="./fight_banner.png" alt=""></div>
   </section>
-<div class="fine-print"><span>BUILD:10.18~1643</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.18~2011</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 </div>
 <script>
 const ROOT="./",ARENA_DIR=ROOT+"arenas/",FIGHTER_DIR=ROOT+"fighters/",TITLECARD_DIR=ROOT+"titlecards/",OBJECT_DIR=ROOT+"objects/",AUDIO=ROOT+"audio/";
@@ -622,7 +622,7 @@ const ARENAS=[
 {name:"WFUD Studios Rooftop",file:ARENA_DIR+"WFUD Studios Rooftop.jpg",pos:"center top",color:"#101820",music:AUDIO+"arena/WFUD New World Order.mp3"},
 {name:"Savage Reality Alley",file:ARENA_DIR+"Savage Reality Alley.jpg",pos:"center",color:"#0e0e12",music:AUDIO+"arena/Savage Reality.mp3"},
 {name:"Street Fight",file:ARENA_DIR+"Street Fight.jpg",pos:"center",color:"#16324a",music:AUDIO+"arena/Summon The FUD.mp3"},
-{name:"Deck Of Ship",file:ARENA_DIR+"Deck Of Ship.jpg",pos:"center",color:"#0a1a28",music:AUDIO+"arena/Fucks With Fud.mp3"},
+{name:"Deck Of Ship",file:ARENA_DIR+"Deck Of Ship.jpg",pos:"center",color:"#0a1a28",music:AUDIO+"arena/Tip Of The Fedora.mp3"},
 {name:"Crime Scene",file:ARENA_DIR+"Crime Scene.jpg",pos:"center",color:"#1a0a0a",music:AUDIO+"arena/X-Austive Journey.mp3"},
 {name:"Back Yard Party",file:ARENA_DIR+"Back Yard Party.jpg",pos:"center",color:"#1a2a10",music:AUDIO+"arena/Boom Boom Pow!.mp3"},
 {name:"WFUD Press Room",file:ARENA_DIR+"WFUD Press Room.jpg",pos:"center",color:"#121820",music:AUDIO+"arena/Stronger Better Louder.mp3"},
@@ -1397,7 +1397,7 @@ function pauseBgm(){bgm.pause();}
 function refreshMuteButtons(){const m=document.getElementById("muteMusic");m.classList.toggle("off",mutedMusic||musicStage===1);m.textContent=musicStage===0?"MUSIC":(musicStage===1?"MUSIC 25%":"MUSIC OFF");document.getElementById("muteFx").classList.toggle("off",mutedFx);}
 function toggleMuteMusic(){musicStage=(musicStage+1)%3;mutedMusic=musicStage===2;applyMusicLevel();if(mutedMusic)bgm.pause();else if(lastScreen!=="intro")playBgm();refreshMuteButtons();}
 function toggleMuteFx(){mutedFx=!mutedFx;introSfx.muted=mutedFx;if(mutedFx)stopIntroBed();else if(!introDone)startIntroBed();refreshMuteButtons();}
-const PIT_TRACKS=[{name:"MAIN TITLE",file:TITLE_TRACK},{name:"TRAILER PARK",file:AUDIO+"arena/Victims Of Propoganda.mp3"},{name:"DUMPSTER FIRE",file:AUDIO+"arena/Olay! Olay! Olay! [Skrrt!].mp3"},{name:"THROUGH THE NOISE",file:AUDIO+"arena/Through The Noise.mp3"},{name:"I GOT THE SMOKE",file:AUDIO+"arena/I got the smoke.mp3"},{name:"WFUD ROOFTOP",file:AUDIO+"arena/WFUD New World Order.mp3"},{name:"SAVAGE REALITY",file:AUDIO+"arena/Savage Reality.mp3"},{name:"STREET FIGHT",file:AUDIO+"arena/Summon The FUD.mp3"},{name:"FUCKS WITH FUD",file:AUDIO+"arena/Fucks With Fud.mp3"},{name:"BATTLEFIELD BOOTS",file:AUDIO+"arena/Battlefield Boots.mp3"},
+const PIT_TRACKS=[{name:"MAIN TITLE",file:TITLE_TRACK},{name:"TRAILER PARK",file:AUDIO+"arena/Victims Of Propoganda.mp3"},{name:"DUMPSTER FIRE",file:AUDIO+"arena/Olay! Olay! Olay! [Skrrt!].mp3"},{name:"THROUGH THE NOISE",file:AUDIO+"arena/Through The Noise.mp3"},{name:"I GOT THE SMOKE",file:AUDIO+"arena/I got the smoke.mp3"},{name:"WFUD ROOFTOP",file:AUDIO+"arena/WFUD New World Order.mp3"},{name:"SAVAGE REALITY",file:AUDIO+"arena/Savage Reality.mp3"},{name:"STREET FIGHT",file:AUDIO+"arena/Summon The FUD.mp3"},{name:"FUCKS WITH FUD",file:AUDIO+"arena/Tip Of The Fedora.mp3"},{name:"BATTLEFIELD BOOTS",file:AUDIO+"arena/Battlefield Boots.mp3"},
 {name:"X-AUSTIVE JOURNEY",file:AUDIO+"arena/X-Austive Journey.mp3"},{name:"BOOM BOOM POW!",file:AUDIO+"arena/Boom Boom Pow!.mp3"},{name:"CRAZY DOTS",file:AUDIO+"arena/Crazy Dots.mp3"},{name:"RIFFS OF CHAOS",file:AUDIO+"arena/Riffs Of Chaos.mp3"},{name:"GOLD VAULT",file:AUDIO+"arena/Fud Kingz [Arena 5150].mp3"},{name:"EV VAN WAREHOUSE",file:AUDIO+"arena/I got the smoke.mp3"},
 {name:"FIRST CLASS TO IBIZA",file:AUDIO+"arena/First Class To Ibiza.mp3"},
 {name:"FIRE IT UP [SMASH FOLLOW]",file:AUDIO+"arena/Fire It Up [Smash Follow].mp3"}];
