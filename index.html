@@ -818,6 +818,24 @@ function showPostFight(beatenName,record,youWon){
     :((theirs.victory&&theirs.victory.length)?theirs.victory:theirs.select);
   bindSrcList(document.getElementById("postP1"),p1Art);
   bindSrcList(document.getElementById("postP2"),p2Art);
+  const arena=ARENAS[selectedArena];
+  const p1Card=document.querySelector("#postfight .vs-card.p1");
+  const p2Card=document.querySelector("#postfight .vs-card.p2");
+  if(arena&&arena.file){
+    const bg="url('"+arena.file+"')";
+    if(p1Card){
+      p1Card.style.backgroundImage=bg;
+      p1Card.style.backgroundSize="cover";
+      p1Card.style.backgroundPosition="center center";
+      p1Card.style.backgroundRepeat="no-repeat";
+    }
+    if(p2Card){
+      p2Card.style.backgroundImage=bg;
+      p2Card.style.backgroundSize="cover";
+      p2Card.style.backgroundPosition="center center";
+      p2Card.style.backgroundRepeat="no-repeat";
+    }
+  }
   const btnContinue=document.getElementById("postContinue");
   const btnAgain=document.getElementById("postPlayAgain");
   const btnExit=document.getElementById("postExitTitle");
