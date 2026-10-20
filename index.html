@@ -105,6 +105,31 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 #stockcred .mint,#guide .mint,#stockcred .grok-credit,#guide .grok-credit{text-align:center}
 #matchup{background-size:cover!important;background-repeat:no-repeat;background-position:center center!important;background-color:#071018}
 #matchup::before{content:none}
+#matchup .tour-map{
+  position:relative;
+  width:100%;
+  max-width:494px;
+  aspect-ratio:494/334;
+  margin:0 auto;
+  background:url(./images/tour_map.jpg) center/cover no-repeat;
+  border-radius:12px;
+  overflow:hidden;
+  display:none;
+}
+#matchup.arcade-map .tour-map{display:block}
+#matchup.arcade-map .vs-row,
+#matchup.arcade-map .match-arena-name,
+#matchup.arcade-map .skill-box{display:none!important}
+.tour-pin{
+  position:absolute;
+  width:70px;
+  height:77px;
+  transform:translate(-50%,-100%);
+  object-fit:contain;
+  pointer-events:none;
+  filter:drop-shadow(0 4px 6px rgba(0,0,0,.6));
+}
+.tour-pin.next{filter:drop-shadow(0 0 10px #ffd54f) drop-shadow(0 4px 6px rgba(0,0,0,.6))}
 #arenas .carousel-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center}
 #arenas .carousel{position:relative;width:100%;height:auto;flex:none;aspect-ratio:16/9;max-height:42vh;min-height:0;margin:0}
 #arenas .slot-wrap.center{width:72%;height:auto;aspect-ratio:16/9}
@@ -207,7 +232,7 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .ammo-label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:#ffd54f;text-shadow:0 0 8px #ffb300;line-height:1;margin:0;padding:0 0 2px}
 .ammo-row{display:flex;align-items:flex-start;justify-content:center;gap:16px;width:100%;height:auto;min-height:0;pointer-events:none;overflow:visible;margin:0}
 .ammo-row img{width:44px;height:44px;object-fit:contain;background:#1a2233;border:1px solid #334;border-radius:8px}
-.ammo-row img.si.ammo-row img.side{opacity:.35;background:transparent;border:0;border-radius:0}de{opacity:.35}
+.ammo-row img.side{opacity:.35;background:transparent;border:0;border-radius:0}
 .ammo-row img.center{width:62px;height:62px;border-color:#ffd54f;opacity:1}
 label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:#ffd54f;text-shadow:0 0 8px #ffb300;line-height:1;margin:0 0 -6px;padding:0}
 #pauseBtn,.tiny-mute{position:relative;background:#222c40;color:#fff;border:1px solid #445;border-radius:8px;padding:4px 8px;font-size:9px;font-weight:800;margin:0;line-height:1.1}
@@ -490,7 +515,33 @@ input[type=file].hidden-file{display:none}
 <section id="invite" class="screen menu fixed-390"><div class="brand"><img class="brand-logo" src="./title header.jpg" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>LIVE 1 ON 1</p></div><div class="invite-body"><div class="room-card"><div class="room-code" id="roomCode">------</div><div class="room-sub">FIGHT CODE</div><div class="invite-row"><button type="button" onclick="copyInvite()">COPY LINK</button><button type="button" onclick="shareInvite()">SHARE</button><button type="button" onclick="newRoom()">NEW</button></div></div><div class="join-card"><div class="invite-row" style="margin:0"><input id="inviteTarget" placeholder="@handle"/><button type="button" onclick="inviteTyped()">INVITE</button></div><div class="invite-row"><input id="joinCode" placeholder="Fight code" maxlength="6"/><button type="button" onclick="joinRoom()">JOIN</button></div></div><div class="member-list" id="memberList"></div><div class="sent-note" id="inviteNote"></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="show('title')" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="20">BACK</text></svg></button><button type="button" class="tok-btn gold" onclick="afterInvite()" aria-label="Next"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="22" font-weight="900" letter-spacing="3.2" stroke="#fff3bf" stroke-width=".5">NEXT</text></svg></button></div></section>
 <section id="fighters" class="screen menu fixed-390"><div class="brand"><h1>FINTWITS FUD KINGZ</h1><p id="fighterHint">CHOOSE FIGHTER</p></div><div class="carousel-wrap"><div class="carousel" id="fighterCarousel"></div><div class="nav-row"><button type="button" onclick="shiftFighter(-1)"><span class="arr">‹</span><span class="arr">‹</span><span class="arr">‹</span></button><button type="button" onclick="shiftFighter(1)"><span class="arr">›</span><span class="arr">›</span><span class="arr">›</span></button></div><div class="ammo-label">AMMO</div><div class="ammo-row" id="fighterAmmo"></div><div class="dots" id="fighterDots"></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="backFromFighters()" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="20">BACK</text></svg></button><button type="button" class="tok-btn gold" onclick="afterYourFighter()" aria-label="Next"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="22" font-weight="900" letter-spacing="3.2" stroke="#fff3bf" stroke-width=".5">NEXT</text></svg></button></div></section>
 <section id="opponents" class="screen menu fixed-390"><div class="brand"><h1>FINTWITS FUD KINGZ</h1><p>CHOOSE YOUR OPPONENT</p></div><div class="carousel-wrap"><div class="carousel" id="opponentCarousel"></div><div class="nav-row"><button type="button" onclick="shiftOpponent(-1)"><span class="arr">‹</span><span class="arr">‹</span><span class="arr">‹</span></button><button type="button" onclick="shiftOpponent(1)"><span class="arr">›</span><span class="arr">›</span><span class="arr">›</span></button></div><div class="ammo-label">AMMO</div><div class="ammo-row" id="opponentAmmo"></div><div class="dots" id="opponentDots"></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="show('fighters')" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="22" font-weight="900" letter-spacing="3.2">BACK</text></svg></button><button type="button" class="tok-btn gold" onclick="goMatchup()" aria-label="Next"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="22" font-weight="900" letter-spacing="3.2" stroke="#fff3bf" stroke-width=".5">NEXT</text></svg></button></div></section>
-<section id="matchup" class="screen menu fixed-390"><div class="brand"><h1>FINTWITS FUD KINGZ</h1><p id="matchHint">CHOOSE CPU LEVEL</p></div><div class="matchup-body"><div class="vs-row" id="matchVs"><b class="vs-name p1" id="matchP1Name">P1</b><b class="vs-name p2" id="matchP2Name">P2</b><div class="vs-card p1"><img id="matchP1" alt=""></div><div class="vs-mark">VS</div><div class="vs-card p2"><img id="matchP2" alt=""></div></div><div class="match-arena-name" id="matchArenaName"></div><div class="skill-box" id="matchSkillBox"><label>CPU LEVEL</label><div class="skill-row" id="skillRow"></div></div><div class="skill-box round-box" id="matchRoundBox"><label>ROUNDS</label><div class="round-pick" id="roundPick"></div></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="backFromMatchup()" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="20" font-weight="900" letter-spacing="2">BACK</text></svg></button><button type="button" class="tok-btn gold" id="matchNext" onclick="fromMatchupNext()" aria-label="Choose arena"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="22" font-weight="900" letter-spacing="3.2" stroke="#fff3bf" stroke-width=".5">NEXT</text></svg></button></div></section>
+<section id="matchup" class="screen menu fixed-390">
+  <div class="brand"><h1>FINTWITS FUD KINGZ</h1><p id="matchHint">CHOOSE CPU LEVEL</p></div>
+  <div class="matchup-body">
+    <div class="vs-row" id="matchVs">
+      <b class="vs-name p1" id="matchP1Name">P1</b>
+      <b class="vs-name p2" id="matchP2Name">P2</b>
+      <div class="vs-card p1"><img id="matchP1" alt=""></div>
+      <div class="vs-mark">VS</div>
+      <div class="vs-card p2"><img id="matchP2" alt=""></div>
+    </div>
+    <div class="tour-map" id="tourMap">
+      <img class="tour-pin" id="pinDavx" src="./images/davx_pin.png" alt="" style="left:90%;top:75%">
+      <img class="tour-pin" id="pinFd420" src="./images/fd420_pin.png" alt="" style="left:15%;top:35%">
+      <img class="tour-pin" id="pinHashtag" src="./images/hashtag_pin.png" alt="" style="left:35%;top:35%">
+      <img class="tour-pin" id="pinTurk" src="./images/turk_pin.png" alt="" style="left:58%;top:42%">
+      <img class="tour-pin" id="pinDfly" src="./images/dfly_pin.png" alt="" style="left:72%;top:37%">
+     <img class="tour-pin" id="pinGrox" src="./images/grox_pin.png" alt="" style="left:54%;top:78%">
+    </div>
+    <div class="match-arena-name" id="matchArenaName"></div>
+    <div class="skill-box" id="matchSkillBox"><label>CPU LEVEL</label><div class="skill-row" id="skillRow"></div></div>
+    <div class="skill-box round-box" id="matchRoundBox"><label>ROUNDS</label><div class="round-pick" id="roundPick"></div></div>
+  </div>
+  <div class="menu-btns tok-row">
+    <button type="button" class="tok-btn silver" onclick="backFromMatchup()" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="20" font-weight="900" letter-spacing="2">BACK</text></svg></button>
+    <button type="button" class="tok-btn gold" id="matchNext" onclick="fromMatchupNext()" aria-label="Choose arena"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="22" font-weight="900" letter-spacing="3.2" stroke="#fff3bf" stroke-width=".5">NEXT</text></svg></button>
+  </div>
+</section>
 <section id="postfight" class="screen menu fixed-390"><div class="brand"><h1>FINTWITS FUD KINGZ</h1><p id="postHint">CHALLENGER DOWN</p></div><div class="post-body"><div class="match-arena-name" id="postBanner"></div><div class="vs-row"><b class="vs-name p1" id="postP1Name">YOU</b><b class="vs-name p2" id="postP2Name">CPU</b><div class="vs-card p1"><img id="postP1" alt=""></div><div class="vs-mark" id="postMark">WIN</div><div class="vs-card p2"><img id="postP2" alt=""></div></div><p class="post-sub" id="postSub"></p><p class="post-sub news-bulletin" id="postNews"></p></div><div class="menu-btns tok-row" id="postBtns"><button type="button" class="tok-btn gold" id="postContinue" onclick="afterPostFight()" aria-label="Continue"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="12" font-weight="900" letter-spacing="1">CONT</text></svg></button><button type="button" class="tok-btn gold" id="postPlayAgain" onclick="playAgainExhibition()" style="display:none" aria-label="Rematch"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="22" font-weight="900" letter-spacing="3.2" stroke="#fff3bf" stroke-width=".5">REMATCH</text></svg></button><button type="button" class="tok-btn silver" id="postExitTitle" onclick="goTitle()" style="display:none" aria-label="Exit to main"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="22" font-weight="900" letter-spacing="3.2">EXIT</text></svg></button><button type="button" class="tok-btn gold" id="postPickFighter" onclick="backToExhibitionFighters()" style="display:none" aria-label="Choose fighter"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="22" font-weight="900" letter-spacing="3.2" stroke="#fff3bf" stroke-width=".5">NEXT</text></svg></button></div></section>
 <section id="liquid" class="screen menu fixed-390"><div class="brand"><h1>FINTWITS FUD KINGZ</h1><p id="liquidHint">LIQUIDATION BOARD</p></div><div class="liquid-wrap"><div class="liquid-stage"><div class="liquid-hero" id="liquidHero"></div><div class="liquid-grid" id="liquidGrid"></div></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" id="liquidExit" onclick="goTitle()" aria-label="Exit to title"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="22" font-weight="900" letter-spacing="3.2">EXIT</text></svg></button><button type="button" class="tok-btn gold" id="liquidSave" onclick="saveOrResumeArcade()" aria-label="Save arcade run" disabled><svg viewBox="0 0 100 100"><text id="liquidSaveWord" x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="16" font-weight="900" letter-spacing="1.4">SAVE</text></svg></button><button type="button" class="tok-btn gold" id="liquidNext" onclick="afterLiquidation()" aria-label="Next challenger"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="22" font-weight="900" letter-spacing="3.2" stroke="#fff3bf" stroke-width=".5">NEXT</text></svg></button></div></section>
 <section id="arenas" class="screen menu fixed-390"><div class="brand"><h1>FINTWITS FUD KINGZ</h1><p>CHOOSE ARENA</p></div><div class="carousel-wrap"><div class="carousel" id="arenaCarousel"></div><div class="nav-row"><button type="button" onclick="shiftArena(-1)"><span class="arr">‹</span><span class="arr">‹</span><span class="arr">‹</span></button><button type="button" onclick="shiftArena(1)"><span class="arr">›</span><span class="arr">›</span><span class="arr">›</span></button></div><div class="match-arena-name" id="arenaTrackTitle" style="font-size:clamp(12px,3.4vw,16px);margin-top:6px;color:#9ad7b2;letter-spacing:1.5px"></div><div class="dots" id="arenaDots"></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="backFromArenas()" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="20" font-weight="900" letter-spacing="2">BACK</text></svg></button><button type="button" class="tok-btn gold" id="arenaNext" onclick="afterArena()" aria-label="Next"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="22" font-weight="900" letter-spacing="3.2" stroke="#fff3bf" stroke-width=".5" id="arenaNextWord">NEXT</text></svg></button></div></section>
@@ -576,7 +627,7 @@ input[type=file].hidden-file{display:none}
    </div>
    <div id="fightGap"><img id="fightBanner" src="./fight_banner.png" alt=""></div>
   </section>
-<div class="fine-print"><span>BUILD:10.20~0444</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.20~0620</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 </div>
 <script>
 const ROOT="./",ARENA_DIR=ROOT+"arenas/",FIGHTER_DIR=ROOT+"fighters/",TITLECARD_DIR=ROOT+"titlecards/",OBJECT_DIR=ROOT+"objects/",AUDIO=ROOT+"audio/";
@@ -604,9 +655,10 @@ else if(pose==="summon"){const sUrls=unique([dir+n+" summon.gif",dir+"summon.gif
 else if(pose==="pushnwalk"){const pUrls=unique([dir+n+"_pushnwalk.gif",dir+"pushnwalk.gif",FIGHTER_DIR+n+"_pushnwalk.gif"]);return unique(pUrls.concat(poseUrls(name,"block"),poseUrls(name,"walk")));}
 else if(pose==="taunt"){const tUrls=unique([dir+n+"_taunt.gif",dir+"taunt.gif",FIGHTER_DIR+n+"_taunt.gif",dir+n+" taunt.gif",FIGHTER_DIR+n+" taunt.gif"]);return unique(tUrls.concat(poseUrls(name,"victory")));}
 else if(pose==="hit"){const hUrls=unique([dir+n+"_hit.gif",dir+"hit.gif",FIGHTER_DIR+n+"_hit.gif"]);return unique(hUrls.concat(poseUrls(name,"idle")));}
+else if(pose==="ko"){const kUrls=unique([dir+n+"_ko.gif",dir+"ko.gif",FIGHTER_DIR+n+"_ko.gif"]);return unique(kUrls.concat(poseUrls(name,"loser"),poseUrls(name,"idle")));}
 else file=String(POSE_LABEL[pose]||"idle").toLowerCase()+".gif";const urls=unique([dir+n+" "+file,dir+file,FIGHTER_DIR+n+" "+file]);if(pose==="walk")return unique(urls.concat([dir+n+" idle.gif",dir+"idle.gif",FIGHTER_DIR+n+" idle.gif"]));return unique(urls.concat(selectUrls(name)));}
 function objectUrls(name){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);return unique([dir+n+" object.png",dir+"object.png",OBJECT_DIR+n+" object.png",FIGHTER_DIR+n+" object.png"].concat(THROW_OBJECTS.map(function(f){return OBJECT_DIR+String(f).toLowerCase();})));}
-function decorateFighter(f){f.select=selectUrls(f.name);f.idle=poseUrls(f.name,"idle");f.walk=poseUrls(f.name,"walk");f.punchL=poseUrls(f.name,"punchL");f.punchR=poseUrls(f.name,"punchR");f.kickL=poseUrls(f.name,"kickL");f.kickR=poseUrls(f.name,"kickR");f.throw=poseUrls(f.name,"throw");f.block=poseUrls(f.name,"block");f.victory=poseUrls(f.name,"victory");f.loser=poseUrls(f.name,"loser");f.knee=poseUrls(f.name,"knee");f.summon=poseUrls(f.name,"summon");f.pushnwalk=poseUrls(f.name,"pushnwalk");f.taunt=poseUrls(f.name,"taunt");f.hit=poseUrls(f.name,"hit");f.liquidated=liquidatedUrls(f.name);f.objects=objectUrls(f.name);return f;}
+function decorateFighter(f){f.select=selectUrls(f.name);f.idle=poseUrls(f.name,"idle");f.walk=poseUrls(f.name,"walk");f.punchL=poseUrls(f.name,"punchL");f.punchR=poseUrls(f.name,"punchR");f.kickL=poseUrls(f.name,"kickL");f.kickR=poseUrls(f.name,"kickR");f.throw=poseUrls(f.name,"throw");f.block=poseUrls(f.name,"block");f.victory=poseUrls(f.name,"victory");f.loser=poseUrls(f.name,"loser");f.ko=poseUrls(f.name,"ko");f.knee=poseUrls(f.name,"knee");f.summon=poseUrls(f.name,"summon");f.pushnwalk=poseUrls(f.name,"pushnwalk");f.taunt=poseUrls(f.name,"taunt");f.hit=poseUrls(f.name,"hit");f.liquidated=liquidatedUrls(f.name);f.objects=objectUrls(f.name);return f;}
 const FIGHTERS=[{name:"Stonks 6-7",handle:"@Stonks67",tint:"#1a2333",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"punch",bio:"Chart gremlin. Light, short reach, twitch. Walk in, punch-punch, back out. Weak to kicks. Throws NUDE PIX early."},{name:"Ventifa",handle:"@Ventifa",tint:"#0d7377",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hands",bio:"Night-shift closer. Fastest hands. LP then RP, block the return, then kick. EPT TEST interrupts, it does not finish."},{name:"Davinstigator",handle:"@Davinstigator",tint:"#37474f",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"bait",bio:"Boarding-line loudmouth. Close the gap, stall in block, late kick. Weak to throws while blocking. PRISON SHOE waits for the commit."},{name:"Troll Bee",handle:"@TrollBee",tint:"#f9a825",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Smallest box, highest step. Circle, sting, never stand in kick range. FUD RADIO is spent on the first full meter."},{name:"Jose Brownstein",handle:"@JoseBrownstein",tint:"#8d6e63",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"kick",bio:"Shop boss. Hold center, kick, block, kick. Weak to speed in and out. TOOL BOX is a mid-range check."},{name:"Captn Jack Hashtag",handle:"@CaptnJack",tint:"#e65100",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sloppy",bio:"Rail-braced and sloppy. Random side, high whiff. COCKTAIL is often thrown from too far. Weak to a patient block."},{name:"OFFICER SANCHEZ",handle:"@WhollyMac",tint:"#6d4c41",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"rush",bio:"Arrives first. Walk in, then a kick. Does not retreat. Weak to a block-heal loop. TOMBSTONE is the finisher."},{name:"Dev Root X",handle:"@DevRootX",tint:"#00bcd4",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"edge",bio:"Long reach, light body. Stay at the edge, kick, back up. Weak inside. FUSION REACTOR closes, then punches."},{name:"WHITE CASSEL",handle:"@WhiteCassel",tint:"#90a4ae",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"late",bio:"Diplomat until the cup is empty. Block early, then punch-kick. HOT DOG is the switch from peace to fight."},{name:"Fuzzled Raccoon",handle:"@FuzzledRacc",tint:"#4e342e",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"counter",bio:"Scavenger. Wait for a whiff, then punch. Does not open. SKULL & BONES is a counter throw."},{name:"Big Daddy Turk",handle:"@BigDaddyTurk",tint:"#1b5e20",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"plant",bio:"Heaviest stance, widest body. Plant, block, kick. Does not chase. OIL BARREL stops a walk-in."},{name:"Dragonfly Fairy",handle:"@DragonflyFairy",tint:"#e91e63",female:true,hidden:true,unlockCrowns:1,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hover",bio:"Hover. In, kick, out. Weak if pinned. MULLEN DRAGONFLY reopens space."},{name:"Bioweapon Bulldog",handle:"@BioBulldog",tint:"#6a1b9a",hidden:true,unlockCrowns:2,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"forward",bio:"Does not heel. Walk forward only, kick, no retreat. GLOBE is a shove at contact."},{name:"LIL OJ",handle:"@LilOJ",tint:"#ef6c00",hidden:true,unlockCrowns:3,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"question",bio:"Press room. Block, pause, punch. Weak to a kick during the pause. WFUD PODIUM is a setup throw."},{name:"Fud Daddy 420",handle:"@FudDaddy420",tint:"#2b6cb0",hidden:true,unlockCrowns:4,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"elder",bio:"Lets the player spend meter, blocks the throw, then kicks. Weak to a raw walk-in. MICROPHONE is the last word."},{name:"KING TROLL",handle:"@KingTroll",tint:"#b71c1c",hidden:true,unlockCrowns:5,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"boss",bio:"Boss. Punches a kicker, kicks a puncher, blocks a full meter. STREET BIKE punishes a whiff."},{name:"Platinum Meow",handle:"@PlatinumMeow",tint:"#c0c0c0",female:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Neon alley cat. Fast claws, precise shots. Circles then strikes. Weak if you hold block. BOW is the closer."},{name:"Grox",handle:"@Grox",tint:"#39ff14",exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hands",bio:"Exhibition only. Dojo build. Not on the arcade board."},
 {name:"Trashed Panda",handle:"@TrashedPanda",tint:"#5d4037",female:true,exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"counter",bio:"Exhibition only. Dumpster-diving panda who treats the grooming table like a ring. Wait for the spray, then swipe. Weak if you stay clean. TRASH BAG is the counter."},
 {name:"That Badger Girl",handle:"@ThatBadgerGirl",tint:"#4e342e",female:true,exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Exhibition only. Salon chair is her ring. She styles the hair, then styles the face. Weak if you stay still under the dryer. BADGER CLAW is the closer."},
@@ -643,6 +695,27 @@ let paused=false,over=false,announcing=false,paid=false,skipPay=false,lastTap=0,
 let mutedMusic=false,mutedFx=false,musicStage=0,selectedFighter=0,selectedOpponent=1,cpuFighter=1,selectedArena=0;
 let arcadeQueue=[],arcadeIndex=0,arcadeKing=false,arcadeBeaten={},lastLiquidIdx=-1,lastArcadeRecord="",lastBeatenName="";
 let cpuSkill=Math.max(1,Math.min(10,parseInt(localStorage.getItem(SKILL_STORE)||"5",10)||5));
+let cpuPressure = 0;
+let cpuPressureAt = 0;
+let cpuPhase = "approach";      // approach | engage | recover
+let cpuPhaseUntil = 0;
+
+function noteCpuPressure(){
+  const now = Date.now();
+  if(now - cpuPressureAt > 1100) cpuPressure = 0;
+  cpuPressure = Math.min(8, cpuPressure + 1);
+  cpuPressureAt = now;
+}
+function cpuUnderPressure(){
+  return cpuPressure >= 5 && (Date.now() - cpuPressureAt) < 900;
+}
+function setCpuPhase(phase, ms){
+  cpuPhase = phase;
+  cpuPhaseUntil = Date.now() + (ms || 0);
+}
+function cpuPhaseExpired(){
+  return Date.now() >= cpuPhaseUntil;
+}
 let arcadeSkill=Math.max(1,Math.min(5,parseInt(localStorage.getItem(ARCADE_SKILL_STORE)||"1",10)||1));
 let matchRounds=parseInt(localStorage.getItem(ROUNDS_STORE)||"3",10)===4?4:3;
 let youBlocking=false,cpuBlocking=false,currentTrack="",lastScreen="intro";
@@ -770,7 +843,18 @@ function arcadeArenaIndex(){
 }
 function playArenaMusic(forceNew){const a=ARENAS[selectedArena];if(!a||!a.music)return;stopIntroBed();const changed=currentTrack!==a.music;setTrack(a.music,true,!!forceNew&&changed);}
 function paintMatchupBg(arena){const el=document.getElementById("matchup");el.style.backgroundImage="url('./images/scenebg.jpg')";el.style.backgroundSize="390px 528px";el.style.backgroundPosition="center top";el.style.backgroundRepeat="no-repeat";const vs=document.getElementById("matchVs");if(!vs)return;if(!arena){vs.style.backgroundImage="";return;}vs.style.backgroundImage="url('"+arena.file+"')";vs.style.backgroundSize="cover";vs.style.backgroundPosition=arena.pos||"center";vs.style.backgroundRepeat="no-repeat";vs.style.borderRadius="14px";}
-function renderMatchup(){if(mode==="pvc"||mode==="arcade")cpuFighter=selectedOpponent;if(mode==="one"&&invitedMember){cpuFighter=invitedMember.fighter;selectedOpponent=cpuFighter;}const mine=FIGHTERS[selectedFighter],theirs=FIGHTERS[cpuFighter],arena=ARENAS[selectedArena];document.getElementById("matchP1Name").textContent=mine.name;document.getElementById("matchP2Name").textContent=theirs.name;bindSrcList(document.getElementById("matchP1"),mine.select);bindSrcList(document.getElementById("matchP2"),theirs.select);const nextBtn=document.getElementById("matchNext"),arenaLine=document.getElementById("matchArenaName");const matchSkill=document.getElementById("matchSkillBox"),roundBox=document.getElementById("matchRoundBox"),skillRow=document.getElementById("skillRow");
+function renderMatchup(){if(mode==="pvc"||mode==="arcade")cpuFighter=selectedOpponent;if(mode==="one"&&invitedMember){cpuFighter=invitedMember.fighter;selectedOpponent=cpuFighter;}const matchEl=document.getElementById("matchup");
+if(mode==="arcade"){
+  if(matchEl) matchEl.classList.add("arcade-map");
+  // highlight the pin that matches the current opponent (optional)
+  document.querySelectorAll(".tour-pin").forEach(function(p){p.classList.remove("next");});
+  const name=(FIGHTERS[selectedOpponent]&&FIGHTERS[selectedOpponent].name)||"";
+  const pinMap={"Davinstigator":"pinDavx","Dr Davinstigator":"pinDavx","Fud Daddy 420":"pinFd420","Captn Jack Hashtag":"pinHashtag","Capt Jack Hashtag":"pinHashtag","Big Daddy Turk":"pinTurk"};
+  const pinId=pinMap[name];
+  if(pinId){const el=document.getElementById(pinId);if(el)el.classList.add("next");}
+}else{
+  if(matchEl) matchEl.classList.remove("arcade-map");
+}const mine=FIGHTERS[selectedFighter],theirs=FIGHTERS[cpuFighter],arena=ARENAS[selectedArena];document.getElementById("matchP1Name").textContent=mine.name;document.getElementById("matchP2Name").textContent=theirs.name;bindSrcList(document.getElementById("matchP1"),mine.select);bindSrcList(document.getElementById("matchP2"),theirs.select);const nextBtn=document.getElementById("matchNext"),arenaLine=document.getElementById("matchArenaName");const matchSkill=document.getElementById("matchSkillBox"),roundBox=document.getElementById("matchRoundBox"),skillRow=document.getElementById("skillRow");
 const skillLabel=matchSkill?matchSkill.querySelector("label"):null;
 if(mode==="arcade"){
   if(matchSkill)matchSkill.style.display="none";
@@ -784,7 +868,7 @@ if(mode==="arcade"){
   if(skillRow)skillRow.style.display=showCpu?"":"none";
   if(skillLabel)skillLabel.style.display=showCpu?"":"none";
   if(roundBox)roundBox.style.display=readyToFight?"none":"";
-}const matchVs=document.getElementById("matchVs"),matchHint=document.getElementById("matchHint");const matchEl=document.getElementById("matchup");if(mode==="arcade"||readyToFight){if(matchEl)matchEl.classList.add("arena-on");if(matchVs)matchVs.style.display="";if(matchHint)matchHint.textContent="MATCH UP";arenaLine.textContent=arena.name;setTokWords("matchNextUp","matchNextDn","ENTER ARENA");paintMatchupBg(arena);preloadMatchPair();}else{if(matchEl)matchEl.classList.remove("arena-on");if(matchVs)matchVs.style.display="none";if(matchHint)matchHint.textContent="CHOOSE CPU LEVEL";arenaLine.textContent="";setTokWords("matchNextUp","matchNextDn","CHOOSE ARENA");paintMatchupBg(null);}renderSkillRow();}
+}const matchVs=document.getElementById("matchVs"),matchHint=document.getElementById("matchHint");if(mode==="arcade"||readyToFight){if(matchEl)matchEl.classList.add("arena-on");if(matchVs)matchVs.style.display="";if(matchHint)matchHint.textContent="MATCH UP";arenaLine.textContent=arena.name;setTokWords("matchNextUp","matchNextDn","ENTER ARENA");paintMatchupBg(arena);preloadMatchPair();}else{if(matchEl)matchEl.classList.remove("arena-on");if(matchVs)matchVs.style.display="none";if(matchHint)matchHint.textContent="CHOOSE CPU LEVEL";arenaLine.textContent="";setTokWords("matchNextUp","matchNextDn","CHOOSE ARENA");paintMatchupBg(null);}renderSkillRow();}
 function goMatchup(){
   if(mode==="pvc"||mode==="arcade")cpuFighter=selectedOpponent;
   if(mode==="arcade"){
@@ -1107,7 +1191,7 @@ function knockLoserHome(who, done){
   requestAnimationFrame(step);
 }
 let boxCache=null,boxAt=0;
-// Minimal movement only: % positions, one gap stop matched to visible sprite mass (~42% max-width)
+// Sprite Proximity one gap stop matched to visible sprite mass (~42% max-width)
 const BODY_STOP = 50; // lower = closer allowed; tuned so visible masses can touch
 function meetLimit(){return 100-BODY_STOP;}
 function resolveOverlap(){
@@ -1165,12 +1249,65 @@ function nudgeCpu(dir){
   }
 }
 function cpuEngage(){
-  if(paused||over||announcing||lastScreen!=="fight")return"stand";
-  if(!inMeleeRange()){nudgeCpu(1.4);return"approach";}
-  const r=Math.random();
-  if(r<0.22){nudgeCpu(-1.2);return"retreat";}
-  if(r<0.40){nudgeCpu(1.15);return"press";}
-  return"stand";
+  if(paused || over || announcing || lastScreen !== "fight") return "stand";
+
+  const close = inMeleeRange();
+  const youAdvancing = !!(moveHold.right || keysDown.ArrowRight || keysDown.KeyL || keysDown.KeyR);
+  const cpuLow = hp.cpu < 36;
+  const hasThrow = canThrow("cpu");
+  const now = Date.now();
+
+  // --- phase: recover (just got bashed, create space, then re-enter) ---
+  if(cpuPhase === "recover"){
+    if(cpuPhaseExpired() || !close){
+      setCpuPhase("approach", 0);
+      return "reapproach";
+    }
+    nudgeCpu(-1.2);
+    if(!cpuBlocking) setBlock("cpu", true);
+    return "retreat";
+  }
+
+  // --- not in range: only move ---
+  if(!close){
+    if(youAdvancing && youPos > 12){
+      nudgeCpu(-0.6);
+      return "space";
+    }
+    nudgeCpu(1.35);
+    setCpuPhase("approach", 0);
+    return "approach";
+  }
+
+  // --- in range: check if we should bail ---
+  if(cpuUnderPressure() || cpuLow){
+    setCpuPhase("recover", 420 + Math.random() * 280);
+    nudgeCpu(-1.15);
+    setBlock("cpu", true);
+    setTimeout(function(){ if(!over) setBlock("cpu", false); }, 280);
+    return "retreat";
+  }
+
+  // --- deliberate engage actions ---
+  setCpuPhase("engage", 0);
+
+  if(youAdvancing && !youBlocking){
+    // player is walking in — block-walk or short shove
+    setBlock("cpu", true);
+    nudgeCpu(1.05);
+    setTimeout(function(){ if(!over) setBlock("cpu", false); }, 200);
+    return "shove";
+  }
+
+  if(hasThrow){
+    // hold position and look for the throw
+    if(Math.random() < 0.3) nudgeCpu(-0.3);
+    return "hold";
+  }
+
+  // light measured pressure
+  nudgeCpu(0.85);
+  return "press";
 }
 function bodyBox(who){
   const el=document.getElementById(who==="you"?"you":"cpu");
@@ -1391,7 +1528,7 @@ function playPose(who,pose){
   const img=document.getElementById(who==="you"?"youFile":"cpuFile");
   if(!img)return;
   const list=(fighter[pose]&&fighter[pose].length)?fighter[pose]:fighter.select;
-  const hold=pose==="idle"||pose==="walk"||pose==="block"||pose==="victory"||pose==="loser"||pose==="knee"||pose==="summon"||pose==="pushnwalk"||pose==="taunt";
+  const hold=pose==="idle"||pose==="walk"||pose==="block"||pose==="victory"||pose==="loser"||pose==="knee"||pose==="summon"||pose==="pushnwalk"||pose==="taunt"||pose==="ko";
   clearTimeout(poseTimer[who]);
   if(who==="you"&&pose==="idle"&&walkLocked&&!youBlocking&&img.dataset.pose==="walk")return;
    if(img.dataset.pose===pose&&img.src){
@@ -1503,52 +1640,7 @@ const WHERE_NOW={
  "Platinum Meow":"The neon alleys still know the name. Left a bow string humming and the city lights on.",
   "Dark Fud 420":"The tower lights stayed on. Left the spellbook open and the ENERGY SPELL still humming in the air."
 };
-function paintAmmo(id,idx){
-  const box=document.getElementById(id);
-  if(!box) return;
-  box.innerHTML="";
-  const list=playableIndexes();
-  if(!list.length) return;
-  const at=Math.max(0,list.indexOf(idx)), n=list.length;
-
-  // Arena color for the center fighter
-  const homes={
-    "Stonks 6-7":"Street Fight","Ventifa":"Hospital Fight","Davinstigator":"Airport Terminal",
-    "Troll Bee":"Gold Vault","Jose Brownstein":"Joses Work Shop","Captn Jack Hashtag":"Deck Of Ship",
-    "OFFICER SANCHEZ":"Crime Scene","Dev Root X":"WFUD Satellite","WHITE CASSEL":"Back Yard Party",
-    "Fuzzled Raccoon":"Savage Reality Alley","Big Daddy Turk":"Hormuz Strait","Dragonfly Fairy":"Mullen Car Lot",
-    "Bioweapon Bulldog":"Trailer Park","LIL OJ":"WFUD Press Room","Fud Daddy 420":"WFUD Studios Rooftop",
-    "KING TROLL":"Dumpster Fire","Grox":"Grox Dojo","Trashed Panda":"Pet Grooming",
-    "That Badger Girl":"Hair Salon","Platinum Meow":"Anime City","Dark Fud 420":"Wizards Castle"
-  };
-  const center=FIGHTERS[idx];
-  const arenaName=center&&homes[center.name];
-  const arena=arenaName?ARENAS.find(function(a){return a.name===arenaName;}):null;
-  const tint=arena&&arena.color?arena.color:"#1a2233";
-
-  [list[wrap(at-1,n)], list[at], list[wrap(at+1,n)]].forEach(function(i,slot){
-    const cell=document.createElement("div");
-    cell.style.cssText="display:flex;flex-direction:column;align-items:center;gap:3px;width:72px";
-    const img=document.createElement("img");
-    img.alt=AMMO_NAMES[i]||"";
-    img.className=slot===1?"center":"side";
-    // tinted background matching the center fighter's arena
-    img.style.background=slot===1
-      ? "linear-gradient(180deg, "+tint+"cc, #0a0e16)"
-      : "rgba(0,0,0,.45)";
-    img.style.borderColor=slot===1?tint:"#334";
-    bindSrcList(img, FIGHTERS[i].objects);
-    cell.appendChild(img);
-    if(slot===1){
-      const cap=document.createElement("b");
-      cap.textContent=AMMO_NAMES[i]||"";
-      cap.style.cssText="font-size:7px;color:#ffd54f;text-align:center;line-height:1;white-space:nowrap;width:100%;margin:2px 0 0;padding:0";
-      cell.style.width="104px";
-      cell.appendChild(cap);
-    }
-    box.appendChild(cell);
-  });
-}
+function paintAmmo(id,idx){const box=document.getElementById(id);if(!box)return;box.innerHTML="";const list=playableIndexes();if(!list.length)return;const at=Math.max(0,list.indexOf(idx)),n=list.length;[list[wrap(at-1,n)],list[at],list[wrap(at+1,n)]].forEach(function(i,slot){const cell=document.createElement("div");cell.style.cssText="display:flex;flex-direction:column;align-items:center;gap:3px;width:72px";const img=document.createElement("img");img.alt=AMMO_NAMES[i]||"";img.className=slot===1?"center":"side";bindSrcList(img,FIGHTERS[i].objects);cell.appendChild(img);if(slot===1){const cap=document.createElement("b");cap.textContent=AMMO_NAMES[i]||"";cap.style.cssText="font-size:7px;color:#ffd54f;text-align:center;line-height:1;white-space:nowrap;width:100%;margin:2px 0 0;padding:0";cell.style.width="104px";cell.appendChild(cap);}box.appendChild(cell);});}
 function renderFighterCarousel(){const box=document.getElementById("fighterCarousel"),dots=document.getElementById("fighterDots");box.innerHTML="";dots.innerHTML="";const list=playableIndexes();if(list.indexOf(selectedFighter)<0)selectedFighter=list[0]||0;const n=list.length,at=Math.max(0,list.indexOf(selectedFighter)),L=list[wrap(at-1,n)],R=list[wrap(at+1,n)];box.appendChild(makeFighterSlot(FIGHTERS[L],"side left",L,function(){shiftFighter(-1);}));box.appendChild(makeFighterSlot(FIGHTERS[selectedFighter],"center",selectedFighter));box.appendChild(makeFighterSlot(FIGHTERS[R],"side right",R,function(){shiftFighter(1);}));list.forEach(function(i){const d=document.createElement("i");if(i===selectedFighter)d.className="on";dots.appendChild(d);});paintAmmo("fighterAmmo",selectedFighter);warmNeighbors(selectedFighter);}
 function pickOpponent(idx){if(fighterLocked(idx))return;selectedOpponent=idx;renderOpponentScreen();}
 function renderHiddenRow(){const box=document.getElementById("hiddenRow");if(!box)return;box.innerHTML="";HIDDEN_INDEXES.forEach(function(idx){const f=FIGHTERS[idx];const cell=document.createElement("div");cell.className="hidden-cell"+(fighterLocked(idx)?" locked":"")+(selectedOpponent===idx?" picked":"");const b=document.createElement("b");b.textContent=fighterLocked(idx)?"\u00a0":f.name;cell.appendChild(b);const panel=document.createElement("div");panel.className="panel";const img=document.createElement("img");img.decoding="async";img.alt=f.name;bindSrcList(img,f.select);panel.appendChild(img);if(fighterLocked(idx)){const need=document.createElement("div");need.className="need";need.textContent="LOCKED  "+crownLabel(hiddenCost(idx));panel.appendChild(need);}cell.appendChild(panel);cell.onclick=function(){pickOpponent(idx);};box.appendChild(cell);});}
@@ -1858,7 +1950,58 @@ function takeFx(){return fxPool.pop()||document.createElement("div");}
 function floats(){}
 function takeCash(){const img=cashPool.pop()||document.createElement("img");img.className="cash";img.style.width="42px";img.style.height="36px";img.style.maxWidth="42px";img.style.maxHeight="36px";img.style.objectFit="contain";img.alt="";return img;}
 function flyMoney(to,count){const stage=document.getElementById("stage"),body=bodyBox(to),stageBox=stage.getBoundingClientRect();const bills=Math.max(1,count||1),half=CASH_W/2;for(let i=0;i<bills;i++){const img=takeCash();bindSrcList(img,MONEY_URLS);const ox=(Math.random()*56-28)+i*14;img.style.left=(body.mid-stageBox.left-half+ox)+"px";img.style.top=(body.top-stageBox.top+8)+"px";stage.appendChild(img);const dir=to==="cpu"?1:-1,dx=dir*(90+Math.random()*110+i*22),dy=-120-Math.random()*90;img.animate([{transform:"translate(0,0) rotate(0deg)",opacity:1},{transform:"translate("+dx+"px,"+(dy+50)+"px) rotate("+(dir*110)+"deg)",opacity:0}],{duration:720+i*90,easing:"ease-out",delay:i*45});setTimeout(function(){if(img.parentNode)img.parentNode.removeChild(img);cashPool.push(img);},980+i*90);}}
-function eruptMoney(to){const stage=document.getElementById("stage");if(!stage)return;const body=bodyBox(to),stageBox=stage.getBoundingClientRect(),pin=document.getElementById("liquidPin");const ground=Math.max(80,stageBox.height-46);let originX=body.mid-stageBox.left,originY=Math.max(70,body.bottom-stageBox.top-36);if(pin){originX=pin.offsetLeft+60;originY=pin.offsetTop+70;}originY=Math.max(70,Math.min(originY,ground-24));const floorW=Math.max(180,stageBox.width-28);const urls=unique(MONEY_URLS.concat([OBJECT_DIR+"money.gif",ROOT+"money.gif","./objects/money.gif","./money.gif"]));for(let i=0;i<42;i++){const img=takeCash();img.classList.add("erupt");bindSrcList(img,urls);const landX=8+Math.random()*(floorW-8),spread=landX-(originX-21),rise=-(28+Math.random()*Math.max(36,originY-18)),landY=ground-Math.random()*34,rot=Math.random()*720-360;img.style.left=(originX-21)+"px";img.style.top=originY+"px";img.style.opacity="1";img.style.zIndex="5";stage.appendChild(img);img.animate([{transform:"translate(0,0) scale(.4) rotate(0deg)",offset:0},{transform:"translate("+(spread*0.25)+"px,"+rise+"px) scale(1.15) rotate("+(rot*0.35)+"deg)",offset:0.34},{transform:"translate("+spread+"px,"+(landY-originY)+"px) scale(1) rotate("+rot+"deg)",offset:1}],{duration:1100+Math.random()*700,easing:"cubic-bezier(.12,.75,.28,1)",delay:i*22,fill:"forwards"});}}
+function eruptMoney(to){
+  const stage=document.getElementById("stage");
+  if(!stage) return;
+  const stageBox=stage.getBoundingClientRect();
+  const pin=document.getElementById("liquidPin");
+  const ground=Math.max(80, stageBox.height - 46);
+  const floorW=Math.max(180, stageBox.width - 28);
+
+  // Origin = center of the liquidation pin (the _l_object). Fall back to the body if no pin.
+  let originX, originY;
+  if(pin){
+    originX = pin.offsetLeft + 60;          // center of 120px pin
+    originY = pin.offsetTop + 50;           // slightly above the pin's middle so it bursts out of it
+  } else {
+    const body=bodyBox(to);
+    originX = body.mid - stageBox.left;
+    originY = Math.max(70, body.bottom - stageBox.top - 36);
+  }
+
+  const urls=unique(MONEY_URLS.concat([OBJECT_DIR+"money.gif",ROOT+"money.gif","./objects/money.gif","./money.gif"]));
+
+  for(let i=0;i<42;i++){
+    const img=takeCash();
+    img.classList.add("erupt");
+    bindSrcList(img, urls);
+
+    const landX = 8 + Math.random() * (floorW - 8);
+    const spread = landX - (originX - 21);
+
+    // Volcano burst: moderate upward kick from the pin, then fall to the floor
+    const rise = -(18 + Math.random() * 42);           // only 18–60px up from the pin
+    const landY = ground - Math.random() * 28;
+    const rot = Math.random() * 720 - 360;
+
+    img.style.left = (originX - 21) + "px";
+    img.style.top = originY + "px";
+    img.style.opacity = "1";
+    img.style.zIndex = "5";
+    stage.appendChild(img);
+
+    img.animate([
+      { transform: "translate(0,0) scale(.35) rotate(0deg)", offset: 0 },
+      { transform: "translate(" + (spread * 0.35) + "px," + rise + "px) scale(1.2) rotate(" + (rot * 0.4) + "deg)", offset: 0.28 },
+      { transform: "translate(" + spread + "px," + (landY - originY) + "px) scale(1) rotate(" + rot + "deg)", offset: 1 }
+    ], {
+      duration: 900 + Math.random() * 500,
+      easing: "cubic-bezier(.18,.7,.3,1)",
+      delay: i * 18,
+      fill: "forwards"
+    });
+  }
+}
 function clearEruptMoney(){document.querySelectorAll("#stage .cash.erupt").forEach(function(n){if(n.parentNode)n.parentNode.removeChild(n);cashPool.push(n);});}
 function setBlock(who,on){
   if(who==="you"){
@@ -1899,7 +2042,7 @@ function pushBack(who,px){
   startDragSfx(who);
   setTimeout(function(){if(dragWho===who)stopDragSfx();},420);
 }
-function applyDamage(from,to,dmg,type){dmg=dmg*(fighterStat(from,"strength")/5)*Math.max(0.25,2-fighterStat(to,"defense")/5);hp[to]=Math.max(0,hp[to]-dmg);if(fighterStat(to,"mass")!==5){const push=(5-fighterStat(to,"mass"))*0.12;if(to==="you")nudgeYou(push>0?-push:push);else nudgeCpu(push>0?-push:push);}breakCombo(to);if(type!=="throw")addPower(from,dmg>=KICK_DMG?POWER_KICK:POWER_PUNCH,type);flyMoney(to,moneyCountFor(dmg));updateMeters();if(hp[to]<=0||suddenDeath)finish(from);}
+function applyDamage(from,to,dmg,type){dmg=dmg*(fighterStat(from,"strength")/5)*Math.max(0.25,2-fighterStat(to,"defense")/5);hp[to]=Math.max(0,hp[to]-dmg);if(to === "cpu") noteCpuPressure();if(fighterStat(to,"mass")!==5){const push=(5-fighterStat(to,"mass"))*0.12;if(to==="you")nudgeYou(push>0?-push:push);else nudgeCpu(push>0?-push:push);}breakCombo(to);if(type!=="throw")addPower(from,dmg>=KICK_DMG?POWER_KICK:POWER_PUNCH,type);flyMoney(to,moneyCountFor(dmg));updateMeters();if(hp[to]<=0||suddenDeath)finish(from);}
 function resolveHit(from,to,dmg,type){const defenderblocking=to==="you"?youBlocking:cpuBlocking;if(defenderblocking){breakCombo(from);losePower(from,12);sfxBlock();floats(to,"BLOCK","miss");floats(from,"SHORT","miss");return;}applyDamage(from,to,dmg,type);}
 function attack(from,to,type){
   if(!liquidateOn&&(over||paused||announcing))return;
@@ -1946,24 +2089,33 @@ function scheduleAI(){
   clearTimeout(aiTimer);
   if(over||paused||announcing)return;
   const tune=skillTune();
-  const rush=!inMeleeRange();
-  aiTimer=setTimeout(function(){
-    if(over||paused||announcing)return;
-    const move=cpuEngage();
-    if(move==="approach"){scheduleAI();return;}
-    if(!canThrow("cpu")&&inMeleeRange()&&Math.random()<tune.blockChance*(cpuWantsGuard()?1.4:0.7)){
-      setBlock("cpu",true);
-      setTimeout(function(){if(!over)setBlock("cpu",false);cpuStrike(tune);},Math.min(280,tune.blockMs));
-    }else{
-      cpuStrike(tune);
-      if(Math.random()<tune.comboChance&&!over&&!paused&&!announcing){
-        setTimeout(function(){
-          if(!over&&!paused&&!announcing){cpuEngage();cpuStrike(tune);}
-        },220);
-      }
-    }
+  const rush=!inMeleeRange() && !youBlocking && hp.cpu > 30;
+aiTimer = setTimeout(function(){
+  if(over || paused || announcing) return;
+
+  const move = cpuEngage();
+
+  // Only consider attacking when actually in melee range
+  if(move === "approach" || move === "space" || !inMeleeRange()){
     scheduleAI();
-  },rush?160:tune.minDelay+Math.random()*tune.span);
+    return;
+  }
+
+  const tune = skillTune();
+
+  // Deliberate block or strike only when close
+  if(!canThrow("cpu") && Math.random() < tune.blockChance * (cpuWantsGuard() ? 0.85 : 0.35)){
+    setBlock("cpu", true);
+    setTimeout(function(){
+      if(!over && inMeleeRange()) cpuStrike(tune);
+      if(!over) setBlock("cpu", false);
+    }, Math.min(260, tune.blockMs));
+  } else if(inMeleeRange()){
+    cpuStrike(tune);
+  }
+
+  scheduleAI();
+}, inMeleeRange() ? (tune.minDelay * 0.55 + Math.random() * tune.span * 0.45) : 180);
 }
 function restartExhibition(){if(mode!=="pvc")return;paused=false;over=false;announcing=false;clearTimeout(aiTimer);clearReadyTimer();clearRoundTimer();stopWalkLoop();setBlock("you",false);setBlock("cpu",false);document.getElementById("pauseOv").classList.remove("show");document.getElementById("roundOv").classList.remove("show");document.getElementById("winFlash").classList.remove("show");youPos=YOU_HOME;cpuPos=CPU_HOME;applyYouPos();applyCpuPos();readyToFight=true;startFight(true);const a=ARENAS[selectedArena];if(a&&a.music)setTrack(a.music,true,true);}
 function togglePause(){
@@ -2060,13 +2212,19 @@ const willEndMatch=(youWonRound&&roundWins.you+1>=winsNeeded())||(!youWonRound&&
   const youImg=document.getElementById("youFile"), cpuImg=document.getElementById("cpuFile");
   if(youImg) youImg.dataset.pose="";
   if(cpuImg) cpuImg.dataset.pose="";
-  const fallWho = youWonRound ? "cpu" : "you";
-  knockLoserHome(fallWho, function(){
-    playPose(winner,"idle");
-    playPose(fallWho,"loser");
-    if(win){startLiquidate(function(){showPostFight(beaten,record,true);},"you");return;}
+const fallWho = youWonRound ? "cpu" : "you";
+// start flying the moment the KO lands
+playPose(fallWho,"ko");
+playPose(winner,"idle");
+knockLoserHome(fallWho, function(){
+  // land in loser once home
+  playPose(fallWho,"loser");
+  if(win){
+    startLiquidate(function(){showPostFight(beaten,record,true);},"you");
+  }else{
     startLiquidate(function(){showPostFight(beaten,record,false);},"cpu");
-  });
+  }
+});
 }
 let liquidateCallTimer=null;
 function cueLiquidateThem(){if(liquidateCallTimer)clearTimeout(liquidateCallTimer);liquidateCallTimer=setTimeout(function(){liquidateCallTimer=null;if(mutedFx||!sfxLiquidateThemEl)return;try{sfxLiquidateThemEl.currentTime=0;}catch(e){}sfxLiquidateThemEl.play().catch(function(){});},1000);}
