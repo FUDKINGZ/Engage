@@ -469,6 +469,7 @@ input[type=file].hidden-file{display:none}
 <audio id="sfxPunch" src="./audio/sound fx/sfx-punch.wav" preload="auto" playsinline></audio>
 <audio id="sfxKick" src="./audio/sound fx/sfx-kick.wav" preload="auto" playsinline></audio>
 <audio id="sfxThrow" src="./audio/sound fx/sfx-throw.wav" preload="auto" playsinline></audio>
+<audio id="sfxAmmoHit" src="./audio/sound fx/sfx-ammo-hit.wav" preload="auto" playsinline></audio>
 <audio id="sfxPowerChime" src="./audio/sound fx/powerchime.wav" preload="auto" playsinline></audio>
 <audio id="sfxGrunt" src="./audio/sound fx/player1_grunt.wav" preload="auto" playsinline></audio>
 <audio id="sfxGrunt2" src="./audio/sound fx/player2_grunt.wav" preload="auto" playsinline></audio>
@@ -627,7 +628,7 @@ input[type=file].hidden-file{display:none}
    </div>
    <div id="fightGap"><img id="fightBanner" src="./fight_banner.png" alt=""></div>
   </section>
-<div class="fine-print"><span>BUILD:10.20~0620</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.20~1318</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 </div>
 <script>
 const ROOT="./",ARENA_DIR=ROOT+"arenas/",FIGHTER_DIR=ROOT+"fighters/",TITLECARD_DIR=ROOT+"titlecards/",OBJECT_DIR=ROOT+"objects/",AUDIO=ROOT+"audio/";
@@ -642,9 +643,11 @@ const ROUND_CALLS=["3","2","1","READY","FIGHT!"],TITLE_MENUS={fighters:1,opponen
 const KEEP_ARENA_MUSIC={fight:1};
 const POSE_LABEL={punchL:"left punch",punchR:"right punch",kickL:"left kick",kickR:"right kick",throw:"throw",block:"block",victory:"victory",loser:"loser",walk:"walk",taunt:"taunt",hit:"hit"};
 const THROW_OBJECTS=["phone.png","laptop.png","coffee.png","chart.png","newspaper.png","megaphone.png","bag.png","keyboard.png","coin.png","contract.png"];
+const sfxAmmoHitEl=document.getElementById("sfxAmmoHit");
+function sfxAmmoHit(){playFile(sfxAmmoHitEl);}
 const INTRO_PAGES=["W.F.U.D. STUDIOS","PRESENTS","FUD KINGZ OF FINTWITS"],LOAD_HOLD_MS=3000;
 function unique(list){const seen={};return(list||[]).filter(function(u){if(!u||seen[u])return false;seen[u]=true;return true;});}
-const MONEY_URLS=unique([OBJECT_DIR+"money.png",ROOT+"money.png","./objects/money.png","./money.png"]);
+const MONEY_URLS=unique([OBJECT_DIR+"money.png",ROOT+"./images/money.png"]);
 function fighterRoot(name){const n=String(name||"").trim().toLowerCase();return FIGHTER_DIR+n+"/";}
 function selectUrls(name){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);return unique([dir+n+" title.gif",dir+"title.gif",FIGHTER_DIR+n+" title.gif"]);}
 function titlecardUrls(name){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);return unique([dir+n+" titlecard.png",dir+"titlecard.png",TITLECARD_DIR+n+" titlecard.png"]);}
@@ -1958,20 +1961,19 @@ function eruptMoney(to){
   const ground=Math.max(80, stageBox.height - 46);
   const floorW=Math.max(180, stageBox.width - 28);
 
-  // Origin = center of the liquidation pin (the _l_object). Fall back to the body if no pin.
   let originX, originY;
   if(pin){
-    originX = pin.offsetLeft + 60;          // center of 120px pin
-    originY = pin.offsetTop + 50;           // slightly above the pin's middle so it bursts out of it
+    originX = pin.offsetLeft + 60;
+    originY = pin.offsetTop + 40;
   } else {
     const body=bodyBox(to);
     originX = body.mid - stageBox.left;
     originY = Math.max(70, body.bottom - stageBox.top - 36);
   }
 
-  const urls=unique(MONEY_URLS.concat([OBJECT_DIR+"money.gif",ROOT+"money.gif","./objects/money.gif","./money.gif"]));
+  const urls=unique(MONEY_URLS.concat([OBJECT_DIR+"money.png",ROOT+"./images/money.png"]));
 
-  for(let i=0;i<42;i++){
+  for(let i=0;i<48;i++){
     const img=takeCash();
     img.classList.add("erupt");
     bindSrcList(img, urls);
@@ -1979,25 +1981,26 @@ function eruptMoney(to){
     const landX = 8 + Math.random() * (floorW - 8);
     const spread = landX - (originX - 21);
 
-    // Volcano burst: moderate upward kick from the pin, then fall to the floor
-    const rise = -(18 + Math.random() * 42);           // only 18–60px up from the pin
-    const landY = ground - Math.random() * 28;
+    // High volcano: shoot up near the HUD, then fall to the floor
+    const peak = 4 + Math.random() * 5;          // stop just under the HUD
+    const rise = peak - originY;                   // negative = upward
+    const landY = ground - Math.random() * 30;
     const rot = Math.random() * 720 - 360;
 
     img.style.left = (originX - 21) + "px";
     img.style.top = originY + "px";
     img.style.opacity = "1";
-    img.style.zIndex = "5";
+    img.style.zIndex = "6";
     stage.appendChild(img);
 
     img.animate([
-      { transform: "translate(0,0) scale(.35) rotate(0deg)", offset: 0 },
-      { transform: "translate(" + (spread * 0.35) + "px," + rise + "px) scale(1.2) rotate(" + (rot * 0.4) + "deg)", offset: 0.28 },
+      { transform: "translate(0,0) scale(.3) rotate(0deg)", offset: 0 },
+      { transform: "translate(" + (spread * 0.4) + "px," + rise + "px) scale(1.25) rotate(" + (rot * 0.4) + "deg)", offset: 0.38 },
       { transform: "translate(" + spread + "px," + (landY - originY) + "px) scale(1) rotate(" + rot + "deg)", offset: 1 }
     ], {
-      duration: 900 + Math.random() * 500,
-      easing: "cubic-bezier(.18,.7,.3,1)",
-      delay: i * 18,
+      duration: 1100 + Math.random() * 500,
+      easing: "cubic-bezier(.15,.75,.3,1)",
+      delay: i * 14,
       fill: "forwards"
     });
   }
@@ -2073,7 +2076,7 @@ function attack(from,to,type){
     resolveHit(from,to,isKick?KICK_DMG:PUNCH_DMG,type);
   },90);
 }
-function throwObject(from,to){if((!liquidateOn||from!=="you")&&(over||paused||announcing))return;if(!canThrow(from))return;spendThrow(from);const el=document.getElementById(from==="you"?"you":"cpu");el.classList.add("throw");playPose(from,"throw");setTimeout(function(){el.classList.remove("throw");},180);sfxThrow();const fighter=FIGHTERS[from==="you"?selectedFighter:cpuFighter];const stage=document.getElementById("stage"),img=document.createElement("img");img.className="toss";img.style.width=TOSS_SIZE+"px";img.style.height=TOSS_SIZE+"px";img.style.maxWidth=TOSS_SIZE+"px";img.style.maxHeight=TOSS_SIZE+"px";img.style.objectFit="contain";bindSrcList(img,fighter.objects);const start=bodyBox(from),dest=bodyBox(to),stageBox=stage.getBoundingClientRect(),half=TOSS_SIZE/2;img.style.left=(start.mid-stageBox.left-half)+"px";img.style.top=(start.top-stageBox.top-8)+"px";stage.appendChild(img);const endX=dest.mid-stageBox.left-half,endY=dest.top-stageBox.top+8;img.animate([{transform:"translate(0,0) rotate(0deg)"},{transform:"translate("+(endX-parseFloat(img.style.left))+"px,"+(endY-parseFloat(img.style.top))+"px) rotate(320deg)"}],{duration:THROW_MS,easing:"ease-in"});setTimeout(function(){img.remove();if(!liquidateOn&&(over||paused||announcing))return;const dmg=ammoDamage(),blocked=to==="you"?youBlocking:cpuBlocking;resolveHit(from,to,dmg,"throw");if(!blocked)pushBack(to,dmg>=3?24:(dmg>=2?16:8));if(from==="you"){const img=document.getElementById("youFile");if(img&&img.dataset.pose==="throw"){if(isMoving()&&!youBlocking)playPose("you","walk");else if(youBlocking)playPose("you","block");else playPose("you","idle");}}},THROW_MS);}
+function throwObject(from,to){if((!liquidateOn||from!=="you")&&(over||paused||announcing))return;if(!canThrow(from))return;spendThrow(from);const el=document.getElementById(from==="you"?"you":"cpu");el.classList.add("throw");playPose(from,"throw");setTimeout(function(){el.classList.remove("throw");},180);sfxThrow();const fighter=FIGHTERS[from==="you"?selectedFighter:cpuFighter];const stage=document.getElementById("stage"),img=document.createElement("img");img.className="toss";img.style.width=TOSS_SIZE+"px";img.style.height=TOSS_SIZE+"px";img.style.maxWidth=TOSS_SIZE+"px";img.style.maxHeight=TOSS_SIZE+"px";img.style.objectFit="contain";bindSrcList(img,fighter.objects);const start=bodyBox(from),dest=bodyBox(to),stageBox=stage.getBoundingClientRect(),half=TOSS_SIZE/2;img.style.left=(start.mid-stageBox.left-half)+"px";img.style.top=(start.top-stageBox.top-8)+"px";stage.appendChild(img);const endX=dest.mid-stageBox.left-half,endY=dest.top-stageBox.top+8;img.animate([{transform:"translate(0,0) rotate(0deg)"},{transform:"translate("+(endX-parseFloat(img.style.left))+"px,"+(endY-parseFloat(img.style.top))+"px) rotate(320deg)"}],{duration:THROW_MS,easing:"ease-in"});setTimeout(function(){img.remove();if(!liquidateOn&&(over||paused||announcing))return;const dmg=ammoDamage(),blocked=to==="you"?youBlocking:cpuBlocking;if(!blocked)sfxAmmoHit();resolveHit(from,to,dmg,"throw");if(!blocked)pushBack(to,dmg>=3?24:(dmg>=2?16:8));if(from==="you"){const img=document.getElementById("youFile");if(img&&img.dataset.pose==="throw"){if(isMoving()&&!youBlocking)playPose("you","walk");else if(youBlocking)playPose("you","block");else playPose("you","idle");}}},THROW_MS);}
 function cpuStrike(tune){
   setBlock("cpu",false);
   const t=tune||skillTune();
