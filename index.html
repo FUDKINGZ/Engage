@@ -100,6 +100,8 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .news-bulletin{display:none;width:min(100%,420px);margin:8px 0 0;padding:8px 10px;border:1px solid #39ff14;border-radius:10px;background:rgba(0,0,0,.45);color:#eaffea;font-family:"Courier New",Courier,monospace;font-size:11px;line-height:1.35;text-align:left;text-shadow:0 0 6px rgba(57,255,20,.35)}
 .news-bulletin b{display:block;margin-bottom:4px;color:#39ff14;letter-spacing:1px;text-align:center}
 #stockcred .scores-wrap,#guide .scores-wrap,#stockcred .stat-card,#guide .stat-card,#guide .post-sub{text-align:center}
+#guide .scores-wrap,#stockcred .scores-wrap{overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:12px}
+#guide .stat-card,#stockcred .stat-card{flex-shrink:0}
 #stockcred .stat-head,#guide .stat-head{justify-content:center;text-align:center}
 #stockcred .stat-head>div,#guide .stat-head>div{text-align:center}
 #stockcred .mint,#guide .mint,#stockcred .grok-credit,#guide .grok-credit{text-align:center}
@@ -184,10 +186,10 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .slot.locked img,.slot.locked .arena-art{filter:grayscale(1) brightness(.38)}
 .lock-tag{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);background:rgba(0,0,0,.78);color:#ffd54f;border:1px solid #886;font-size:11px;font-weight:900;padding:7px 10px;border-radius:8px;text-align:center;width:max-content;max-width:92%;white-space:normal;line-height:1.15}
 .opp-wrap,.liquid-wrap{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px;padding:2px 6px;overflow:hidden}
-.liquid-stage{width:100%;max-width:720px;flex:0 0 auto;min-height:0;display:grid;grid-template-columns:128px minmax(0,1fr);grid-template-rows:auto;align-items:start;gap:6px;overflow:hidden}
-.liquid-hero{position:relative;min-width:0;width:128px;height:364px;flex:none;z-index:1;pointer-events:none;display:flex;flex-direction:column}
-.liquid-hero .panel{width:128px;height:364px;flex:none;background:transparent;border:0;border-radius:14px;overflow:hidden;box-shadow:none}
-.liquid-hero img{width:128px;height:364px;object-fit:contain;object-position:center top;display:block;filter:drop-shadow(0 12px 18px #000);opacity:.98;transform:none}
+.liquid-stage{width:100%;max-width:720px;flex:0 0 auto;min-height:0;display:grid;max-height:calc(100dvh - 220px);grid-template-columns:128px minmax(0,1fr);grid-template-rows:auto;align-items:start;gap:6px;overflow:hidden}
+.liquid-hero{position:relative;min-width:0;width:min(128px,28vw);height:auto;aspect-ratio:128/364;flex:none;z-index:1;pointer-events:none;display:flex;flex-direction:column}
+.liquid-hero .panel{width:100%;height:100%;flex:none;background:transparent;border:0;border-radius:14px;overflow:hidden;box-shadow:none}
+.liquid-hero img{width:100%;height:100%;object-fit:contain;object-position:center top;display:block;filter:drop-shadow(0 12px 18px #000);opacity:.98}
 .liquid-main{width:100%;max-width:720px;display:flex;gap:10px;align-items:stretch;min-height:0;flex:1}
 .hidden-box{display:none!important}
 .hidden-box label{display:none}
@@ -628,7 +630,7 @@ input[type=file].hidden-file{display:none}
    </div>
    <div id="fightGap"><img id="fightBanner" src="./fight_banner.png" alt=""></div>
   </section>
-<div class="fine-print"><span>BUILD:10.20~1318</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.20~1348</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 </div>
 <script>
 const ROOT="./",ARENA_DIR=ROOT+"arenas/",FIGHTER_DIR=ROOT+"fighters/",TITLECARD_DIR=ROOT+"titlecards/",OBJECT_DIR=ROOT+"objects/",AUDIO=ROOT+"audio/";
@@ -777,7 +779,13 @@ function scoreWasWin(s){const m=String((s&&s.record)||"").match(/^(\d+)\s*-\s*(\
 function emptyFighterBook(){const book={};FIGHTERS.forEach(function(f){book[f.name]={fights:0,wins:0,losses:0,points:0,xp:0};});return book;}
 function normalizePlayer(p){const scores=Array.isArray(p&&p.scores)?p.scores:[];let fights=parseInt(p&&p.fights,10),wins=parseInt(p&&p.wins,10),losses=parseInt(p&&p.losses,10),points=parseInt(p&&p.points,10);if(!fights)fights=scores.length;if(isNaN(wins)||wins<0)wins=scores.filter(scoreWasWin).length;if(isNaN(losses)||losses<0)losses=Math.max(0,fights-wins);if(isNaN(points)||points<0)points=scores.reduce(function(n,s){return n+(s.score||0);},0);return{id:(p&&p.id)||uid(),name:(p&&p.name)||"Player",handle:normHandle((p&&(p.handle||p.name))||"@player"),wallet:String((p&&p.wallet)||"").trim(),admin:!!(p&&p.admin),created:(p&&p.created)||Date.now(),scores:scores,invites:Array.isArray(p&&p.invites)?p.invites:[],xp:Math.max(0,parseInt(p&&p.xp,10)||0),crowns:Math.max(0,parseInt(p&&p.crowns,10)||0),fights:Math.max(0,fights||0),wins:Math.max(0,wins||0),losses:Math.max(0,losses||0),points:Math.max(0,points||0),fighters:Object.assign(emptyFighterBook(),(p&&p.fighters)||{}),arcadeSaves:Array.isArray(p&&p.arcadeSaves)?p.arcadeSaves:[]};}
 function loadRosterLocal(){try{const data=JSON.parse(localStorage.getItem(ROSTER_STORE)||"null");if(!data||!Array.isArray(data.players))return emptyRoster();return{activeId:data.activeId||"",players:data.players.map(normalizePlayer)};}catch(e){return emptyRoster();}}
-function persistRoster(){try{localStorage.setItem(ROSTER_STORE,JSON.stringify(rosterData));}catch(e){}writeRosterToRoot(false);}
+function persistRoster(){
+  try{
+    const str=JSON.stringify(rosterData);
+    if(str.length<480000) localStorage.setItem(ROSTER_STORE,str);
+  }catch(e){console.warn("roster persist failed",e);}
+  writeRosterToRoot(false);
+}
 function activePlayer(){return rosterData.players.find(function(p){return p.id===rosterData.activeId;})||null;}
 function ensureDefaultPlayer(){if(!rosterData.players.length){const p=normalizePlayer({id:uid(),name:"Player 1",handle:"@Player1",created:Date.now()});rosterData.players.push(p);rosterData.activeId=p.id;persistRoster();}else if(!activePlayer()){rosterData.activeId=rosterData.players[0].id;persistRoster();}}
 function setRosterNote(t){document.getElementById("rosterNote").textContent=t||"";}
@@ -1312,11 +1320,16 @@ function cpuEngage(){
   nudgeCpu(0.85);
   return "press";
 }
+function invalidateBoxes(){boxCache=null;}
 function bodyBox(who){
+  if(boxCache&&boxCache[who])return boxCache[who];
   const el=document.getElementById(who==="you"?"you":"cpu");
   if(!el)return{left:0,right:0,top:0,bottom:0,mid:0};
   const r=el.getBoundingClientRect();
-  return{left:r.left,right:r.right,top:r.top+r.height*0.18,bottom:r.bottom-r.height*0.05,mid:r.left+r.width/2};
+  const b={left:r.left,right:r.right,top:r.top+r.height*0.18,bottom:r.bottom-r.height*0.05,mid:r.left+r.width/2};
+  if(!boxCache)boxCache={};
+  boxCache[who]=b;
+  return b;
 }
 function inMeleeRange(){
   const youEl = document.getElementById("you");
@@ -1324,18 +1337,17 @@ function inMeleeRange(){
   if(!youEl || !cpuEl) return (youPos + cpuPos) >= (meetLimit() - 4);
   const you = youEl.getBoundingClientRect();
   const cpu = cpuEl.getBoundingClientRect();
-  // Inset ~22% on each side so we ignore transparent padding and measure near the visible mass
-  const youInset = you.width * 0.22;
-  const cpuInset = cpu.width * 0.22;
+  if(you.width < 10 || cpu.width < 10) return (youPos + cpuPos) >= (meetLimit() - 4);
+  const youInset = you.width * 0.18;
+  const cpuInset = cpu.width * 0.18;
   const youLeft = you.left + youInset;
   const youRight = you.right - youInset;
   const cpuLeft = cpu.left + cpuInset;
   const cpuRight = cpu.right - cpuInset;
   const gap = youRight < cpuLeft ? cpuLeft - youRight
             : (cpuRight < youLeft ? youLeft - cpuRight : 0);
-  // Tight threshold: only register when the approximated visible masses are nearly touching
-  // (attack translates still help the limbs reach)
-  return gap <= 12;
+  // Slightly more forgiving so limbs can connect; still tight
+  return gap <= 18 || (youPos + cpuPos) >= (meetLimit() - 2);
 }
 function pushingNow(){
   return youBlocking&&(moveHold.right||keysDown.ArrowRight||keysDown.KeyL||keysDown.KeyR);
@@ -1516,14 +1528,14 @@ function bindSrcList(img,list){
     if(img.src!==next.src)img.src=next.src;
     img.classList.add("loaded");
   };
-  next.onerror=function(){
-    i+=1;
-    if(i<urls.length){
-      next.src=urls[i];
-      return;
-    }
-    img.classList.add("loaded");
-  };
+next.onerror=function(){
+  i+=1;
+  if(i<urls.length && i<4){   // hard cap retries
+    next.src=urls[i];
+    return;
+  }
+  img.classList.add("loaded");
+};
   next.src=urls[0];
 }
 function playPose(who,pose){
