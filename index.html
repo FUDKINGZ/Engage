@@ -258,16 +258,16 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #cpu{right:6%;z-index:4}
 #cpu .fighter-img{transform:scaleX(-1)}
 .fighter.hit{filter:none}
-#you.punchL{transform:translateX(14%) rotate(-5deg)}
-#you.punchR{transform:translateX(18%) rotate(3deg)}
-#you.kickL{transform:translateX(13%) rotate(7deg)}
-#you.kickR{transform:translateX(16%) translateY(-4%) rotate(-8deg)}
-#you.throw{transform:translateX(8%) rotate(-8deg)}
-#cpu.punchL{transform:translateX(-14%) rotate(5deg)}
-#cpu.punchR{transform:translateX(-18%) rotate(-3deg)}
-#cpu.kickL{transform:translateX(-13%) rotate(-7deg)}
-#cpu.kickR{transform:translateX(-16%) translateY(-4%) rotate(8deg)}
-#cpu.throw{transform:translateX(-8%) rotate(8deg)}
+#you.punchL{transform:translateX(8%)}
+#you.punchR{transform:translateX(10%)}
+#you.kickL{transform:translateX(7%)}
+#you.kickR{transform:translateX(9%) translateY(-2%)}
+#you.throw{transform:translateX(5%)}
+#cpu.punchL{transform:translateX(-8%)}
+#cpu.punchR{transform:translateX(-10%)}
+#cpu.kickL{transform:translateX(-7%)}
+#cpu.kickR{transform:translateX(-9%) translateY(-2%)}
+#cpu.throw{transform:translateX(-5%)}
 .toss,.cash{position:absolute;object-fit:contain;object-position:center;pointer-events:none;z-index:8;filter:drop-shadow(0 8px 12px #000);image-rendering:auto;opacity:0}
 .toss.loaded,.cash.loaded{opacity:1}
 .toss{width:min(14vw,55px);height:min(14vw,55px);max-width:55px;max-height:55px}
@@ -584,7 +584,7 @@ const TITLE_TRACK=AUDIO+"title/maintitle.mp3",INTRO_BED=AUDIO+"intro/intro-boot.
 const ROSTER=ROOT+"title screen.jpg",ROSTER_FILE=ROOT+"roster.json";
 const MAX=100,PUNCH_DMG=1,KICK_DMG=1.5,THROW_DMG=2.5,BLOCK_HEAL=0.5;
 const HS_STORE="ft_gains",SKILL_STORE="ft_skill",ARCADE_SKILL_STORE="ft_arcade_skill",ROSTER_STORE="ft_roster",ROUNDS_STORE="ft_rounds";
-const POSE_MS=420,HS_LIMIT=10,ANNOUNCE_MS=800,WIN_FLASH_MS=4200,ROUND_WIN_HOLD_MS=4000,FINAL_KO_HOLD_MS=4000;
+const POSE_MS=140,HS_LIMIT=10,ANNOUNCE_MS=800,WIN_FLASH_MS=4200,ROUND_WIN_HOLD_MS=4000,FINAL_KO_HOLD_MS=4000;
 const THROW_MS=640,POWER_MAX=100,POWER_PUNCH=22,POWER_KICK=28,COMBO_WINDOW=900,COMBO_BONUS=12,THROWS_PER_POWER=3;
 const ROUND_SECS=120,YOU_HOME=6,YOU_MIN=2,YOU_MAX=58,CPU_HOME=6,CPU_MIN=2,CPU_MAX=58,TILT_DEAD=7,TILT_SCALE=28,ARCADE_ROUNDS=2,CASH_W=29,CASH_H=26,TOSS_SIZE=55;
 const ROUND_CALLS=["3","2","1","READY","FIGHT!"],TITLE_MENUS={fighters:1,opponents:1,invite:1,scores:1,roster:1,crown:1,credits:1,guide:1,stockcred:1,soundtrack:1,gate:1};
@@ -1775,7 +1775,7 @@ function setBlock(who,on){
     if(!over)playPose("cpu",on?"block":"idle");
   }
 }
-function playerMove(type){if(liquidateOn&&type==="punchR")noteLiquidate("J");if(!liquidateOn&&(paused||over||announcing||youBlocking))return;if(liquidateOn&&youBlocking)return;const now=Date.now();if(now-lastTap<180)return;lastTap=now;if(type==="throw"){if(!canThrow("you")){floats("you","NO POWER","miss");return;}throwObject("you","cpu");}else attack("you","cpu",type);}
+function playerMove(type){if(liquidateOn&&type==="punchR")noteLiquidate("J");if(!liquidateOn&&(paused||over||announcing||youBlocking))return;if(liquidateOn&&youBlocking)return;const now=Date.now();if(now-lastTap<140)return;lastTap=now;if(type==="throw"){if(!canThrow("you")){floats("you","NO POWER","miss");return;}throwObject("you","cpu");}else attack("you","cpu",type);}
 function moneyCountFor(dmg){if(dmg>=THROW_DMG)return 3;if(dmg>=KICK_DMG)return 2;return 1;}
 function ammoDamage(){
   const you=document.getElementById("you").getBoundingClientRect();
@@ -1805,7 +1805,7 @@ function attack(from,to,type){
   const el=document.getElementById(from==="you"?"you":"cpu");
   el.classList.add(type);
   playPose(from,type);
-  setTimeout(function(){el.classList.remove(type);},160);
+  setTimeout(function(){el.classList.remove(type);},140);
   const isKick=type==="kickL"||type==="kickR";
   setTimeout(function(){
     if(!liquidateOn&&(over||paused||announcing))return;
