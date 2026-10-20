@@ -1108,7 +1108,7 @@ function knockLoserHome(who, done){
 }
 let boxCache=null,boxAt=0;
 // Minimal movement only: % positions, one gap stop matched to visible sprite mass (~42% max-width)
-const BODY_STOP = 51; // lower = closer allowed; tuned so visible masses can touch
+const BODY_STOP = 50; // lower = closer allowed; tuned so visible masses can touch
 function meetLimit(){return 100-BODY_STOP;}
 function resolveOverlap(){
   const lim=meetLimit();
