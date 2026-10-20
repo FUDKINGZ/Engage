@@ -206,7 +206,7 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 #fighterDots{display:none}
 .ammo-label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:#ffd54f;text-shadow:0 0 8px #ffb300;line-height:1;margin:0;padding:0 0 2px}
 .ammo-row{display:flex;align-items:flex-start;justify-content:center;gap:16px;width:100%;height:auto;min-height:0;pointer-events:none;overflow:visible;margin:0}
-.ammo-row img{width:44px;height:44px;object-fit:contain;background:rgba(0,0,0,.4);border:1px solid #334;border-radius:8px}
+.ammo-row img{width:44px;height:44px;object-fit:contain;background:#1a2233;border:1px solid #334;border-radius:8px}
 .ammo-row img.side{opacity:.35}
 .ammo-row img.center{width:62px;height:62px;border-color:#ffd54f;opacity:1}
 label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:#ffd54f;text-shadow:0 0 8px #ffb300;line-height:1;margin:0 0 -6px;padding:0}
@@ -249,12 +249,12 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #fightBanner{display:none}
 .fighter{position:absolute;bottom:7.5%;width:auto;max-width:46%;height:65%;aspect-ratio:auto;max-height:65%;transform-origin:center bottom;z-index:4;overflow:hidden}
 .fighter-img{width:auto;height:100%;max-width:100%;object-fit:contain;object-position:center bottom;display:none;background:transparent!important;transform:none}
-#you{left:6%;z-index:6}#cpu{right:6%;z-index:4}#cpu .fighter-img{transform:scaleX(-1)}.fighter.hit{filter:none}
+#you{left:6%;z-index:4}#cpu{right:6%;z-index:4}#cpu .fighter-img{transform:scaleX(-1)}.fighter.hit{filter:none}
 #fight.paused .power-wrap,
 #fight.paused .fighter{
   animation-play-state:paused !important;
 }
-#you{left:6%;z-index:6}
+#you{left:6%;z-index:4}
 #cpu{right:6%;z-index:4}
 #cpu .fighter-img{transform:scaleX(-1)}
 .fighter.hit{filter:none}
@@ -1420,7 +1420,46 @@ function shareInvite(){if(navigator.share)navigator.share({title:"FINTWITS FUD K
 function joinRoom(){const code=(document.getElementById("joinCode").value||"").trim().toUpperCase();if(code.length<4){setInviteNote("Enter a valid code.");return;}roomCode=code;document.getElementById("roomCode").textContent=roomCode;if(!invitedMember)invitedMember={handle:"@Challenger",name:"Challenger",fighter:wrap(selectedFighter+1,MAIN_COUNT),color:"#80d8ff"};setInviteNote("Joined "+roomCode);afterInvite();}
 function afterInvite(){if(!invitedMember&&mode==="one"){setInviteNote("Invite someone first.");return;}renderFighterCarousel();show("fighters");}
 function decorateSlot(el,locked,label){if(!locked)return el;el.classList.add("locked");const tag=document.createElement("div");tag.className="lock-tag";tag.textContent=label||"LOCKED";el.appendChild(tag);return el;}
-function makeFighterSlot(f,cls,idx,onClick){const wrapEl=document.createElement("div");wrapEl.className="slot-wrap "+cls;const name=document.createElement("b");name.className="slot-name";name.textContent=f.name;wrapEl.appendChild(name);const el=document.createElement("div");el.className="slot "+cls;const img=document.createElement("img");img.decoding="async";img.alt=f.name;bindSrcList(img,f.select);el.appendChild(img);wrapEl.appendChild(el);if(onClick)wrapEl.onclick=onClick;return wrapEl;}
+function makeFighterSlot(f,cls,idx,onClick){
+  const wrapEl=document.createElement("div");
+  wrapEl.className="slot-wrap "+cls;
+  const name=document.createElement("b");
+  name.className="slot-name";
+  name.textContent=f.name;
+  wrapEl.appendChild(name);
+  const el=document.createElement("div");
+  el.className="slot "+cls;
+
+  // Home arena as the slot background
+  const homes={
+    "Stonks 6-7":"Street Fight","Ventifa":"Hospital Fight","Davinstigator":"Airport Terminal",
+    "Dr Davinstigator":"Airport Terminal","Troll Bee":"Gold Vault","Jose Brownstein":"Joses Work Shop",
+    "Captn Jack Hashtag":"Deck Of Ship","Capt Jack Hashtag":"Deck Of Ship","OFFICER SANCHEZ":"Crime Scene",
+    "Wholly Mac":"Crime Scene","Dev Root X":"WFUD Satellite","WHITE CASSEL":"Back Yard Party",
+    "White Cassel":"Back Yard Party","Fuzzled Raccoon":"Savage Reality Alley","Big Daddy Turk":"Hormuz Strait",
+    "Dragonfly Fairy":"Mullen Car Lot","Bioweapon Bulldog":"Trailer Park","LIL OJ":"WFUD Press Room",
+    "Lil OJ":"WFUD Press Room","Fud Daddy 420":"WFUD Studios Rooftop","KING TROLL":"Dumpster Fire",
+    "King Troll":"Dumpster Fire","Grox":"Grox Dojo","Trashed Panda":"Pet Grooming",
+    "That Badger Girl":"Hair Salon","Platinum Meow":"Anime City","Dark Fud 420":"Wizards Castle"
+  };
+  const arenaName=homes[f.name];
+  const arena=arenaName?ARENAS.find(function(a){return a.name===arenaName;}):null;
+  if(arena&&arena.file&&cls.indexOf("center")>=0){
+    el.style.backgroundImage="url('"+arena.file+"')";
+    el.style.backgroundSize="cover";
+    el.style.backgroundPosition="center center";
+    el.style.backgroundRepeat="no-repeat";
+  }
+
+  const img=document.createElement("img");
+  img.decoding="async";
+  img.alt=f.name;
+  bindSrcList(img,f.select);
+  el.appendChild(img);
+  wrapEl.appendChild(el);
+  if(onClick)wrapEl.onclick=onClick;
+  return wrapEl;
+}
 function makeArenaSlot(a,cls,idx,onClick){const wrapEl=document.createElement("div");wrapEl.className="slot-wrap "+cls;const name=document.createElement("b");name.className="slot-name";name.textContent=a.name;wrapEl.appendChild(name);const el=document.createElement("div");el.className="slot "+cls;const art=document.createElement("div");art.className="arena-art";art.style.background=a.color;art.style.backgroundImage="url('"+a.file+"')";art.style.backgroundSize="contain";art.style.backgroundPosition="center center";art.style.backgroundRepeat="no-repeat";el.appendChild(art);decorateSlot(el,arenaLocked(idx));wrapEl.appendChild(el);if(onClick)wrapEl.onclick=onClick;return wrapEl;}
 const AMMO_NAMES=["NUDE PIX","EPT TEST","PRISON SHOE","FUD RADIO","TOOL BOX","COCKTAIL","TOMBSTONE","FUSION REACTOR","HOT DOG","SKULL & BONES","OIL BARREL","MULLEN DRAGONFLY","GLOBE","WFUD PODIUM","MICROPHONE","STREET BIKE","BOW","TABLET","TRASH BAG","HAIR DRYER","ENERGY SPELL"];
 const WHERE_NOW={
@@ -1446,7 +1485,52 @@ const WHERE_NOW={
  "Platinum Meow":"The neon alleys still know the name. Left a bow string humming and the city lights on.",
   "Dark Fud 420":"The tower lights stayed on. Left the spellbook open and the ENERGY SPELL still humming in the air."
 };
-function paintAmmo(id,idx){const box=document.getElementById(id);if(!box)return;box.innerHTML="";const list=playableIndexes();if(!list.length)return;const at=Math.max(0,list.indexOf(idx)),n=list.length;[list[wrap(at-1,n)],list[at],list[wrap(at+1,n)]].forEach(function(i,slot){const cell=document.createElement("div");cell.style.cssText="display:flex;flex-direction:column;align-items:center;gap:3px;width:72px";const img=document.createElement("img");img.alt=AMMO_NAMES[i]||"";img.className=slot===1?"center":"side";bindSrcList(img,FIGHTERS[i].objects);cell.appendChild(img);if(slot===1){const cap=document.createElement("b");cap.textContent=AMMO_NAMES[i]||"";cap.style.cssText="font-size:7px;color:#ffd54f;text-align:center;line-height:1;white-space:nowrap;width:100%;margin:2px 0 0;padding:0";cell.style.width="104px";cell.appendChild(cap);}box.appendChild(cell);});}
+function paintAmmo(id,idx){
+  const box=document.getElementById(id);
+  if(!box) return;
+  box.innerHTML="";
+  const list=playableIndexes();
+  if(!list.length) return;
+  const at=Math.max(0,list.indexOf(idx)), n=list.length;
+
+  // Arena color for the center fighter
+  const homes={
+    "Stonks 6-7":"Street Fight","Ventifa":"Hospital Fight","Davinstigator":"Airport Terminal",
+    "Troll Bee":"Gold Vault","Jose Brownstein":"Joses Work Shop","Captn Jack Hashtag":"Deck Of Ship",
+    "OFFICER SANCHEZ":"Crime Scene","Dev Root X":"WFUD Satellite","WHITE CASSEL":"Back Yard Party",
+    "Fuzzled Raccoon":"Savage Reality Alley","Big Daddy Turk":"Hormuz Strait","Dragonfly Fairy":"Mullen Car Lot",
+    "Bioweapon Bulldog":"Trailer Park","LIL OJ":"WFUD Press Room","Fud Daddy 420":"WFUD Studios Rooftop",
+    "KING TROLL":"Dumpster Fire","Grox":"Grox Dojo","Trashed Panda":"Pet Grooming",
+    "That Badger Girl":"Hair Salon","Platinum Meow":"Anime City","Dark Fud 420":"Wizards Castle"
+  };
+  const center=FIGHTERS[idx];
+  const arenaName=center&&homes[center.name];
+  const arena=arenaName?ARENAS.find(function(a){return a.name===arenaName;}):null;
+  const tint=arena&&arena.color?arena.color:"#1a2233";
+
+  [list[wrap(at-1,n)], list[at], list[wrap(at+1,n)]].forEach(function(i,slot){
+    const cell=document.createElement("div");
+    cell.style.cssText="display:flex;flex-direction:column;align-items:center;gap:3px;width:72px";
+    const img=document.createElement("img");
+    img.alt=AMMO_NAMES[i]||"";
+    img.className=slot===1?"center":"side";
+    // tinted background matching the center fighter's arena
+    img.style.background=slot===1
+      ? "linear-gradient(180deg, "+tint+"cc, #0a0e16)"
+      : "rgba(0,0,0,.45)";
+    img.style.borderColor=slot===1?tint:"#334";
+    bindSrcList(img, FIGHTERS[i].objects);
+    cell.appendChild(img);
+    if(slot===1){
+      const cap=document.createElement("b");
+      cap.textContent=AMMO_NAMES[i]||"";
+      cap.style.cssText="font-size:7px;color:#ffd54f;text-align:center;line-height:1;white-space:nowrap;width:100%;margin:2px 0 0;padding:0";
+      cell.style.width="104px";
+      cell.appendChild(cap);
+    }
+    box.appendChild(cell);
+  });
+}
 function renderFighterCarousel(){const box=document.getElementById("fighterCarousel"),dots=document.getElementById("fighterDots");box.innerHTML="";dots.innerHTML="";const list=playableIndexes();if(list.indexOf(selectedFighter)<0)selectedFighter=list[0]||0;const n=list.length,at=Math.max(0,list.indexOf(selectedFighter)),L=list[wrap(at-1,n)],R=list[wrap(at+1,n)];box.appendChild(makeFighterSlot(FIGHTERS[L],"side left",L,function(){shiftFighter(-1);}));box.appendChild(makeFighterSlot(FIGHTERS[selectedFighter],"center",selectedFighter));box.appendChild(makeFighterSlot(FIGHTERS[R],"side right",R,function(){shiftFighter(1);}));list.forEach(function(i){const d=document.createElement("i");if(i===selectedFighter)d.className="on";dots.appendChild(d);});paintAmmo("fighterAmmo",selectedFighter);warmNeighbors(selectedFighter);}
 function pickOpponent(idx){if(fighterLocked(idx))return;selectedOpponent=idx;renderOpponentScreen();}
 function renderHiddenRow(){const box=document.getElementById("hiddenRow");if(!box)return;box.innerHTML="";HIDDEN_INDEXES.forEach(function(idx){const f=FIGHTERS[idx];const cell=document.createElement("div");cell.className="hidden-cell"+(fighterLocked(idx)?" locked":"")+(selectedOpponent===idx?" picked":"");const b=document.createElement("b");b.textContent=fighterLocked(idx)?"\u00a0":f.name;cell.appendChild(b);const panel=document.createElement("div");panel.className="panel";const img=document.createElement("img");img.decoding="async";img.alt=f.name;bindSrcList(img,f.select);panel.appendChild(img);if(fighterLocked(idx)){const need=document.createElement("div");need.className="need";need.textContent="LOCKED  "+crownLabel(hiddenCost(idx));panel.appendChild(need);}cell.appendChild(panel);cell.onclick=function(){pickOpponent(idx);};box.appendChild(cell);});}
@@ -1804,8 +1888,12 @@ function attack(from,to,type){
   if(liquidateOn&&from!=="you")return;
   const el=document.getElementById(from==="you"?"you":"cpu");
   el.classList.add(type);
+  el.style.zIndex = "7";
   playPose(from,type);
-  setTimeout(function(){el.classList.remove(type);},140);
+  setTimeout(function(){
+    el.classList.remove(type);
+    el.style.zIndex = "4";
+  },160);
   const isKick=type==="kickL"||type==="kickR";
   setTimeout(function(){
     if(!liquidateOn&&(over||paused||announcing))return;
