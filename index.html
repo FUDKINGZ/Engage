@@ -651,7 +651,7 @@ input[type=file].hidden-file{display:none}
    </div>
    <div id="fightGap"><img id="fightBanner" src="./fight_banner.png" alt=""></div>
   </section>
-<div class="fine-print"><span>BUILD:10.21~0812</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.21~0842</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 </div>
 <script>
 const ROOT="./",ARENA_DIR=ROOT+"arenas/",FIGHTER_DIR=ROOT+"fighters/",TITLECARD_DIR=ROOT+"titlecards/",OBJECT_DIR=ROOT+"objects/",AUDIO=ROOT+"audio/";
@@ -2012,21 +2012,19 @@ function holdRoundWinner(youWonRound){
   document.getElementById("winFlash").classList.add("show","center");
   if(winFlashTimer)clearTimeout(winFlashTimer);
   if(window._roundWinRoll){clearInterval(window._roundWinRoll);window._roundWinRoll=null;}
-  let flip=0;
-  window._roundWinRoll=setInterval(function(){
-    flip^=1;
+  const hold=1800;
+  winFlashTimer=setTimeout(function(){
     koEl.classList.remove("roll-in");
     void koEl.offsetWidth;
-    koEl.textContent=flip?winnerName:title;
+    koEl.textContent=winnerName;
     koEl.classList.add("roll-in");
-  },900);
-  winFlashTimer=setTimeout(function(){
-    winFlashTimer=null;
-    if(window._roundWinRoll){clearInterval(window._roundWinRoll);window._roundWinRoll=null;}
-    koEl.classList.remove("roll-in");
-    document.getElementById("winFlash").classList.remove("show","center");
-    startNextRound();
-  },ROUND_WIN_HOLD_MS);
+    winFlashTimer=setTimeout(function(){
+      winFlashTimer=null;
+      koEl.classList.remove("roll-in");
+      document.getElementById("winFlash").classList.remove("show","center");
+      startNextRound();
+    },hold);
+  },hold);
 }
 function updateMeters(){const pct=function(v){return Math.max(0,(v/MAX)*100)+"%";};const p1=document.getElementById("p1Bar"),p2=document.getElementById("p2Bar");document.getElementById("p1Dollar").textContent="$"+Math.round(hp.you);document.getElementById("p2Dollar").textContent="$"+Math.round(hp.cpu);p1.style.width=pct(hp.you);p2.style.width=pct(hp.cpu);p1.style.background=healthColor(hp.you/MAX);p2.style.background=healthColor(hp.cpu/MAX);}
 const fxPool=[],cashPool=[];
