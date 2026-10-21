@@ -651,7 +651,7 @@ input[type=file].hidden-file{display:none}
    </div>
    <div id="fightGap"><img id="fightBanner" src="./fight_banner.png" alt=""></div>
   </section>
-<div class="fine-print"><span>BUILD:10.21~1242</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.21~1252</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 </div>
 <script>
 const ROOT="./",ARENA_DIR=ROOT+"arenas/",FIGHTER_DIR=ROOT+"fighters/",TITLECARD_DIR=ROOT+"titlecards/",OBJECT_DIR=ROOT+"objects/",AUDIO=ROOT+"audio/";
@@ -1170,12 +1170,13 @@ function applyCpuPos(){
 }
 function walkBackToHome(done){
   const targetYou = YOU_HOME, targetCpu = CPU_HOME;
+  playPose("you","walk");
+  playPose("cpu","walk");
   let last = performance.now();
   function step(now){
     const dt = Math.min(32, now - last);
     last = now;
     const scale = dt / 28;
-    // match normal walk speed (the 0.8 * scale * (speed/8) used in the fight)
     const stepSize = 0.8 * scale * (3 / 8);
     let arrived = true;
     if(Math.abs(youPos - targetYou) > 0.12){
@@ -1185,6 +1186,12 @@ function walkBackToHome(done){
     if(Math.abs(cpuPos - targetCpu) > 0.12){
       cpuPos += Math.sign(targetCpu - cpuPos) * Math.min(stepSize, Math.abs(targetCpu - cpuPos));
       arrived = false;
+    }
+    const youImg=document.getElementById("youFile");
+    const cpuImg=document.getElementById("cpuFile");
+    if(!arrived){
+      if(youImg&&youImg.dataset.pose!=="walk")playPose("you","walk");
+      if(cpuImg&&cpuImg.dataset.pose!=="walk")playPose("cpu","walk");
     }
     applyYouPos();
     applyCpuPos();
@@ -2241,11 +2248,10 @@ const willEndMatch=(youWonRound&&roundWins.you+1>=winsNeeded())||(!youWonRound&&
   if(!willEndMatch){
     // midround path (unchanged)
     sfxRoundBell();
-    playPose("you","idle");
-    playPose("cpu","idle");
+    stopWalkLoop();
+    moveHold.left=false;moveHold.right=false;
+    runHold.left=false;runHold.right=false;
     setTimeout(function(){
-      playPose("you","walk");
-      playPose("cpu","walk");
       walkBackToHome(function(){
         playPose(winner, "taunt");
         playPose(youWonRound ? "cpu" : "you", "knee");
