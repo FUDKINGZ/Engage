@@ -651,7 +651,7 @@ input[type=file].hidden-file{display:none}
    </div>
    <div id="fightGap"><img id="fightBanner" src="./fight_banner.png" alt=""></div>
   </section>
-<div class="fine-print"><span>BUILD:10.21~1252</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.21~1326</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 </div>
 <script>
 const ROOT="./",ARENA_DIR=ROOT+"arenas/",FIGHTER_DIR=ROOT+"fighters/",TITLECARD_DIR=ROOT+"titlecards/",OBJECT_DIR=ROOT+"objects/",AUDIO=ROOT+"audio/";
@@ -661,7 +661,8 @@ const MAX=100,PUNCH_DMG=1,KICK_DMG=1.5,THROW_DMG=2.5,BLOCK_HEAL=0.5;
 const HS_STORE="ft_gains",SKILL_STORE="ft_skill",ARCADE_SKILL_STORE="ft_arcade_skill",ROSTER_STORE="ft_roster",ROUNDS_STORE="ft_rounds";
 const POSE_MS=140,HS_LIMIT=10,ANNOUNCE_MS=800,WIN_FLASH_MS=4200,ROUND_WIN_HOLD_MS=4000,FINAL_KO_HOLD_MS=4000;
 const THROW_MS=640,POWER_MAX=100,POWER_PUNCH=22,POWER_KICK=28,COMBO_WINDOW=900,COMBO_BONUS=12,THROWS_PER_POWER=3;
-const ROUND_SECS=120,YOU_HOME=6,YOU_MIN=2,YOU_MAX=58,CPU_HOME=6,CPU_MIN=2,CPU_MAX=58,TILT_DEAD=7,TILT_SCALE=28,ARCADE_ROUNDS=2,CASH_W=29,CASH_H=26,TOSS_SIZE=55;
+const ROUND_SECS=120,YOU_HOME=6,YOU_MIN=2,YOU_MAX=58,CPU_HOME=6,CPU_MIN=2,CPU_MAX=58,TILT_DEAD=7,TILT_SCALE=28,ARCADE_ROUNDS=2,CASH_W=29,CASH_H=26,TOSS_SIZE=55,HIT_FX_SIZE=75,HIT_FX_MS=500;
+const HIT_FX_URL="./images/ammo_x.gif";
 const ROUND_CALLS=["3","2","1","READY","FIGHT!"],TITLE_MENUS={fighters:1,opponents:1,invite:1,scores:1,roster:1,crown:1,credits:1,guide:1,stockcred:1,soundtrack:1,gate:1};
 const KEEP_ARENA_MUSIC={fight:1};
 const POSE_LABEL={punchL:"left punch",punchR:"right punch",kickL:"left kick",kickR:"right kick",throw:"throw",block:"block",victory:"victory",loser:"loser",walk:"walk",taunt:"taunt",hit:"hit"};
@@ -2041,6 +2042,17 @@ function takeFx(){return fxPool.pop()||document.createElement("div");}
 function floats(){}
 function takeCash(){const img=cashPool.pop()||document.createElement("img");img.className="cash";img.style.width="42px";img.style.height="36px";img.style.maxWidth="42px";img.style.maxHeight="36px";img.style.objectFit="contain";img.alt="";return img;}
 function flyMoney(to,count){const stage=document.getElementById("stage"),body=bodyBox(to),stageBox=stage.getBoundingClientRect();const bills=Math.max(1,count||1),half=CASH_W/2;for(let i=0;i<bills;i++){const img=takeCash();bindSrcList(img,MONEY_URLS);const ox=(Math.random()*56-28)+i*14;img.style.left=(body.mid-stageBox.left-half+ox)+"px";img.style.top=(body.top-stageBox.top+8)+"px";stage.appendChild(img);const dir=to==="cpu"?1:-1,dx=dir*(90+Math.random()*110+i*22),dy=-120-Math.random()*90;img.animate([{transform:"translate(0,0) rotate(0deg)",opacity:1},{transform:"translate("+dx+"px,"+(dy+50)+"px) rotate("+(dir*110)+"deg)",opacity:0}],{duration:720+i*90,easing:"ease-out",delay:i*45});setTimeout(function(){if(img.parentNode)img.parentNode.removeChild(img);cashPool.push(img);},980+i*90);}}
+function spawnHitFx(stage, stageBox, dest){
+  if(!stage||!dest)return;
+  const fx=document.createElement("img");
+  fx.className="hit-fx";
+  fx.alt="";
+  fx.src=HIT_FX_URL;
+  const half=HIT_FX_SIZE/2;
+  fx.style.cssText="position:absolute;width:"+HIT_FX_SIZE+"px;height:"+HIT_FX_SIZE+"px;left:"+(dest.mid-stageBox.left-half)+"px;top:"+(dest.top-stageBox.top+8-half+18)+"px;z-index:11;pointer-events:none;object-fit:contain";
+  stage.appendChild(fx);
+  setTimeout(function(){if(fx.parentNode)fx.parentNode.removeChild(fx);},HIT_FX_MS);
+}
 function eruptMoney(to){
   const stage=document.getElementById("stage");
   if(!stage) return;
@@ -2164,7 +2176,18 @@ function attack(from,to,type){
     resolveHit(from,to,isKick?KICK_DMG:PUNCH_DMG,type);
   },90);
 }
-function throwObject(from,to){if((!liquidateOn||from!=="you")&&(over||paused||announcing))return;if(!canThrow(from))return;spendThrow(from);const el=document.getElementById(from==="you"?"you":"cpu");el.classList.add("throw");playPose(from,"throw");setTimeout(function(){el.classList.remove("throw");},180);sfxThrow();const fighter=FIGHTERS[from==="you"?selectedFighter:cpuFighter];const stage=document.getElementById("stage"),img=document.createElement("img");img.className="toss";img.style.width=TOSS_SIZE+"px";img.style.height=TOSS_SIZE+"px";img.style.maxWidth=TOSS_SIZE+"px";img.style.maxHeight=TOSS_SIZE+"px";img.style.objectFit="contain";bindSrcList(img,fighter.objects);const start=bodyBox(from),dest=bodyBox(to),stageBox=stage.getBoundingClientRect(),half=TOSS_SIZE/2;img.style.left=(start.mid-stageBox.left-half)+"px";img.style.top=(start.top-stageBox.top-8)+"px";stage.appendChild(img);const endX=dest.mid-stageBox.left-half,endY=dest.top-stageBox.top+8;img.animate([{transform:"translate(0,0) rotate(0deg)"},{transform:"translate("+(endX-parseFloat(img.style.left))+"px,"+(endY-parseFloat(img.style.top))+"px) rotate(320deg)"}],{duration:THROW_MS,easing:"ease-in"});setTimeout(function(){img.remove();if(!liquidateOn&&(over||paused||announcing))return;const dmg=ammoDamage(),blocked=to==="you"?youBlocking:cpuBlocking;if(!blocked)sfxAmmoHit();resolveHit(from,to,dmg,"throw");if(!blocked)pushBack(to,dmg>=3?24:(dmg>=2?16:8));if(from==="you"){const img=document.getElementById("youFile");if(img&&img.dataset.pose==="throw"){if(isMoving()&&!youBlocking)playPose("you","walk");else if(youBlocking)playPose("you","block");else playPose("you","idle");}}},THROW_MS);}
+function throwObject(from,to){if((!liquidateOn||from!=="you")&&(over||paused||announcing))return;if(!canThrow(from))return;spendThrow(from);const el=document.getElementById(from==="you"?"you":"cpu");el.classList.add("throw");playPose(from,"throw");setTimeout(function(){el.classList.remove("throw");},180);sfxThrow();const fighter=FIGHTERS[from==="you"?selectedFighter:cpuFighter];const stage=document.getElementById("stage"),img=document.createElement("img");img.className="toss";img.style.width=TOSS_SIZE+"px";img.style.height=TOSS_SIZE+"px";img.style.maxWidth=TOSS_SIZE+"px";img.style.maxHeight=TOSS_SIZE+"px";img.style.objectFit="contain";bindSrcList(img,fighter.objects);const start=bodyBox(from),dest=bodyBox(to),stageBox=stage.getBoundingClientRect(),half=TOSS_SIZE/2;img.style.left=(start.mid-stageBox.left-half)+"px";img.style.top=(start.top-stageBox.top-8)+"px";stage.appendChild(img);const endX=dest.mid-stageBox.left-half,endY=dest.top-stageBox.top+8;img.animate([{transform:"translate(0,0) rotate(0deg)"},{transform:"translate("+(endX-parseFloat(img.style.left))+"px,"+(endY-parseFloat(img.style.top))+"px) rotate(320deg)"}],{duration:THROW_MS,easing:"ease-in"});setTimeout(function(){
+  const hitX=parseFloat(img.style.left)||0, hitY=parseFloat(img.style.top)||0;
+  img.remove();
+  if(!liquidateOn&&(over||paused||announcing))return;
+  const dmg=ammoDamage(),blocked=to==="you"?youBlocking:cpuBlocking;
+  const stageNow=document.getElementById("stage");
+  const destNow=bodyBox(to);
+  const stageBoxNow=stageNow?stageNow.getBoundingClientRect():null;
+  if(stageNow&&stageBoxNow)spawnHitFx(stageNow,stageBoxNow,destNow);
+  if(!blocked)sfxAmmoHit();
+  resolveHit(from,to,dmg,"throw");
+  if(!blocked)pushBack(to,dmg>=3?24:(dmg>=2?16:8));if(from==="you"){const img=document.getElementById("youFile");if(img&&img.dataset.pose==="throw"){if(isMoving()&&!youBlocking)playPose("you","walk");else if(youBlocking)playPose("you","block");else playPose("you","idle");}}},THROW_MS);}
 function cpuStrike(tune){
   setBlock("cpu",false);
   const t=tune||skillTune();
