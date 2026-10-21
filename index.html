@@ -339,11 +339,28 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #winFlashName{font-family:Impact,"Arial Black",system-ui,sans-serif;font-size:clamp(18px,5.4vw,31px);font-weight:900;color:#ffd54f;text-shadow:0 0 18px #ffb300,0 0 8px #ffb300;letter-spacing:2.5px;text-transform:uppercase;position:relative;left:auto;top:auto;transform:none;margin:10px 0 0;opacity:1}
 #winFlashName.pulse-win{animation:winNamePulse 1.15s ease-in-out infinite}
 @keyframes winNamePulse{0%,100%{text-shadow:0 0 14px #ffb300,0 0 6px #ffb300,2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000;filter:brightness(1)}50%{text-shadow:0 0 28px #ffe082,0 0 16px #ffb300,2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000;filter:brightness(1.18)}}
+@keyframes winRoll{0%{transform:translateY(22px);opacity:0}100%{transform:translateY(0);opacity:1}}
+#winFlashKo.roll-in{animation:winRoll .32s ease-out}
 #postBanner{white-space:pre-line;line-height:1.05}
 #postBanner .liq{display:inline-block;margin-top:10px;color:#ff1744;-webkit-text-stroke:2px #000;paint-order:stroke fill;text-shadow:2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000,0 0 20px #f00}
 #winFlash.show{justify-content:flex-start;padding-top:50px}
+#winFlash.show.center{justify-content:center;align-items:center;padding-top:0;padding-bottom:0}
+#winFlash.show.center #winFlashName:empty,#winFlash.show.center #winFlashSub:empty{display:none;margin:0;padding:0;height:0}
 #winFlashKo,#winFlashName{-webkit-text-stroke:2px #000;paint-order:stroke fill}
-#winFlashKo{text-shadow:2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000,0 0 14px #ffb300}
+#winFlashKo{
+  font-family:Impact,"Arial Black",system-ui,sans-serif;
+  font-size:clamp(18px,5.4vw,31px);
+  font-weight:900;
+  color:#ffd54f;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+  text-shadow:2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000;
+  margin:0;
+}
+#winFlashKo.fight-flash{
+  text-shadow:0 0 22px #ffb300,0 0 10px #ffb300,2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000;
+  animation:winNamePulse .55s ease-in-out 2;
+}
 #controls{position:relative;width:100%;max-width:500px;flex:0 0 auto;padding:0 0 calc(env(safe-area-inset-bottom) + 4px);margin:0 auto;background:url(./controller/controller_texture.jpg) center / cover no-repeat;z-index:6;box-sizing:border-box;overflow:hidden}
 #controls::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:4;box-shadow:inset 0 0 18px rgba(0,0,0,.55)}
 .pad-wrap{position:relative;width:100%;height:auto;min-height:0;max-height:none;margin:0;padding:11px 11px 15px;background:transparent;border:0;border-top:0;border-radius:0;box-shadow:none;display:grid;grid-template-columns:57px 57px 57px 1fr 57px 57px 57px;grid-template-rows:57px 57px 57px;align-items:center;justify-items:center;column-gap:0;row-gap:0;box-sizing:border-box;overflow:visible}
@@ -634,7 +651,7 @@ input[type=file].hidden-file{display:none}
    </div>
    <div id="fightGap"><img id="fightBanner" src="./fight_banner.png" alt=""></div>
   </section>
-<div class="fine-print"><span>BUILD:10.21~0732</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.21~0812</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 </div>
 <script>
 const ROOT="./",ARENA_DIR=ROOT+"arenas/",FIGHTER_DIR=ROOT+"fighters/",TITLECARD_DIR=ROOT+"titlecards/",OBJECT_DIR=ROOT+"objects/",AUDIO=ROOT+"audio/";
@@ -1914,21 +1931,45 @@ function announceRound(){
   clearReadyTimer();clearRoundTimer();clearTimeout(aiTimer);
   announcing=true;paused=true;over=false;ensureAudio();
   if(currentRound!==2)playBgm();
-  document.getElementById("winFlash").classList.remove("show");
   document.getElementById("endOv").classList.remove("show");
-  document.getElementById("roundOv").classList.add("show");
-  document.getElementById("winFlashKo").textContent="ROUND "+currentRound;
-  document.getElementById("winFlashName").textContent="";
-  document.getElementById("winFlash").classList.add("show","top");
-  const calls=["GET READY","3","2","1","FIGHT!!"];
+  document.getElementById("roundOv").classList.remove("show");
+  const koEl=document.getElementById("winFlashKo");
+  const nameEl=document.getElementById("winFlashName");
+  nameEl.textContent="";
+  nameEl.classList.remove("pulse-win");
+  const calls=["ROUND "+currentRound,"READY","3","2","1","FIGHT!"];
+  const holds=[1800,1800,800,800,800,1200];
   announceIdx=0;
-  setAnnounceCall(calls[0]);
-  readyTimer=setInterval(function(){
+  koEl.classList.remove("roll-in","fight-flash");
+  koEl.textContent=calls[0];
+  document.getElementById("winFlash").classList.add("show","center");
+  sfxCall(calls[0]);
+  function step(){
     announceIdx+=1;
     if(announceIdx===1){playPose("you","idle");playPose("cpu","idle");}
-    if(announceIdx>=calls.length){clearReadyTimer();sfxRoundBell();fightLive();return;}
-    setAnnounceCall(calls[announceIdx]);
-  },ANNOUNCE_MS);
+    if(announceIdx>=calls.length){
+      clearReadyTimer();
+      sfxRoundBell();
+      document.getElementById("winFlash").classList.remove("show","center");
+      koEl.classList.remove("roll-in","fight-flash");
+      fightLive();
+      return;
+    }
+    koEl.classList.remove("roll-in","fight-flash");
+    void koEl.offsetWidth;
+    koEl.textContent=calls[announceIdx];
+    koEl.classList.add("roll-in");
+    if(calls[announceIdx]==="FIGHT!") koEl.classList.add("fight-flash");
+    sfxCall(calls[announceIdx]);
+    if(calls[announceIdx]==="READY"&&sfxRound1SusEl){
+      sfxRound1SusEl.pause();
+      sfxRound1SusEl.loop=false;
+      try{sfxRound1SusEl.currentTime=0;}catch(e){}
+      playBgm();
+    }
+    readyTimer=setTimeout(step,holds[announceIdx]);
+  }
+  readyTimer=setTimeout(step,holds[0]);
 }
 function applyArena(){
   const a=ARENAS[selectedArena];
@@ -1948,7 +1989,7 @@ function holdFinalKo(done,winnerName){
   const nameEl=document.getElementById("winFlashName");
   nameEl.textContent=winnerName||playerLabel();
   nameEl.classList.add("pulse-win");
-  document.getElementById("winFlash").classList.add("show","top");
+  document.getElementById("winFlash").classList.add("show","center");
   if(winFlashTimer)clearTimeout(winFlashTimer);
   winFlashTimer=setTimeout(function(){
     winFlashTimer=null;
@@ -1960,13 +2001,32 @@ function holdFinalKo(done,winnerName){
 function holdRoundWinner(youWonRound){
   if(currentRound!==1)playBgm();
   clearRoundTimer();
+  const title="WINNER";
+  const winnerName=youWonRound?playerLabel():opponentLabel();
+  const koEl=document.getElementById("winFlashKo");
   const nameEl=document.getElementById("winFlashName");
-  document.getElementById("winFlashKo").textContent="ROUND "+currentRound+" WINNER";
   nameEl.textContent="";
   nameEl.classList.remove("pulse-win");
-  document.getElementById("winFlash").classList.add("show","top");
+  koEl.textContent=title;
+  koEl.classList.remove("roll-in","fight-flash");
+  document.getElementById("winFlash").classList.add("show","center");
   if(winFlashTimer)clearTimeout(winFlashTimer);
-  winFlashTimer=setTimeout(function(){winFlashTimer=null;startNextRound();},ROUND_WIN_HOLD_MS);
+  if(window._roundWinRoll){clearInterval(window._roundWinRoll);window._roundWinRoll=null;}
+  let flip=0;
+  window._roundWinRoll=setInterval(function(){
+    flip^=1;
+    koEl.classList.remove("roll-in");
+    void koEl.offsetWidth;
+    koEl.textContent=flip?winnerName:title;
+    koEl.classList.add("roll-in");
+  },900);
+  winFlashTimer=setTimeout(function(){
+    winFlashTimer=null;
+    if(window._roundWinRoll){clearInterval(window._roundWinRoll);window._roundWinRoll=null;}
+    koEl.classList.remove("roll-in");
+    document.getElementById("winFlash").classList.remove("show","center");
+    startNextRound();
+  },ROUND_WIN_HOLD_MS);
 }
 function updateMeters(){const pct=function(v){return Math.max(0,(v/MAX)*100)+"%";};const p1=document.getElementById("p1Bar"),p2=document.getElementById("p2Bar");document.getElementById("p1Dollar").textContent="$"+Math.round(hp.you);document.getElementById("p2Dollar").textContent="$"+Math.round(hp.cpu);p1.style.width=pct(hp.you);p2.style.width=pct(hp.cpu);p1.style.background=healthColor(hp.you/MAX);p2.style.background=healthColor(hp.cpu/MAX);}
 const fxPool=[],cashPool=[];
