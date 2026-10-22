@@ -522,10 +522,10 @@ input[type=file].hidden-file{display:none}
   <div class="menu-art"><img class="roster" id="rosterArt" alt="Title" width="500" height="417"></div>
   <div class="menu-btns tight">
     <div class="mode-split span2"><button class="btn btn-gold" type="button" onclick="openModeGate('arcade')">ARCADE</button><button class="btn btn-gold pulse-gold" type="button" onclick="startFreeDemo()">EXHIBITION</button><button class="btn btn-gold" type="button" onclick="openModeGate('one')">1 ON 1</button></div>
-    <button class="btn btn-dark" onclick="show('soundtrack')">SOUNDTRACK</button>
-    <button class="btn btn-dark" onclick="openGallery()">GALLERY</button>
-    <button class="btn btn-dark" onclick="openStockCred()">STOCK CRED</button>
-    <button class="btn btn-dark" onclick="show('guide')">GUIDE</button>
+    <button class="btn btn-gold" onclick="show('soundtrack')">SOUNDTRACK</button>
+    <button class="btn btn-gold" onclick="openGallery()">GALLERY</button>
+    <button class="btn btn-gold" onclick="openStockCred()">STOCK CRED</button>
+    <button class="btn btn-gold" onclick="show('guide')">GUIDE</button>
   </div>
   </section>
 <section id="gate" class="screen menu"><div class="frame-390"><div class="brand"><img class="brand-logo" src="./title header.jpg" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p id="gateHint">ROSTER / WALLET</p></div><div class="roster-body"><div class="form-card"><div class="form-label">PROFILE — REQUIRED</div><div class="form-row" style="margin-top:8px"><input id="gateName" placeholder="Player name"/><input id="gateHandle" placeholder="@handle"/></div><div class="form-label" style="margin-top:10px">TOKEN WALLET — REQUIRED</div><div class="form-row"><input id="gateWallet" placeholder="Wallet address"/></div><div class="form-row"><button type="button" id="gateSave" onclick="saveGateProfile()" disabled>SAVE</button></div><div class="sent-note" id="gateNote"></div><div class="form-label" style="margin-top:10px">SAVED RUNS</div><div class="pit-list" id="gateSaves"></div><p class="post-sub">Save a profile and a wallet before Arcade or 1 On 1. Exhibition does not use this gate. The wallet line is an identifier only. No payment is taken here. A win in Arcade writes a run here. Open one to restart that character on the next opponent.</p></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="show('title')" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="22" font-weight="900" letter-spacing="3.2">BACK</text></svg></button><button type="button" class="tok-btn gold" id="gateEnter" onclick="enterGatedMode()" aria-label="Enter" disabled><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="16" font-weight="900" letter-spacing="2">ENTER</text></svg></button></div></div></section>
@@ -635,7 +635,7 @@ input[type=file].hidden-file{display:none}
     <div class="fighter" id="cpu"><img class="fighter-img" id="cpuFile" alt=""></div>
     <div class="power-wrap p1" id="p1PowerWrap"><div class="power-bar" id="p1Depth"><span class="side-long">LONG</span><span class="depth-long" id="p1Power"></span><span class="depth-short" id="p1Short"></span><span id="p1PowerTxt">MID</span><span class="side-short">SHORT</span><i class="depth-mid"></i></div><em class="squeeze-flash" id="p1Squeeze">SQUEEZE!!</em><b class="ammo-count" id="p1Ammo">0</b></div>
     <div class="power-wrap p2" id="p2PowerWrap"><b class="ammo-count" id="p2Ammo">0</b><div class="power-bar" id="p2Depth"><span class="side-long">LONG</span><span class="depth-long" id="p2Power"></span><span class="depth-short" id="p2Short"></span><span id="p2PowerTxt">MID</span><span class="side-short">SHORT</span><i class="depth-mid"></i></div><em class="squeeze-flash" id="p2Squeeze">SQUEEZE!!</em></div>
-    <div class="overlay" id="pauseOv"><h2>PAUSED</h2><button class="btn btn-gold" onclick="togglePause()">RESUME</button><button class="btn btn-dark" id="pauseRestart" onclick="restartExhibition()" style="display:none">RESTART</button><button class="btn btn-gold" id="pauseSave" onclick="saveOrResumeArcade()" style="display:none">SAVE</button><button class="btn btn-dark" onclick="goTitle()">TITLE SCREEN</button></div>
+    <div class="overlay" id="pauseOv"><h2>PAUSED</h2><button class="btn btn-gold" onclick="togglePause()">RESUME</button><button class="btn btn-gold" id="pauseRestart" onclick="restartExhibition()" style="display:none">RESTART</button><button class="btn btn-gold" id="pauseSave" onclick="saveOrResumeArcade()" style="display:none">SAVE</button><button class="btn btn-gold" onclick="goTitle()">TITLE SCREEN</button></div>
     <div class="overlay" id="roundOv"><div class="ko" id="roundKo">ROUND 1</div><h2 id="roundMsg">GET READY</h2><p id="roundSub" style="color:#9ad7b2"></p><div id="readyCount">3</div></div>
     <div class="overlay" id="winFlash"><div class="ko" id="winFlashKo">WINNER</div><div id="winFlashName">YOU</div><p id="winFlashSub" style="color:#9ad7b2"></p></div>
     <div class="overlay" id="endOv"><div class="ko" id="endKo">K.O.</div><h2 id="endMsg">YOU WIN</h2><p id="endSub" style="color:#9ad7b2"></p><button class="btn btn-gold" id="endGold" onclick="openHighScores()">GAINS & STATS</button><button class="btn btn-dark" id="endTitle" onclick="goTitle()">TITLE SCREEN</button></div>
@@ -661,7 +661,7 @@ input[type=file].hidden-file{display:none}
      </div>
    </div>
      </section>
-<div class="fine-print"><span>BUILD:10.22~0255</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.22~1352</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 <div id="loadingOverlay"><div class="loading-spinner"></div><div class="loading-text">LOADING...</div></div>
 </div>
 <script>
