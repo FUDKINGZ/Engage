@@ -134,17 +134,20 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
   filter:drop-shadow(0 4px 6px rgba(0,0,0,.6));
 }
 .tour-pin.next{filter:drop-shadow(0 0 10px #ffd54f) drop-shadow(0 4px 6px rgba(0,0,0,.6))}
-#arenas .carousel-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center}
-#arenas .carousel{position:relative;width:100%;height:auto;flex:none;aspect-ratio:16/9;max-height:42vh;min-height:0;margin:0}
+.carousel-wrap{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:6px 4px 0;overflow:hidden}
+.carousel{position:relative;width:100%;height:auto;flex:none;margin:0}
+#fighters .carousel-wrap,#opponents .carousel-wrap{justify-content:center;gap:10px;padding-bottom:0}
+#fighters .carousel,#opponents .carousel{aspect-ratio:1/1;max-height:38vh;min-height:0}
+#arenas .carousel-wrap{justify-content:center;gap:10px}
+#arenas .carousel{aspect-ratio:16/9;max-height:42vh;min-height:0}
 #arenas .slot-wrap.center{width:72%;height:auto;aspect-ratio:16/9}
 #arenas .slot-wrap.center .slot{width:100%;height:100%;flex:none;aspect-ratio:16/9;background:transparent}
 #arenas .slot-wrap.side{width:24%;height:auto;aspect-ratio:16/9}
 #arenas .slot-wrap.side .slot{width:100%;height:100%;flex:none;aspect-ratio:16/9;background:transparent}
 #arenas .slot .arena-art{width:100%;height:100%;flex:none;background-color:transparent!important;background-size:cover!important;background-repeat:no-repeat;background-position:center center}
 #arenaDots{display:none}
-#opponents .carousel-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding-bottom:0}
-#opponents .carousel{position:relative;width:100%;height:auto;flex:none;aspect-ratio:1/1;max-height:38vh;min-height:0;margin:0}
 #opponentDots{display:none}
+#fighterDots{display:none}
 #matchup .matchup-body{justify-content:center}
 #matchup.arena-on .matchup-body{position:absolute;inset:0;z-index:2;justify-content:center;align-items:center}
 #matchup.arena-on .menu-btns{position:absolute;left:0;right:0;bottom:0;z-index:3}
@@ -165,10 +168,6 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 #matchup .vs-card{background:transparent;border:0;border-radius:0;overflow:visible;box-shadow:none;aspect-ratio:1/1;width:100%;max-width:220px;margin:0 auto}
 #matchup .vs-mark{z-index:2;align-self:center}
 #matchup .match-arena-name{margin-top:8px}
-.carousel-wrap{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:6px 4px 0}
-.carousel{position:relative;width:100%;height:50%}
-#fighters .carousel-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding-bottom:0}
-#fighters .carousel{position:relative;width:100%;height:auto;flex:none;aspect-ratio:1/1;max-height:38vh;min-height:0;margin:0}
 .slot-wrap{position:absolute;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
 .slot-wrap.side{width:28%;height:68%;pointer-events:auto}
 .slot-wrap.left{left:18%}
@@ -236,7 +235,6 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 .dots i{width:7px;height:7px;border-radius:50%;background:#445;display:block}
 .dots i.on{background:#ffd54f}
 .dots i.lock{background:#664}
-#fighterDots{display:none}
 .ammo-label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:#ffd54f;text-shadow:0 0 8px #ffb300;line-height:1;margin:0;padding:0 0 2px}
 .ammo-row{display:flex;align-items:flex-start;justify-content:center;gap:16px;width:100%;height:auto;min-height:0;pointer-events:none;overflow:visible;margin:0}
 .ammo-row img{width:44px;height:44px;object-fit:contain;background:#1a2233;border:1px solid #334;border-radius:8px}
@@ -1509,7 +1507,7 @@ function stopWalkLoop(){
     walkRafId=null;
   }
   if(dragWho) stopDragSfx();
-  if(over) return; // auto walk-back / round end owns the pose
+  if(over && !liquidateOn) return; // auto walk-back / round end owns the pose; liquidate allows normal idle
   if(isMoving()) return;
   if(youFileEl&&(youFileEl.dataset.pose==="pushnwalk"||youFileEl.dataset.pose==="walk")&&!youBlocking) playPose("you","idle");
   else if(youFileEl&&youFileEl.dataset.pose==="pushnwalk"&&youBlocking) playPose("you","block");
@@ -2414,10 +2412,7 @@ function startLiquidate(done,by){
   const youImg2=document.getElementById("youFile"),cpuImg2=document.getElementById("cpuFile");
   if(youImg2){youImg2.dataset.pose="";youImg2.dataset.list="";}
   if(cpuImg2){cpuImg2.dataset.pose="";cpuImg2.dataset.list="";}
-  playPose(by,"idle");
-  playPose(by==="you"?"cpu":"you","loser");
-  bgm.pause();
-  if(sfxLiquidateEl){sfxLiquidateEl.loop=false;try{sfxLiquidateEl.currentTime=0;}catch(e){}if(!mutedFx)sfxLiquidateEl.play().catch(function(){});}
+  stopWalkLoop();playPose(by,"idle");playPose(by==="you"?"cpu":"you","loser");bgm.pause();if(sfxLiquidateEl){sfxLiquidateEl.loop=false;try{sfxLiquidateEl.currentTime=0;}catch(e){}if(!mutedFx)sfxLiquidateEl.play().catch(function(){});}
   cueLiquidateThem();
   if(by==="cpu"){setTimeout(function(){if(liquidateOn)finishLiquidate("cpu");},900);return;}
   if(winFlashTimer){clearTimeout(winFlashTimer);winFlashTimer=null;}
@@ -2431,6 +2426,7 @@ function startLiquidate(done,by){
     document.getElementById("winFlashSub").textContent=Math.max(0,liquidateLeft);
     if(liquidateLeft>0)return;
     const doneFn=liquidateDone;
+    playPose(by,"victory");
     clearLiquidate();
     document.getElementById("winFlash").classList.remove("show","liq-mode");
     holdFinalKo(doneFn,playerLabel());
@@ -2440,6 +2436,7 @@ function finishLiquidate(by){
   if(!liquidateOn)return;
   by=by==="cpu"?"cpu":"you";
   const doneFn=liquidateDone;
+  stopWalkLoop();
   liquidateOn=false;
   liquidateSeq="";
   if(liquidateTimer){clearInterval(liquidateTimer);liquidateTimer=null;}
