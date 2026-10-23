@@ -32,7 +32,7 @@ html,body{margin:0;width:100%;height:100%;height:100dvh;overflow:hidden;font-fam
 #title{background:#071018;background-image:none}
 .menu{background:radial-gradient(ellipse at top,rgba(80,20,0,.35),transparent 55%),#071018}
 .fixed-390.menu,.fixed-390,#gate .frame-390{background-color:#071018;background-image:linear-gradient(180deg,rgba(5,8,14,.55),rgba(5,8,14,.72)),url(./images/scenebg.jpg);background-repeat:no-repeat;background-position:center center;background-size:cover}
-#postfight .post-body{justify-content:flex-start}
+#postfight .post-body{justify-content:center}
 #postBtns{display:flex;width:100%;margin:0;box-sizing:border-box;justify-content:space-between;align-items:center;padding:6px 12px calc(30px + env(safe-area-inset-bottom));min-height:0;overflow:visible}
 .fine-print{position:absolute;left:0;right:0;bottom:0;z-index:30;display:grid;width:auto;margin:0;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;padding:4px 10px calc(4px + env(safe-area-inset-bottom));border-top:0;background:rgba(0,0,0,.72);font-family:"Courier New",Courier,monospace;font-size:9px;letter-spacing:.4px;color:#39ff14;text-shadow:0 0 6px rgba(57,255,20,.45);white-space:nowrap}
 .fine-print span,.fine-print a{white-space:nowrap}
@@ -661,7 +661,7 @@ input[type=file].hidden-file{display:none}
      </div>
    </div>
      </section>
-<div class="fine-print"><span>BUILD:10.22~1837</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.23~0100</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 <div id="loadingOverlay"><div class="loading-spinner"></div><div class="loading-text">LOADING...</div></div>
 </div>
 <script>
@@ -685,8 +685,8 @@ function unique(list){const seen={};return(list||[]).filter(function(u){if(!u||s
 const MONEY_URLS=unique([OBJECT_DIR+"money.png",ROOT+"./images/money.png"]);
 function fighterRoot(name){const n=String(name||"").trim().toLowerCase();return FIGHTER_DIR+n+"/";}
 function selectUrls(name){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);return unique([dir+n+" title.gif",dir+"title.gif",FIGHTER_DIR+n+" title.gif"]);}
-function titlecardUrls(name){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);return unique([dir+n+" titlecard.png",dir+"titlecard.png",TITLECARD_DIR+n+" titlecard.png"]);}
-function shadowboxUrls(name){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);return unique([dir+n+" shadowbox.png",dir+"shadowbox.png",TITLECARD_DIR+n+" shadowbox.png"]);}
+function titlecardUrls(name){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);return unique([dir+n+" titlecard.jpg",dir+"titlecard.jpg",TITLECARD_DIR+n+" titlecard.jpg"]);}
+function shadowboxUrls(name){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);return unique([dir+n+" shadowbox.jpg",dir+"shadowbox.jpg",TITLECARD_DIR+n+" shadowbox.jpg"]);}
 function liquidatedUrls(name){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);return unique([dir+n+" liquidated.gif",dir+"liquidated.gif",FIGHTER_DIR+n+" liquidated.gif"].concat(poseUrls(name,"loser")));}
 function poseUrls(name,pose){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);let file="idle.gif";if(pose==="idle")file="idle.gif";else if(pose==="throw")file="throw.gif";else if(pose==="walk")file="walk.gif";else if(pose==="knee"){const kUrls=unique([dir+n+"_knee.gif",dir+"knee.gif",FIGHTER_DIR+n+"_knee.gif"]);return unique(kUrls.concat(selectUrls(name)));}
 else if(pose==="summon"){const sUrls=unique([dir+n+" summon.gif",dir+"summon.gif",FIGHTER_DIR+n+" summon.gif"]);return unique(sUrls.concat(selectUrls(name)));}
