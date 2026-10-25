@@ -16,7 +16,9 @@ html,body{margin:0;width:100%;height:100%;height:100dvh;overflow:hidden;font-fam
 #title .menu-art img.roster{width:100%;max-width:100%;height:auto;max-height:none;min-width:0;min-height:0;object-fit:contain;object-position:center top}
 #title .menu-btns.tight{flex:none;width:100%;min-width:0;max-width:100%;padding:10px 12px calc(28px + env(safe-area-inset-bottom));background:#1a1f28;border-radius:14px 14px 0 0;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
 @keyframes goldPulse {0%,100%{box-shadow:0 0 8px rgba(255,213,79,.35), 0 0 0 0 rgba(255,179,0,.25);}50%{ box-shadow: 0 0 18px rgba(255,213,79,.75), 0 0 12px rgba(255,179,0,.55);}}
-.pulse-gold {animation: goldPulse 1.6s ease-in-out infinite;}
+.pulse-gold .pulse-gold {animation: goldPulse 1.6s ease-in-out infinite;}
+@keyframes greenPulse {0%,100%{box-shadow:0 0 8px rgba(0,230,118,.35), 0 0 0 0 rgba(57,255,20,.25);}50%{ box-shadow: 0 0 18px rgba(0,230,118,.75), 0 0 12px rgba(57,255,20,.55);}}
+.pulse-green {animation: greenPulse 1.6s ease-in-out infinite;}{animation: goldPulse 1.6s ease-in-out infinite;}
 #mainBanner{display:none}
 .screen{position:absolute;inset:0;display:none;flex-direction:column;contain:layout paint}
 .screen.active{display:flex}
@@ -521,7 +523,7 @@ input[type=file].hidden-file{display:none}
   <div class="brand"><img class="brand-logo" src="./title header.jpg" alt="FINTWITS FUD KINGZ" width="500" height="119-"></div>
   <div class="menu-art"><img class="roster" id="rosterArt" alt="Title" width="500" height="417"></div>
   <div class="menu-btns tight">
-    <div class="mode-split span2"><button class="btn btn-gold" type="button" onclick="openModeGate('arcade')">ARCADE</button><button class="btn btn-gold pulse-gold" type="button" onclick="startFreeDemo()">EXHIBITION</button><button class="btn btn-gold" type="button" onclick="openModeGate('one')">1 ON 1</button></div>
+    <div class="mode-split span2"><button class="btn btn-gold" type="button" onclick="openModeGate('arcade')">ARCADE</button><button class="btn btn-green pulse-green" type="button" onclick="startFreeDemo()">EXHIBITION</button><button class="btn btn-gold" type="button" onclick="openModeGate('one')">1 ON 1</button></div>
     <button class="btn btn-gold" onclick="show('soundtrack')">SOUNDTRACK</button>
     <button class="btn btn-gold" onclick="openGallery()">GALLERY</button>
     <button class="btn btn-gold" onclick="openStockCred()">STOCK CRED</button>
@@ -661,7 +663,7 @@ input[type=file].hidden-file{display:none}
      </div>
    </div>
      </section>
-<div class="fine-print"><span>BUILD:10.25~0448</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.25~0456</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 <div id="loadingOverlay"><div class="loading-spinner"></div><div class="loading-text">LOADING...</div></div>
 </div>
 <script>
