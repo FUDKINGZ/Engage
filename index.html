@@ -314,8 +314,8 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
   position:relative !important;
   width:auto !important;
   height:auto !important;
-  max-width:42vw !important;
-  max-height:40vh !important;
+  max-width:100% !important;
+  max-height:100% !important;
   object-fit:contain !important;
   object-position:bottom center !important;
   transform-origin:bottom center !important;
@@ -331,13 +331,34 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #stage .fighter:has(img[data-pose="loser"]),
 #stage .fighter:has(img[data-pose="ko"]){
   bottom:2% !important;
-  height:auto !important;
+  height:50% !important;
   max-height:none !important;
   width:auto !important;
   min-width:100px;
 }
 #you{left:1%;z-index:4}
 #cpu{right:1%;z-index:4}
+
+/* Title screen demos — natural GIF size, independent of fight stage */
+#titleIntroClip .tic-fighter{
+  position:absolute;
+  bottom:4%;
+  height:auto;
+  width:auto;
+  transform-origin:center bottom;
+  z-index:4;
+  overflow:visible;
+  pointer-events:none;
+}
+#titleIntroClip .tic-fighter img{
+  width:auto;
+  height:auto;
+  max-height:none;
+  max-width:none;
+  object-fit:contain;
+  object-position:bottom center;
+  display:block;
+}
 #cpu .fighter-img{transform:scaleX(-1)}
 .fighter.hit{filter:none}
 #fight.paused .power-wrap,
@@ -1742,14 +1763,10 @@ function playPose(who,pose){
   img.dataset.pose=pose;
   bindSrcList(img,hold?list:list.concat(fighter.idle||[]));
   img.style.display="block";
-  // constrain wide loser.gif on live stage
+  // loser/ko size is controlled by stage-relative CSS; clear any inline overrides
   if(pose==="loser" || pose==="ko"){
-    img.style.width="auto";
-    img.style.height="auto";
-    img.style.maxWidth="42vw";
-    img.style.maxHeight="40vh";
-    img.style.objectFit="contain";
-    img.style.objectPosition="bottom center";
+    img.style.maxWidth="";
+    img.style.maxHeight="";
   }else{
     img.style.maxWidth="";
     img.style.maxHeight="";
@@ -2915,11 +2932,11 @@ function titleIntroclip(){
   const stage=document.createElement("div");
   stage.style.cssText="position:absolute;inset:0;background:transparent;overflow:hidden;";
   stage.innerHTML=`
-    <div id="ticYou" class="fighter" style="position:absolute;bottom:8%;left:12%;z-index:4;transform-origin:center bottom">
-      <img id="ticYouImg" style="width:auto;height:auto;max-height:70%;object-fit:contain;display:block">
+    <div id="ticYou" class="tic-fighter" style="left:8%">
+      <img id="ticYouImg">
     </div>
-    <div id="ticCpu" class="fighter" style="position:absolute;bottom:8%;right:12%;z-index:4;transform-origin:center bottom">
-      <img id="ticCpuImg" style="width:auto;height:auto;max-height:70%;object-fit:contain;display:block;transform:scaleX(-1)">
+    <div id="ticCpu" class="tic-fighter" style="right:8%">
+      <img id="ticCpuImg" style="transform:scaleX(-1)">
     </div>
   `;
   box.appendChild(stage);
