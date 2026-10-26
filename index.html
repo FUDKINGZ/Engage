@@ -307,6 +307,20 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #fightBanner{display:none}
 .fighter{position:absolute;bottom:7.5%;width:auto;height:68%;transform-origin:center bottom;z-index:4;overflow:visible}
 .fighter-img{width:auto;height:100%;display:none;background:transparent!important;object-fit:contain;object-position:center bottom}
+.fighter img[data-pose="loser"]{
+  width:auto !important;
+  height:auto !important;
+  max-height:42% !important;
+  max-width:85% !important;
+  object-fit:contain !important;
+  object-position:bottom center !important;
+}
+.fighter:has(img[data-pose="loser"]){
+  height:auto !important;
+  max-height:50% !important;
+  width:auto !important;
+  bottom:6% !important;
+}
 #you{left:1%;z-index:4}
 #cpu{right:1%;z-index:4}
 #cpu .fighter-img{transform:scaleX(-1)}
@@ -1713,6 +1727,30 @@ function playPose(who,pose){
   img.dataset.pose=pose;
   bindSrcList(img,hold?list:list.concat(fighter.idle||[]));
   img.style.display="block";
+  // constrain wide loser.gif on live stage
+  if(pose==="loser"){
+    img.style.width="auto";
+    img.style.height="auto";
+    img.style.maxHeight="42%";
+    img.style.maxWidth="85%";
+    img.style.objectFit="contain";
+    img.style.objectPosition="bottom center";
+    const fighterEl=img.parentElement;
+    if(fighterEl){
+      fighterEl.style.height="auto";
+      fighterEl.style.maxHeight="50%";
+      fighterEl.style.width="auto";
+      fighterEl.style.bottom="6%";
+    }
+  }else{
+    img.style.maxHeight="";
+    img.style.maxWidth="";
+    const fighterEl=img.parentElement;
+    if(fighterEl){
+      fighterEl.style.maxHeight="";
+      fighterEl.style.height="";
+    }
+  }
   if(!hold)poseTimer[who]=setTimeout(function(){playPose(who,"idle");},POSE_MS);
   logReplayEvent("pose", {who: who, pose: pose});
 }
