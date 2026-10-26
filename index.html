@@ -305,8 +305,8 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #fightUBanner{display:block;width:100%;height:36px;margin:0;padding:0;pointer-events:none;object-fit:cover}
 #fightGap{display:none}
 #fightBanner{display:none}
-.fighter{position:absolute;bottom:7.5%;width:auto;height:68%;transform-origin:center bottom;z-index:4;overflow:visible}
-.fighter-img{width:auto;height:100%;display:none;background:transparent!important;object-fit:contain;object-position:center bottom}
+.fighter{position:absolute;bottom:7.5%;width:auto;height:auto;max-height:68%;transform-origin:center bottom;z-index:4;overflow:visible}
+.fighter-img{width:auto;height:auto;max-height:100%;display:none;background:transparent!important;object-fit:contain;object-position:center bottom}
 
 /* Clean loser / KO rules — stay on the floor, inside the stage */
 .fighter img[data-pose="loser"],
@@ -323,16 +323,11 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
   left:auto !important;
   z-index:5 !important;
 }
-/* Preserve CPU facing */
-#cpu img[data-pose="loser"],
-#cpu img[data-pose="ko"]{
-  transform:scaleX(-1) !important;
-}
 #stage .fighter:has(img[data-pose="loser"]),
 #stage .fighter:has(img[data-pose="ko"]){
   bottom:2% !important;
-  height:50% !important;
-  max-height:none !important;
+  height:auto !important;
+  max-height:50% !important;
   width:auto !important;
   min-width:100px;
 }
@@ -747,16 +742,16 @@ input[type=file].hidden-file{display:none}
     <!-- cloned stage content will be injected here -->
   </div>
   <div style="margin-top:12px;display:flex;gap:12px;">
-    <button class="btn btn-gold" onclick="closeMatchReplay()">CLOSE</button>
-    <button class="btn btn-dark" id="replayRestartBtn" onclick="restartMatchReplay()">RESTART</button>
+<button class="btn btn-gold" id="replayRestartBtn" onclick="restartMatchReplay()">RESTART</button>
+<button class="btn btn-gold" onclick="closeMatchReplay()">CLOSE</button>
   </div>
   <div id="replayClock" style="margin-top:6px;font-family:Impact,sans-serif;color:#ffd54f;font-size:14px;">0:00</div>
 </div>
 <div id="replayOverlay" style="display:none;position:fixed;inset:0;z-index:200;background:#000;flex-direction:column;align-items:center;justify-content:center;">
   <div id="replayStageWrap" style="position:relative;width:min(100%,500px);aspect-ratio:500/280;overflow:hidden;background:#12080c;border:2px solid #ffd54f;"></div>
   <div style="margin-top:12px;display:flex;gap:12px;">
-    <button class="btn btn-gold" onclick="closeMatchReplay()">CLOSE</button>
-    <button class="btn btn-dark" onclick="restartMatchReplay()">RESTART</button>
+<button class="btn btn-gold" onclick="restartMatchReplay()">RESTART</button>
+<button class="btn btn-gold" onclick="closeMatchReplay()">CLOSE</button>
   </div>
   <div id="replayClock" style="margin-top:6px;font-family:Impact,sans-serif;color:#ffd54f;font-size:14px;">0:00</div>
 </div>
