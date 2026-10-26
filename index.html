@@ -279,20 +279,6 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #replayStageWrap #roundOv,
 #replayStageWrap #pauseOv,
 #replayStageWrap #endOv{display:none!important;}
-#replayStageWrap .fighter img[data-pose="loser"]{
-  width:auto !important;
-  height:100% !important;
-  max-height:68% !important;
-  max-width:70% !important;
-  object-fit:contain !important;
-  object-position:bottom center !important;
-}
-#replayStageWrap .fighter:has(img[data-pose="loser"]){
-  width:auto !important;
-  height:68% !important;
-  bottom:6% !important;
-  /* keep left/right from the normal fighter positioning */
-}
 #replayStageWrap #stage{
   position:absolute;
   left:0;right:0;
@@ -329,24 +315,6 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
   display: none;
   background: transparent !important;
   pointer-events: none;
-}
-
-/* Loser / KO match standing size */
-.fighter img[data-pose="loser"],
-.fighter img[data-pose="ko"] {
-  height: 100% !important;
-  width: auto !important;
-  max-width: 100% !important;
-  object-fit: contain !important;
-  object-position: bottom center !important;
-  transform-origin: bottom center !important;
-}
-
-#stage .fighter:has(img[data-pose="loser"]),
-#stage .fighter:has(img[data-pose="ko"]) {
-  height: 58% !important;
-  bottom: 7.5% !important;
-  width: auto !important;
 }
 #you{left:1%;z-index:4}
 #cpu{right:1%;z-index:4}
