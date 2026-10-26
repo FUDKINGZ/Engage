@@ -280,17 +280,18 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #replayStageWrap #pauseOv,
 #replayStageWrap #endOv{display:none!important;}
 #replayStageWrap .fighter img[data-pose="loser"]{
-  width:100% !important;
-  height:auto !important;
-  max-height:none !important;
+  width:auto !important;
+  height:100% !important;
+  max-height:68% !important;
+  max-width:70% !important;
   object-fit:contain !important;
   object-position:bottom center !important;
 }
 #replayStageWrap .fighter:has(img[data-pose="loser"]){
-  width:100% !important;
-  left:0 !important;
-  right:0 !important;
-  bottom:0 !important;
+  width:auto !important;
+  height:68% !important;
+  bottom:6% !important;
+  /* keep left/right from the normal fighter positioning */
 }
 #replayStageWrap #stage{
   position:absolute;
@@ -2810,19 +2811,20 @@ function applyReplayEvent(ev, you, cpu, youImg, cpuImg){
       fighterEl.style.bottom = "";
     }
 
-    // special case: {name} loser.gif is a wide floor image
+    // constrain loser.gif so it does not fill the stage
     if(ev.data.pose === "loser"){
-      img.style.width = "100%";
-      img.style.height = "auto";
-      img.style.maxHeight = "none";
+      img.style.width = "auto";
+      img.style.height = "100%";
+      img.style.maxHeight = "68%";
+      img.style.maxWidth = "70%";
       img.style.objectFit = "contain";
       img.style.objectPosition = "bottom center";
       if(fighterEl){
-        fighterEl.style.width = "100%";
-        fighterEl.style.left = "0";
-        fighterEl.style.right = "0";
-        fighterEl.style.bottom = "0";
+        fighterEl.style.width = "auto";
+        fighterEl.style.height = "68%";
+        fighterEl.style.bottom = "6%";
         fighterEl.style.zIndex = "5";
+        // leave left/right alone so the fighter stays on its side
       }
     }
   } else if(ev.type === "pos"){
