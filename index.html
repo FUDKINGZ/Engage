@@ -2581,27 +2581,42 @@ function finishLiquidate(by){
   bgm.pause();
   const isDarkFud=FIGHTERS[by==="you"?selectedFighter:cpuFighter].name==="Dark Fud 420";
   playPose(by==="you"?"cpu":"you","loser");
+
   const stage=document.getElementById("stage");
   const ammo=document.createElement("img");
   ammo.className="toss liquid-pin";
   ammo.id="liquidPin";
+  ammo.style.cssText="position:absolute;width:120px;height:120px;left:0;top:-80px;z-index:9;pointer-events:none;object-fit:contain;opacity:0";
   const loser=by==="you"?"cpu":"you";
   const loserImg=document.getElementById(loser==="you"?"youFile":"cpuFile");
-  requestAnimationFrame(function(){
+  const liqName=String(FIGHTERS[by==="you"?selectedFighter:cpuFighter].name||"").trim().toLowerCase();
+  bindSrcList(ammo,[FIGHTER_DIR+liqName+"/"+liqName+"_l_object.png"]);
+  stage.appendChild(ammo);
+  if(isDarkFud)playPose(by,"summon");
+
+  function placeAndDrop(){
+    if(!loserImg || !stage) return;
     const stageBox=stage.getBoundingClientRect();
-    const imgRect=loserImg?loserImg.getBoundingClientRect():document.getElementById(loser).getBoundingClientRect();
-    const pinLeft=Math.max(0,imgRect.left-stageBox.left+(imgRect.width-120)/2);
-    const pinTop=Math.max(0,imgRect.top-stageBox.top+(imgRect.height*0.5)-60);
-    ammo.style.cssText="position:absolute;width:120px;height:120px;left:"+pinLeft+"px;top:-80px;z-index:9;pointer-events:none;object-fit:contain";
-    const liqName=String(FIGHTERS[by==="you"?selectedFighter:cpuFighter].name||"").trim().toLowerCase();
-    bindSrcList(ammo,[FIGHTER_DIR+liqName+"/"+liqName+"_l_object.png"]);
-    stage.appendChild(ammo);
-    if(isDarkFud)playPose(by,"summon");
-    ammo.animate([{top:"-80px"},{top:pinTop+"px"}],{duration:900,easing:"ease-in",fill:"forwards"}).onfinish=function(){
+    const imgRect=loserImg.getBoundingClientRect();
+    // Skip if the image has not yet produced a real size
+    if(imgRect.width < 20 || imgRect.height < 20) return false;
+
+    const pinSize=120;
+    const pinLeft=Math.max(0, imgRect.left - stageBox.left + (imgRect.width - pinSize) / 2);
+    // Center the pin on the visible character body (not the stage floor)
+    const pinTop=Math.max(0, imgRect.top - stageBox.top + (imgRect.height - pinSize) / 2);
+
+    ammo.style.left=pinLeft+"px";
+    ammo.style.opacity="1";
+    ammo.animate(
+      [{top:"-80px"},{top:pinTop+"px"}],
+      {duration:900, easing:"ease-in", fill:"forwards"}
+    ).onfinish=function(){
       ammo.style.top=pinTop+"px";
       ammo.style.left=pinLeft+"px";
       sfxWhistleCrash();
     };
+
     setTimeout(function(){
       ammo.style.top=pinTop+"px";
       ammo.style.left=pinLeft+"px";
@@ -2625,7 +2640,27 @@ function finishLiquidate(by){
         },8000);
       },1800);
     },1100);
-  });
+    return true;
+  }
+
+  // Wait for the loser.gif to finish loading and for layout to settle
+  function waitForLoserThenPlace(){
+    let attempts=0;
+    function check(){
+      attempts++;
+      if(loserImg && loserImg.classList.contains("loaded") && loserImg.complete && placeAndDrop()){
+        return;
+      }
+      if(attempts < 60){ // ~1s max at 60fps
+        requestAnimationFrame(check);
+      }else{
+        // Fallback: place with whatever rect we have
+        placeAndDrop();
+      }
+    }
+    requestAnimationFrame(check);
+  }
+  waitForLoserThenPlace();
 }
 function goTitle(){
   if(typeof stopTitleIntroclip==="function")stopTitleIntroclip();
