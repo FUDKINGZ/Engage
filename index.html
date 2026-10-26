@@ -307,19 +307,34 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #fightBanner{display:none}
 .fighter{position:absolute;bottom:7.5%;width:auto;height:68%;transform-origin:center bottom;z-index:4;overflow:visible}
 .fighter-img{width:auto;height:100%;display:none;background:transparent!important;object-fit:contain;object-position:center bottom}
-.fighter img[data-pose="loser"]{
+
+/* Clean loser / KO rules — stay on the floor, inside the stage */
+.fighter img[data-pose="loser"],
+.fighter img[data-pose="ko"]{
+  position:relative !important;
   width:auto !important;
   height:auto !important;
-  max-height:42% !important;
-  max-width:85% !important;
+  max-width:42vw !important;
+  max-height:40vh !important;
   object-fit:contain !important;
   object-position:bottom center !important;
+  transform-origin:bottom center !important;
+  bottom:auto !important;
+  left:auto !important;
+  z-index:5 !important;
 }
-.fighter:has(img[data-pose="loser"]){
+/* Preserve CPU facing */
+#cpu img[data-pose="loser"],
+#cpu img[data-pose="ko"]{
+  transform:scaleX(-1) !important;
+}
+#stage .fighter:has(img[data-pose="loser"]),
+#stage .fighter:has(img[data-pose="ko"]){
+  bottom:2% !important;
   height:auto !important;
-  max-height:50% !important;
+  max-height:none !important;
   width:auto !important;
-  bottom:6% !important;
+  min-width:100px;
 }
 #you{left:1%;z-index:4}
 #cpu{right:1%;z-index:4}
@@ -1728,28 +1743,16 @@ function playPose(who,pose){
   bindSrcList(img,hold?list:list.concat(fighter.idle||[]));
   img.style.display="block";
   // constrain wide loser.gif on live stage
-  if(pose==="loser"){
+  if(pose==="loser" || pose==="ko"){
     img.style.width="auto";
     img.style.height="auto";
-    img.style.maxHeight="42%";
-    img.style.maxWidth="85%";
+    img.style.maxWidth="42vw";
+    img.style.maxHeight="40vh";
     img.style.objectFit="contain";
     img.style.objectPosition="bottom center";
-    const fighterEl=img.parentElement;
-    if(fighterEl){
-      fighterEl.style.height="auto";
-      fighterEl.style.maxHeight="50%";
-      fighterEl.style.width="auto";
-      fighterEl.style.bottom="6%";
-    }
   }else{
-    img.style.maxHeight="";
     img.style.maxWidth="";
-    const fighterEl=img.parentElement;
-    if(fighterEl){
-      fighterEl.style.maxHeight="";
-      fighterEl.style.height="";
-    }
+    img.style.maxHeight="";
   }
   if(!hold)poseTimer[who]=setTimeout(function(){playPose(who,"idle");},POSE_MS);
   logReplayEvent("pose", {who: who, pose: pose});
@@ -2834,37 +2837,6 @@ function applyReplayEvent(ev, you, cpu, youImg, cpuImg){
     const list = (f && f[ev.data.pose]) || (f && f.select);
     if(list) bindSrcList(img, list);
     img.dataset.pose = ev.data.pose;
-
-    const fighterEl = img.parentElement;
-    // reset normal pose sizing
-    img.style.width = "";
-    img.style.height = "";
-    img.style.maxHeight = "";
-    img.style.objectFit = "";
-    img.style.objectPosition = "";
-    if(fighterEl){
-      fighterEl.style.width = "";
-      fighterEl.style.left = "";
-      fighterEl.style.right = "";
-      fighterEl.style.bottom = "";
-    }
-
-    // constrain loser.gif so it does not fill the stage
-    if(ev.data.pose === "loser"){
-      img.style.width = "auto";
-      img.style.height = "100%";
-      img.style.maxHeight = "68%";
-      img.style.maxWidth = "70%";
-      img.style.objectFit = "contain";
-      img.style.objectPosition = "bottom center";
-      if(fighterEl){
-        fighterEl.style.width = "auto";
-        fighterEl.style.height = "68%";
-        fighterEl.style.bottom = "6%";
-        fighterEl.style.zIndex = "5";
-        // leave left/right alone so the fighter stays on its side
-      }
-    }
   } else if(ev.type === "pos"){
     if(you) you.style.left = ev.data.you + "%";
     if(cpu) cpu.style.right = ev.data.cpu + "%";
