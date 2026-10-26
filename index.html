@@ -305,31 +305,50 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #fightUBanner{display:block;width:100%;height:36px;margin:0;padding:0;pointer-events:none;object-fit:cover}
 #fightGap{display:none}
 #fightBanner{display:none}
-.fighter{position:absolute;bottom:7.5%;width:auto;height:auto;max-height:68%;transform-origin:center bottom;z-index:4;overflow:visible}
-.fighter-img{width:auto;height:auto;max-height:100%;display:none;background:transparent!important;object-fit:contain;object-position:center bottom}
-
-/* Clean loser / KO rules — stay on the floor, inside the stage */
-.fighter img[data-pose="loser"],
-.fighter img[data-pose="ko"]{
-  position:relative !important;
-  width:auto !important;
-  height:auto !important;
-  max-width:100% !important;
-  max-height:100% !important;
-  object-fit:contain !important;
-  object-position:bottom center !important;
-  transform-origin:bottom center !important;
-  bottom:auto !important;
-  left:auto !important;
-  z-index:5 !important;
+/* ===== FIGHTER SIZING — stage-relative, keeps aspect ratio on all screens ===== */
+.fighter {
+  position: absolute;
+  bottom: 7.5%;
+  width: auto;
+  height: 58%;
+  transform-origin: center bottom;
+  z-index: 4;
+  overflow: visible;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
 }
+
+.fighter-img {
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  display: none;
+  background: transparent !important;
+  pointer-events: none;
+}
+
+/* Loser / KO stay grounded and smaller */
+.fighter img[data-pose="loser"],
+.fighter img[data-pose="ko"] {
+  height: auto !important;
+  max-height: 100% !important;
+  width: auto !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  object-position: bottom center !important;
+  transform-origin: bottom center !important;
+}
+
 #stage .fighter:has(img[data-pose="loser"]),
-#stage .fighter:has(img[data-pose="ko"]){
-  bottom:2% !important;
-  height:auto !important;
-  max-height:50% !important;
-  width:auto !important;
-  min-width:100px;
+#stage .fighter:has(img[data-pose="ko"]) {
+  height: 42% !important;
+  bottom: 2% !important;
+  width: auto !important;
+  min-width: 80px;
 }
 #you{left:1%;z-index:4}
 #cpu{right:1%;z-index:4}
