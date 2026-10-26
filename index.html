@@ -331,11 +331,10 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
   pointer-events: none;
 }
 
-/* Loser / KO stay grounded and smaller */
+/* Loser / KO match standing size */
 .fighter img[data-pose="loser"],
 .fighter img[data-pose="ko"] {
-  height: auto !important;
-  max-height: 100% !important;
+  height: 100% !important;
   width: auto !important;
   max-width: 100% !important;
   object-fit: contain !important;
@@ -345,10 +344,9 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 
 #stage .fighter:has(img[data-pose="loser"]),
 #stage .fighter:has(img[data-pose="ko"]) {
-  height: 42% !important;
-  bottom: 2% !important;
+  height: 58% !important;
+  bottom: 7.5% !important;
   width: auto !important;
-  min-width: 80px;
 }
 #you{left:1%;z-index:4}
 #cpu{right:1%;z-index:4}
