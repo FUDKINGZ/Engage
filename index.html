@@ -181,7 +181,7 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 #opponents .slot{aspect-ratio:1/1;width:100%;height:auto;flex:none}
 .slot-wrap.side .slot{opacity:.9;filter:none;background:transparent;border-color:transparent;box-shadow:none}
 .slot-wrap.center .slot{border-color:#ffd54f;box-shadow:0 0 22px rgba(255,213,79,.45)}
-.slot img{width:100%;flex:1;min-height:0;object-fit:contain;object-position:center bottom;display:block;background:transparent;opacity:0}
+.slot img{width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;object-position:center bottom;display:block;background:transparent;opacity:0;flex:none}
 .slot img.loaded{opacity:1}
 .slot .arena-art{width:100%;flex:1;min-height:0;object-fit:cover;object-position:center center;display:block;background:transparent;opacity:1}
 .slot.locked img,.slot.locked .arena-art{filter:grayscale(1) brightness(.38)}
@@ -284,19 +284,19 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
   left:0;right:0;
   top:-22%;
   height:145%;
-  transform:none;
-}
-.arena-img{display:block;width:100%;height:100%;object-fit:fill;object-position:center center;pointer-events:none;position:absolute;inset:0;z-index:1}
+  transform:none;}
+.arena-img{display:block;width:100%;height:100%;object-fit:cover;object-position:center center;pointer-events:none;position:absolute;inset:0;z-index:1}
 #fightU{display:block;width:100%;height:36px;min-height:36px;max-height:36px;margin:0;padding:0;background:#05070d;overflow:hidden;flex:none}
 #fightUBanner{display:block;width:100%;height:36px;margin:0;padding:0;pointer-events:none;object-fit:cover}
 #fightGap{display:none}
 #fightBanner{display:none}
-/* ===== FIGHTER SIZING — stage-relative for standing poses, intrinsic for loser/ko ===== */
+/* ===== FIGHTER SIZING — standing = stage height, loser/ko = stage width ===== */
 .fighter {
   position: absolute;
   bottom: 7.5%;
+  height: 78%;
   width: auto;
-  height: 80%;          /* explicit height so % max-height on the img can resolve */
+  max-width: 48%;
   transform-origin: center bottom;
   z-index: 4;
   overflow: visible;
@@ -306,10 +306,10 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
   pointer-events: none;
 }
 .fighter-img {
+  height: 100%;
   width: auto;
-  height: auto;
-  max-height: 100%;     /* = 80% of stage; standing sprites stay stage-relative */
-  max-width: none;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
   object-position: center bottom;
   display: none;
@@ -317,18 +317,20 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
   pointer-events: none;
   image-rendering: auto;
 }
-/* Horizontal loser / ko sprites must use their natural size — do not force standing height */
+/* Loser / KO: lying down — use more width, less height, keep ratio */
 .fighter-img[data-pose="loser"],
 .fighter-img[data-pose="ko"] {
-  max-height: none;
-  max-width: none;
   height: auto;
-  width: auto;
+  width: 62vw;
+  max-width: 62%;
+  max-height: 38%;
+  object-fit: contain;
+  object-position: center bottom;
 }
 #cpu .fighter-img{transform:scaleX(-1)}
 /* Title intro clip fighters — force same row */
 .tic-fighter{position:absolute;bottom:8%;width:auto;height:auto;display:flex;align-items:flex-end;justify-content:center;pointer-events:none;z-index:3}
-.tic-fighter img{width:auto;height:auto;max-height:62%;max-width:none;object-fit:contain;object-position:center bottom;display:block;background:transparent}
+.tic-fighter img{width:auto;height:auto;max-height:62%;max-width:100%;object-fit:contain;object-position:center bottom;display:block;background:transparent}
 .fighter.hit{filter:none}
 #fight.paused .power-wrap,
 #fight.paused .fighter{
@@ -1733,15 +1735,11 @@ function playPose(who,pose){
   img.dataset.pose=pose;
   bindSrcList(img,hold?list:list.concat(fighter.idle||[]));
   img.style.display="block";
-  // loser/ko size is controlled by stage-relative CSS; clear any inline overrides
-  // loser/ko size is controlled by stage-relative CSS; clear any inline overrides
-  if(pose==="loser" || pose==="ko"){
-    img.style.maxWidth="";
-    img.style.maxHeight="";
-  }else{
-    img.style.maxWidth="";
-    img.style.maxHeight="";
-  }
+  // CSS controls sizing. Only clear inline overrides that could fight it.
+  img.style.maxWidth = "";
+  img.style.maxHeight = "";
+  img.style.width = "";
+  img.style.height = "";
   if(!hold)poseTimer[who]=setTimeout(function(){playPose(who,"idle");},POSE_MS);
   logReplayEvent("pose", {who: who, pose: pose});
 }
