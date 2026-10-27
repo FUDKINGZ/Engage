@@ -290,13 +290,13 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #fightUBanner{display:block;width:100%;height:36px;margin:0;padding:0;pointer-events:none;object-fit:cover}
 #fightGap{display:none}
 #fightBanner{display:none}
-/* ===== FIGHTER SIZING — standing = stage height, loser/ko = stage width ===== */
+/* ===== FIGHTER SIZING — standing height-driven, loser/ko width-driven ===== */
 .fighter {
   position: absolute;
   bottom: 7.5%;
   height: 78%;
   width: auto;
-  max-width: 48%;
+  max-width: 46%;
   transform-origin: center bottom;
   z-index: 4;
   overflow: visible;
@@ -304,6 +304,14 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
   align-items: flex-end;
   justify-content: center;
   pointer-events: none;
+}
+/* Relax the box when the image is a lying pose so it can use stage width */
+.fighter:has(img[data-pose="loser"]),
+.fighter:has(img[data-pose="ko"]) {
+  height: auto;
+  max-height: 42%;
+  width: 72%;
+  max-width: 78%;
 }
 .fighter-img {
   height: 100%;
@@ -317,13 +325,13 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
   pointer-events: none;
   image-rendering: auto;
 }
-/* Loser / KO: lying down — use more width, less height, keep ratio */
+/* Loser / KO: natural ratio, sized by the relaxed parent */
 .fighter-img[data-pose="loser"],
 .fighter-img[data-pose="ko"] {
+  width: 100%;
   height: auto;
-  width: 62vw;
-  max-width: 62%;
-  max-height: 38%;
+  max-width: 100%;
+  max-height: none;
   object-fit: contain;
   object-position: center bottom;
 }
