@@ -2721,9 +2721,13 @@ function finishLiquidate(by){
   function dropPin(){
     requestAnimationFrame(function(){
     const stageBox=stage.getBoundingClientRect();
-    const imgRect=loserImg?loserImg.getBoundingClientRect():document.getElementById(loser).getBoundingClientRect();
+    const target=loserImg||document.getElementById(loser);
+    const imgRect=target.getBoundingClientRect();
     const pinLeft=Math.max(0,imgRect.left-stageBox.left+(imgRect.width-120)/2);
-    const pinTop=Math.max(0,imgRect.top-stageBox.top+(imgRect.height*0.5)-60);
+    let pinTop=imgRect.top-stageBox.top+(imgRect.height*0.42)-60;
+    const floorLimit=stageBox.height*0.62;
+    if(pinTop>floorLimit)pinTop=floorLimit;
+    pinTop=Math.max(stageBox.height*0.28,pinTop);
     ammo.style.cssText="position:absolute;width:120px;height:120px;left:"+pinLeft+"px;top:-80px;z-index:9;pointer-events:none;object-fit:contain";
     const liqName=String(FIGHTERS[by==="you"?selectedFighter:cpuFighter].name||"").trim().toLowerCase();
     bindSrcList(ammo,[FIGHTER_DIR+liqName+"/"+liqName+"_l_object.png"]);
