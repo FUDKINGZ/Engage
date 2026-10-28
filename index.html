@@ -747,7 +747,7 @@ input[type=file].hidden-file{display:none}
   </div>
   <div id="replayClock" style="margin-top:6px;font-family:Impact,sans-serif;color:#ffd54f;font-size:14px;">0:00</div>
 </div>
-<div class="fine-print"><span>BUILD:10.25~2121</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.27~2332</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 <div id="loadingOverlay"><div class="loading-spinner"></div><div class="loading-text">LOADING...</div></div>
 </div>
 <script>
@@ -789,7 +789,8 @@ const FIGHTERS=[{name:"Stonks 6-7",handle:"@Stonks67",tint:"#1a2333",speed:5,acc
 {name:"Trashed Panda",handle:"@TrashedPanda",tint:"#5d4037",female:true,exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"counter",bio:"Dumpster-diving panda who treats the grooming table like a ring. Wait for the spray, then swipe. Weak if you stay clean. TRASH BAG is the counter."},
 {name:"That Girl Badger",handle:"@ThatBadgerGirl",tint:"#4e342e",female:true,exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Salon chair is her ring. She styles the hair, then styles the face. Weak if you stay still under the dryer. BADGER CLAW is the closer."},
 {name:"Dark Fud 420",handle:"@DarkFud420",tint:"#6b21a8",exhibitionOnly:true,spriteScale:1.3,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Wizard of the pit. Casts ENERGY SPELL from the tower. Weak if you close the gap and hold block."},
-{name:"Detective Macaroni",handle:"@DetectiveMacaroni",tint:"#4a3a28",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"counter",bio:"Interrogation-room closer. Asks the question, then swings. Weak if you stay quiet under the light. PASTA BOWL is the closer."}].map(decorateFighter);
+{name:"Detective Macaroni",handle:"@DetectiveMacaroni",tint:"#4a3a28",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"counter",bio:"Interrogation-room closer. Asks the question, then swings. Weak if you stay quiet under the light. PASTA BOWL is the closer."},
+{name:"Overlordess",handle:"@Overlordess",tint:"#c2185b",female:true,exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"boss",bio:"Downtown FintwiX ruler. Commands the streets, then the fight. Weak if you stay mobile. DOG is the closer."}].map(decorateFighter);
 function fighterStat(who,key){const f=FIGHTERS[who==="you"?selectedFighter:cpuFighter];const n=f&&f[key];return (n==null||n===""||isNaN(n))?5:Number(n);}
 const MAIN_COUNT=11,HIDDEN_INDEXES=[11,12,13,14,15],FINAL_INDEX=15;
 const MEMBERS=FIGHTERS.filter(function(f){return!f.hidden;}).map(function(f,i){return{handle:f.handle,name:f.name,fighter:i,color:f.tint};});
@@ -816,7 +817,7 @@ const ARENAS=[
 {name:"Anime City",file:ARENA_DIR+"Anime City.jpg",pos:"center",color:"#1a1028",music:AUDIO+"arena/First Class To Ibiza.mp3"},
 {name:"Wizards Castle",file:ARENA_DIR+"Wizards Castle.jpg",pos:"center",color:"#1a0a28",music:AUDIO+"arena/Fire It Up [Smash Follow].mp3"},
 {name:"Interrogation Room",file:ARENA_DIR+"Interrogation Room.jpg",pos:"center",color:"#1a1410",music:AUDIO+"arena/Villains Of Chaos.mp3"},
-{name:"Downtown FintwiX",file:ARENA_DIR+"Downtown FintwiX.jpg",pos:"center",color:"#0e1620",music:AUDIO+"arena/Summon The FUD.mp3"}
+{name:"Downtown FintwiX",file:ARENA_DIR+"Downtown FintwiX.jpg",pos:"center",color:"#0e1620",music:AUDIO+"arena/Enter the Arena.mp3"}
 ];
 let mode="pvc",hp={you:MAX,cpu:MAX},power={you:0,cpu:0},throwAmmo={you:0,cpu:0};
 let comboCount={you:0,cpu:0},comboAt={you:0,cpu:0},lastSide={you:"",cpu:""},lastKind={you:"",cpu:""};
@@ -975,7 +976,8 @@ function arcadeArenaIndex(){
     "That Girl Badger":"Hair Salon",
     "Platinum Meow":"Anime City",
     "Dark Fud 420":"Wizards Castle",
-    "Detective Macaroni":"Interrogation Room"
+    "Detective Macaroni":"Interrogation Room",
+    "Overlordess":"Downtown FintwiX"
   };
   const who=FIGHTERS[(mode==="arcade"||mode==="pvc")?selectedOpponent:selectedFighter];
   const want=who&&homes[who.name];
@@ -1768,11 +1770,34 @@ function pauseBgm(){bgm.pause();}
 function refreshMuteButtons(){const m=document.getElementById("muteMusic");m.classList.toggle("off",mutedMusic||musicStage===1);m.textContent=musicStage===0?"MUSIC":(musicStage===1?"MUSIC 25%":"MUSIC OFF");document.getElementById("muteFx").classList.toggle("off",mutedFx);}
 function toggleMuteMusic(){musicStage=(musicStage+1)%3;mutedMusic=musicStage===2;applyMusicLevel();if(mutedMusic)bgm.pause();else if(lastScreen!=="intro")playBgm();refreshMuteButtons();}
 function toggleMuteFx(){mutedFx=!mutedFx;introSfx.muted=mutedFx;if(mutedFx)stopIntroBed();else if(!introDone)startIntroBed();refreshMuteButtons();}
-const PIT_TRACKS=[{name:"MAIN TITLE",file:TITLE_TRACK},{name:"TRAILER PARK",file:AUDIO+"arena/Victims Of Propoganda.mp3"},{name:"DUMPSTER FIRE",file:AUDIO+"arena/Olay! Olay! Olay! [Skrrt!].mp3"},{name:"THROUGH THE NOISE",file:AUDIO+"arena/Through The Noise.mp3"},{name:"I GOT THE SMOKE",file:AUDIO+"arena/I got the smoke.mp3"},{name:"WFUD ROOFTOP",file:AUDIO+"arena/WFUD New World Order.mp3"},{name:"SAVAGE REALITY",file:AUDIO+"arena/Savage Reality.mp3"},{name:"STREET FIGHT",file:AUDIO+"arena/Summon The FUD.mp3"},{name:"FUCKS WITH FUD",file:AUDIO+"arena/Tip Of The Fedora.mp3"},{name:"BATTLEFIELD BOOTS",file:AUDIO+"arena/Battlefield Boots.mp3"},
-{name:"X-AUSTIVE JOURNEY",file:AUDIO+"arena/X-Austive Journey.mp3"},{name:"BOOM BOOM POW!",file:AUDIO+"arena/Boom Boom Pow!.mp3"},{name:"CRAZY DOTS",file:AUDIO+"arena/Crazy Dots.mp3"},{name:"RIFFS OF CHAOS",file:AUDIO+"arena/Riffs Of Chaos.mp3"},{name:"GOLD VAULT",file:AUDIO+"arena/Fud Kingz [Arena 5150].mp3"},{name:"EV VAN WAREHOUSE",file:AUDIO+"arena/I got the smoke.mp3"},
+const PIT_TRACKS=[{name:"WFUD [WORLDWIDE]",file:AUDIO+"arena/WFUD [WORLDWIDE].mp3"},
+{name:"VICTIMS OF PROPOGANDA",file:AUDIO+"arena/Victims Of Propoganda.mp3"},
+{name:"OLAY! OLAY! OLAY! [Skrrt!]",file:AUDIO+"arena/Olay! Olay! Olay! [Skrrt!].mp3"},
+{name:"THROUGH THE NOISE",file:AUDIO+"arena/Through The Noise.mp3"},
+{name:"I GOT THE SMOKE",file:AUDIO+"arena/I got the smoke.mp3"},
+{name:"OPEN MIC FIGHTS",file:AUDIO+"arena/Open Mic Fights.mp3"},
+{name:"WFUD NEW WORLD ORDER",file:AUDIO+"arena/WFUD New World Order.mp3"},
+{name:"SAVAGE REALITY",file:AUDIO+"arena/Savage Reality.mp3"},
+{name:"SUMMON THE FUD",file:AUDIO+"arena/Summon The FUD.mp3"},
+{name:"MILADYS FEDORA",file:AUDIO+"arena/Tip Of The Fedora.mp3"},
+{name:"BATTLEFIELD BOOTS",file:AUDIO+"arena/Battlefield Boots.mp3"},
+{name:"X-AUSTIVE JOURNEY",file:AUDIO+"arena/X-Austive Journey.mp3"},
+{name:"BOOM BOOM POW!",file:AUDIO+"arena/Boom Boom Pow!.mp3"},
+{name:"CRAZY DOTS",file:AUDIO+"arena/Crazy Dots.mp3"},
+{name:"RIFFS OF CHAOS",file:AUDIO+"arena/Riffs Of Chaos.mp3"},
+{name:"ARENA 5150",file:AUDIO+"arena/Fud Kingz [Arena 5150].mp3"},
+{name:"I GOT THE SMOKE",file:AUDIO+"arena/I got the smoke.mp3"},
 {name:"FIRST CLASS TO IBIZA",file:AUDIO+"arena/First Class To Ibiza.mp3"},
 {name:"FIRE IT UP [SMASH FOLLOW]",file:AUDIO+"arena/Fire It Up [Smash Follow].mp3"},
-{name:"VILLAINS OF CHAOS",file:AUDIO+"arena/Villains Of Chaos.mp3"}];
+{name:"VILLAINS OF CHAOS",file:AUDIO+"arena/Villains Of Chaos.mp3"},
+{name:"ENTER THE ARENA",file:AUDIO+"arena/Enter the Arena.mp3"},
+{name:"FINTWITS WAR MACHINE",file:AUDIO+"arena/Fintwits War Machine.mp3"},
+{name:"FIRE IT UP! [SMASH FOLLOW]",file:AUDIO+"arena/Fire It Up [Smash Follow].mp3"},
+{name:"FIRE IT UP! [DREZDMX]",file:AUDIO+"arena/FIRE IT UP! [DREZDMX].mp3"},
+{name:"FUKS WIFF FUD",file:AUDIO+"arena/Fucks With Fud.mp3"},
+{name:"STRONGER BETTER LOUDER",file:AUDIO+"arena/Stronger Better Louder.mp3"},
+{name:"OPEN MIC OVERLORDS",file:AUDIO+"arena/Open Mic Overlords.mp3"}
+];
 let pitIndex=0;
 function renderPitDeck(){const box=document.getElementById("pitList");if(!box)return;box.innerHTML="";PIT_TRACKS.forEach(function(t,i){const b=document.createElement("button");b.type="button";b.textContent=(i+1)+"  "+t.name;if(i===pitIndex)b.className="on";b.onclick=function(){pitIndex=i;pitPlay(true);};box.appendChild(b);});const cur=PIT_TRACKS[pitIndex];document.getElementById("pitNow").textContent=cur?cur.name:"PIT DECK";document.getElementById("pitSub").textContent=(pitIndex+1)+" / "+PIT_TRACKS.length;document.getElementById("pitPlay").textContent=bgm.paused?"PLAY":"PAUSE";}
 function pitPlay(force){ensureAudio();const t=PIT_TRACKS[pitIndex];if(!t)return;setTrack(t.file,true,!!force);renderPitDeck();}
@@ -1813,7 +1838,8 @@ function makeFighterSlot(f,cls,idx,onClick){
     "Lil OJ":"WFUD Press Room","Fud Daddy 420":"WFUD Studios Rooftop","KING TROLL":"Dumpster Fire",
     "King Troll":"Dumpster Fire","Grox":"Grox Dojo","Trashed Panda":"Pet Salon",
     "That Girl Badger":"Hair Salon","Platinum Meow":"Anime City","Dark Fud 420":"Wizards Castle",
-    "Detective Macaroni":"Interrogation Room"
+    "Detective Macaroni":"Interrogation Room",
+    "Overlordess":"Downtown FintwiX"
   };
   const arenaName=homes[f.name];
   const arena=arenaName?ARENAS.find(function(a){return a.name===arenaName;}):null;
@@ -1834,7 +1860,7 @@ function makeFighterSlot(f,cls,idx,onClick){
   return wrapEl;
 }
 function makeArenaSlot(a,cls,idx,onClick){const wrapEl=document.createElement("div");wrapEl.className="slot-wrap "+cls;const name=document.createElement("b");name.className="slot-name";name.textContent=a.name;wrapEl.appendChild(name);const el=document.createElement("div");el.className="slot "+cls;const art=document.createElement("div");art.className="arena-art";art.style.background=a.color;art.style.backgroundImage="url('"+a.file+"')";art.style.backgroundSize="contain";art.style.backgroundPosition="center center";art.style.backgroundRepeat="no-repeat";el.appendChild(art);decorateSlot(el,arenaLocked(idx));wrapEl.appendChild(el);if(onClick)wrapEl.onclick=onClick;return wrapEl;}
-const AMMO_NAMES=["NUDE PIX","EPT TEST","PRISON SHOE","FUD RADIO","TOOL BOX","COCKTAIL","TOMBSTONE","FUSION REACTOR","HOT DOG","SKULL & BONES","OIL BARREL","MULLEN DRAGONFLY","GLOBE","WFUD PODIUM","MICROPHONE","STREET BIKE","BOW","TABLET","TRASH BAG","HAIR DRYER","ENERGY SPELL","PASTA BOWL"];
+const AMMO_NAMES=["GOLDEN NUT","EPT TEST","PRISON SHOE","FUD RADIO","TOOL BOX","COCKTAIL","TOMBSTONE","FUSION REACTOR","HOT DOG","SKULL & BONES","OIL BARREL","MULLEN DRAGONFLY","GLOBE","WFUD PODIUM","MICROPHONE","STREET BIKE","BOW","TABLET","TRASH BAG","HAIR DRYER","ENERGY SPELL","DOG"];
 const WHERE_NOW={
   "Stonks 6-7":"Took a night desk and now draws lines on other people’s candles. Still calls every dip healthy.",
   "Ventifa":"Clocked out of the ward and into a clinic that does not ask names. Still patches strangers. Still no bedside manner.",
@@ -1855,9 +1881,10 @@ const WHERE_NOW={
   "Grox":"The dojo lights stayed on. Went back to the mat. Never joined the arcade board.",
   "Trashed Panda":"The grooming table is still sticky. Left a mask in the drain and took the treats.",
   "That Girl Badger":"The salon lights stayed on. Left the chair spinning and the dryer running.",
- "Platinum Meow":"The neon alleys still know the name. Left a bow string humming and the city lights on.",
+  "Platinum Meow":"The neon alleys still know the name. Left a bow string humming and the city lights on.",
   "Dark Fud 420":"The tower lights stayed on. Left the spellbook open and the ENERGY SPELL still humming in the air.",
-  "Detective Macaroni":"The interrogation light stayed on. Left the chair spinning and the pasta bowl on the table."
+  "Detective Macaroni":"The interrogation light stayed on. Left the chair spinning and the pasta bowl on the table.",
+  "Overlordess":"The downtown lights stayed on. Left the DOG on the corner and the street still running."
 };
 function paintAmmo(id,idx){const box=document.getElementById(id);if(!box)return;box.innerHTML="";const list=playableIndexes();if(!list.length)return;const at=Math.max(0,list.indexOf(idx)),n=list.length;[list[wrap(at-1,n)],list[at],list[wrap(at+1,n)]].forEach(function(i,slot){const cell=document.createElement("div");cell.style.cssText="display:flex;flex-direction:column;align-items:center;gap:3px;width:72px";const img=document.createElement("img");img.alt=AMMO_NAMES[i]||"";img.className=slot===1?"center":"side";bindSrcList(img,FIGHTERS[i].objects);cell.appendChild(img);if(slot===1){const cap=document.createElement("b");cap.textContent=AMMO_NAMES[i]||"";cap.style.cssText="font-size:7px;color:#ffd54f;text-align:center;line-height:1;white-space:nowrap;width:100%;margin:2px 0 0;padding:0";cell.style.width="104px";cell.appendChild(cap);}box.appendChild(cell);});}
 function renderFighterCarousel(){const box=document.getElementById("fighterCarousel"),dots=document.getElementById("fighterDots");box.innerHTML="";dots.innerHTML="";const list=playableIndexes();if(list.indexOf(selectedFighter)<0)selectedFighter=list[0]||0;const n=list.length,at=Math.max(0,list.indexOf(selectedFighter)),L=list[wrap(at-1,n)],R=list[wrap(at+1,n)];box.appendChild(makeFighterSlot(FIGHTERS[L],"side left",L,function(){shiftFighter(-1);}));box.appendChild(makeFighterSlot(FIGHTERS[selectedFighter],"center",selectedFighter));box.appendChild(makeFighterSlot(FIGHTERS[R],"side right",R,function(){shiftFighter(1);}));list.forEach(function(i){const d=document.createElement("i");if(i===selectedFighter)d.className="on";dots.appendChild(d);});paintAmmo("fighterAmmo",selectedFighter);const bioEl=document.getElementById("fighterBio");
