@@ -750,7 +750,7 @@ input[type=file].hidden-file{display:none}
   </div>
   <div id="replayClock" style="margin-top:6px;font-family:Impact,sans-serif;color:#ffd54f;font-size:14px;">0:00</div>
 </div>
-<div class="fine-print"><span>BUILD:10.28~0153</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.28~1345</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 <div id="loadingOverlay"><div class="loading-spinner"></div><div class="loading-text">LOADING...</div></div>
 </div>
 <script>
@@ -1133,6 +1133,18 @@ function showLoading(on){
   const ov=document.getElementById("loadingOverlay");
   if(!ov)return;
   ov.classList.toggle("show",!!on);
+}
+function ensureTrackReady(src, done){
+  if(!src||mutedMusic){if(done)done();return;}
+  showLoading(true);
+  let finished=false;
+  const finish=function(){if(finished)return;finished=true;showLoading(false);if(done)done();};
+  const safe=encodeURI(src);
+  const have=(bgm.currentSrc||bgm.src||"");
+  if(bgm.readyState>=3&&have.indexOf(src.split("/").pop())>=0){finish();return;}
+  if(have.indexOf(src.split("/").pop())<0){bgm.src=safe;try{bgm.load();}catch(e){}}
+  const timer=setTimeout(finish,2200);
+  bgm.addEventListener("canplay",function(){clearTimeout(timer);finish();},{once:true});
 }
 function preloadCritical(){
   ["./intro-dish.jpg",INTRO_BED].forEach(function(u){preloadUrl(u,"high");});
@@ -1882,7 +1894,7 @@ function renderPitDeck(){const box=document.getElementById("pitList");if(!box)re
 function pitPlay(force){ensureAudio();const t=PIT_TRACKS[pitIndex];if(!t)return;setTrack(t.file,true,!!force);renderPitDeck();}
 function pitToggle(){if(!bgm.paused&&currentTrack===PIT_TRACKS[pitIndex].file){pauseBgm();renderPitDeck();return;}pitPlay(false);}
 function pitStep(dir){pitIndex=(pitIndex+dir+PIT_TRACKS.length)%PIT_TRACKS.length;pitPlay(true);}
-function show(id){document.querySelectorAll(".screen").forEach(function(s){s.classList.remove("active");});document.getElementById(id).classList.add("active");lastScreen=id;if(id==="intro"){startIntroBed();return;}if(id==="title"){startTitleSong();if(typeof titleIntroclip==="function")titleIntroclip();return;}if(id==="soundtrack"){renderPitDeck();return;}if(id==="matchup"){renderMatchup();startTitleSong();return;}if(KEEP_ARENA_MUSIC[id]){if(id==="fight")playArenaMusic(false);else playBgm();return;}if(id==="postfight"||id==="liquid"){startTitleSong();return;}if(TITLE_MENUS[id])startTitleSong();if(id==="arenas"){const w=document.getElementById("arenaNextWord");if(w)w.textContent="NEXT";const an=document.getElementById("arenaNext");if(an)an.setAttribute("aria-label","Choose CPU level");startTitleSong();}if(id==="fighters"){document.getElementById("fighterHint").textContent=mode==="arcade"?"CHOOSE YOUR FIGHTER":"CHOOSE FIGHTER";renderSkillRow();renderFighterCarousel();}if(id==="opponents")renderOpponentScreen();}
+function show(id){document.querySelectorAll(".screen").forEach(function(s){s.classList.remove("active");});document.getElementById(id).classList.add("active");lastScreen=id;if(id==="intro"){startIntroBed();return;}if(id==="title"){ensureTrackReady(TITLE_TRACK,function(){startTitleSong();if(typeof titleIntroclip==="function")titleIntroclip();});return;}if(id==="soundtrack"){renderPitDeck();return;}if(id==="matchup"){renderMatchup();ensureTrackReady(TITLE_TRACK,startTitleSong);return;}if(KEEP_ARENA_MUSIC[id]){if(id==="fight"){const a=ARENAS[selectedArena];ensureTrackReady(a&&a.music,function(){playArenaMusic(false);});}else playBgm();return;}if(id==="postfight"||id==="liquid"){ensureTrackReady(TITLE_TRACK,startTitleSong);return;}if(TITLE_MENUS[id])ensureTrackReady(TITLE_TRACK,startTitleSong);if(id==="arenas"){const w=document.getElementById("arenaNextWord");if(w)w.textContent="NEXT";const an=document.getElementById("arenaNext");if(an)an.setAttribute("aria-label","Choose CPU level");ensureTrackReady(TITLE_TRACK,startTitleSong);}if(id==="fighters"){document.getElementById("fighterHint").textContent=mode==="arcade"?"CHOOSE YOUR FIGHTER":"CHOOSE FIGHTER";renderSkillRow();renderFighterCarousel();}if(id==="opponents")renderOpponentScreen();}
 function makeCode(){const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let s="";for(let i=0;i<6;i++)s+=chars[Math.floor(Math.random()*chars.length)];return s;}
 function inviteLink(){return location.href.split("#")[0]+"#fight="+roomCode;}
 function newRoom(){roomCode=makeCode();sentInvites={};invitedMember=null;document.getElementById("roomCode").textContent=roomCode;setInviteNote("New pit opened.");renderMembers();}
