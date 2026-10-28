@@ -68,6 +68,7 @@ html,body{margin:0;width:100%;height:100%;height:100dvh;overflow:hidden;font-fam
 .pit-list button.on{background:#143322;color:#39ff14;border-color:#39ff14}
 .pit-controls{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:6px;margin-top:8px}
 .pit-controls button{border:0;border-radius:10px;padding:10px 6px;background:#1b2436;color:#ffd54f;font-weight:900}
+.pit-controls button.on{background:linear-gradient(#ffe082,#ffb300);color:#1a1200}
 .btn{width:100%;border:0;border-radius:12px;padding:12px 10px;margin:5px 0;font-weight:800;font-size:14px}
 .btn-gold{background:linear-gradient(#ffe082,#ffb300);color:#1a1200}
 .btn-green{background:linear-gradient(#00e676,#00a854);color:#04140a}
@@ -688,7 +689,7 @@ input[type=file].hidden-file{display:none}
 <p class="post-sub">Image Render Assist — Grok</p>
 <p class="post-sub">Fud Kingz of Fintwits is an original WFUD Studios production. Tools assisted. They did not direct, own, or ship this game.</p>
 </div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="show('title')" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="20">BACK</text></svg></button></div></section>
-<section id="soundtrack" class="screen menu fixed-390 back-left"><div class="brand"><img class="brand-logo" src="./title header.jpg" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>PIT DECK</p></div><div class="pit"><div class="pit-lcd"><b id="pitNow">PIT DECK</b><span id="pitSub">SELECT A TRACK</span></div><div class="pit-list" id="pitList"></div><div class="pit-controls"><button type="button" onclick="pitStep(-1)">PREV</button><button type="button" id="pitPlay" onclick="pitToggle()">PLAY</button><button type="button" onclick="pitStep(1)">NEXT</button></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="show('title')" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="22" font-weight="900" letter-spacing="3.2">BACK</text></svg></button></div></section>
+<section id="soundtrack" class="screen menu fixed-390 back-left"><div class="brand"><img class="brand-logo" src="./title header.jpg" alt="FINTWITS FUD KINGZ"><h1>FINTWITS FUD KINGZ</h1><p>PIT DECK</p></div><div class="pit"><div class="pit-lcd"><b id="pitNow">PIT DECK</b><span id="pitSub">SELECT A TRACK</span></div><div class="pit-list" id="pitList"></div><div class="pit-controls"><button type="button" onclick="pitStep(-1)">PREV</button><button type="button" id="pitPlay" onclick="pitToggle()">PLAY</button><button type="button" onclick="pitStep(1)">NEXT</button><button type="button" id="pitShuffle" onclick="pitToggleShuffle()">SHUFFLE</button><button type="button" id="pitRepeat" onclick="pitToggleRepeat()">REPEAT</button></div></div><div class="menu-btns tok-row"><button type="button" class="tok-btn silver" onclick="show('title')" aria-label="Back"><svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="22" font-weight="900" letter-spacing="3.2">BACK</text></svg></button></div></section>
 <section id="fight" class="screen">
   <div id="stage">
     <img id="arenaImg" class="arena-img" alt="">
@@ -750,7 +751,7 @@ input[type=file].hidden-file{display:none}
   </div>
   <div id="replayClock" style="margin-top:6px;font-family:Impact,sans-serif;color:#ffd54f;font-size:14px;">0:00</div>
 </div>
-<div class="fine-print"><span>BUILD:10.28~1345</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.28~1735</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 <div id="loadingOverlay"><div class="loading-spinner"></div><div class="loading-text">LOADING...</div></div>
 </div>
 <script>
@@ -1889,11 +1890,15 @@ const PIT_TRACKS=[{name:"WFUD [WORLDWIDE]",file:AUDIO+"arena/WFUD [WORLDWIDE].mp
 {name:"STRONGER BETTER LOUDER",file:AUDIO+"arena/Stronger Better Louder.mp3"},
 {name:"OPEN MIC OVERLORDS",file:AUDIO+"arena/Open Mic Overlords.mp3"}
 ];
-let pitIndex=0;
-function renderPitDeck(){const box=document.getElementById("pitList");if(!box)return;box.innerHTML="";PIT_TRACKS.forEach(function(t,i){const b=document.createElement("button");b.type="button";b.textContent=(i+1)+"  "+t.name;if(i===pitIndex)b.className="on";b.onclick=function(){pitIndex=i;pitPlay(true);};box.appendChild(b);});const cur=PIT_TRACKS[pitIndex];document.getElementById("pitNow").textContent=cur?cur.name:"PIT DECK";document.getElementById("pitSub").textContent=(pitIndex+1)+" / "+PIT_TRACKS.length;document.getElementById("pitPlay").textContent=bgm.paused?"PLAY":"PAUSE";}
-function pitPlay(force){ensureAudio();const t=PIT_TRACKS[pitIndex];if(!t)return;setTrack(t.file,true,!!force);renderPitDeck();}
+let pitIndex=0,pitShuffle=false,pitRepeat=false;
+function renderPitDeck(){const box=document.getElementById("pitList");if(!box)return;box.innerHTML="";PIT_TRACKS.forEach(function(t,i){const b=document.createElement("button");b.type="button";b.textContent=(i+1)+"  "+t.name;if(i===pitIndex)b.className="on";b.onclick=function(){pitIndex=i;pitPlay(true);};box.appendChild(b);});const cur=PIT_TRACKS[pitIndex];document.getElementById("pitNow").textContent=cur?cur.name:"PIT DECK";document.getElementById("pitSub").textContent=(pitIndex+1)+" / "+PIT_TRACKS.length+(pitShuffle?"  •  SHUFFLE":"")+(pitRepeat?"  •  REPEAT":"");document.getElementById("pitPlay").textContent=bgm.paused?"PLAY":"PAUSE";const sh=document.getElementById("pitShuffle"),rp=document.getElementById("pitRepeat");if(sh)sh.classList.toggle("on",pitShuffle);if(rp)rp.classList.toggle("on",pitRepeat);}
+function pitPlay(force){ensureAudio();const t=PIT_TRACKS[pitIndex];if(!t)return;setTrack(t.file,true,!!force);bgm.loop=!!pitRepeat;renderPitDeck();}
 function pitToggle(){if(!bgm.paused&&currentTrack===PIT_TRACKS[pitIndex].file){pauseBgm();renderPitDeck();return;}pitPlay(false);}
 function pitStep(dir){pitIndex=(pitIndex+dir+PIT_TRACKS.length)%PIT_TRACKS.length;pitPlay(true);}
+function pitToggleShuffle(){pitShuffle=!pitShuffle;renderPitDeck();}
+function pitToggleRepeat(){pitRepeat=!pitRepeat;if(lastScreen==="soundtrack")bgm.loop=!!pitRepeat;renderPitDeck();}
+function pitAdvance(){if(lastScreen!=="soundtrack"||pitRepeat)return;if(pitShuffle&&PIT_TRACKS.length>1){let n=pitIndex;while(n===pitIndex)n=Math.floor(Math.random()*PIT_TRACKS.length);pitIndex=n;}else pitIndex=(pitIndex+1)%PIT_TRACKS.length;pitPlay(true);}
+if(bgm&&!bgm.dataset.pitBound){bgm.dataset.pitBound="1";bgm.addEventListener("ended",function(){if(lastScreen==="soundtrack")pitAdvance();});}
 function show(id){document.querySelectorAll(".screen").forEach(function(s){s.classList.remove("active");});document.getElementById(id).classList.add("active");lastScreen=id;if(id==="intro"){startIntroBed();return;}if(id==="title"){ensureTrackReady(TITLE_TRACK,function(){startTitleSong();if(typeof titleIntroclip==="function")titleIntroclip();});return;}if(id==="soundtrack"){renderPitDeck();return;}if(id==="matchup"){renderMatchup();ensureTrackReady(TITLE_TRACK,startTitleSong);return;}if(KEEP_ARENA_MUSIC[id]){if(id==="fight"){const a=ARENAS[selectedArena];ensureTrackReady(a&&a.music,function(){playArenaMusic(false);});}else playBgm();return;}if(id==="postfight"||id==="liquid"){ensureTrackReady(TITLE_TRACK,startTitleSong);return;}if(TITLE_MENUS[id])ensureTrackReady(TITLE_TRACK,startTitleSong);if(id==="arenas"){const w=document.getElementById("arenaNextWord");if(w)w.textContent="NEXT";const an=document.getElementById("arenaNext");if(an)an.setAttribute("aria-label","Choose CPU level");ensureTrackReady(TITLE_TRACK,startTitleSong);}if(id==="fighters"){document.getElementById("fighterHint").textContent=mode==="arcade"?"CHOOSE YOUR FIGHTER":"CHOOSE FIGHTER";renderSkillRow();renderFighterCarousel();}if(id==="opponents")renderOpponentScreen();}
 function makeCode(){const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let s="";for(let i=0;i<6;i++)s+=chars[Math.floor(Math.random()*chars.length)];return s;}
 function inviteLink(){return location.href.split("#")[0]+"#fight="+roomCode;}
@@ -2493,7 +2498,11 @@ logReplayEvent("throw", {
   }
   resolveHit(from,to,dmg,"throw");
   if(!blocked)pushBack(to,dmg>=3?24:(dmg>=2?16:8));if(from==="you"){const img=document.getElementById("youFile");if(img&&img.dataset.pose==="throw"){if(isMoving()&&!youBlocking)playPose("you","walk");else if(youBlocking)playPose("you","block");else playPose("you","idle");}}},THROW_MS);}
+let cpuLastStrike=0;
 function cpuStrike(tune){
+  const now=Date.now();
+  if(now-cpuLastStrike<POSE_MS*2)return;
+  cpuLastStrike=now;
   setBlock("cpu",false);
   const t=tune||skillTune();
   if(canThrow("cpu")&&Math.random()<t.throwChance){throwObject("cpu","you");return;}
