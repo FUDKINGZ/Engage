@@ -2718,7 +2718,8 @@ function finishLiquidate(by){
   ammo.id="liquidPin";
   const loser=by==="you"?"cpu":"you";
   const loserImg=document.getElementById(loser==="you"?"youFile":"cpuFile");
-  requestAnimationFrame(function(){
+  function dropPin(){
+    requestAnimationFrame(function(){
     const stageBox=stage.getBoundingClientRect();
     const imgRect=loserImg?loserImg.getBoundingClientRect():document.getElementById(loser).getBoundingClientRect();
     const pinLeft=Math.max(0,imgRect.left-stageBox.left+(imgRect.width-120)/2);
@@ -2756,7 +2757,11 @@ function finishLiquidate(by){
         },8000);
       },1800);
     },1100);
-  });
+    });
+  }
+  if(loserImg&&loserImg.complete&&loserImg.naturalHeight)setTimeout(dropPin,60);
+  else if(loserImg)loserImg.addEventListener("load",function(){setTimeout(dropPin,60);},{once:true});
+  else setTimeout(dropPin,120);
 }
 function goTitle(){
   if(typeof stopTitleIntroclip==="function")stopTitleIntroclip();
