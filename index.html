@@ -181,7 +181,7 @@ button,.btn,.atk,.nav-row button,.skill-row button,.round-pick button,.invite-ro
 #opponents .slot{aspect-ratio:1/1;width:100%;height:auto;flex:none}
 .slot-wrap.side .slot{opacity:.9;filter:none;background:transparent;border-color:transparent;box-shadow:none}
 .slot-wrap.center .slot{border-color:#ffd54f;box-shadow:0 0 22px rgba(255,213,79,.45)}
-.slot img{width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;object-position:center bottom;display:block;background:transparent;opacity:0;flex:none}
+.slot img{width:100%;flex:1;min-height:0;object-fit:contain;object-position:center bottom;display:block;background:transparent;opacity:0}
 .slot img.loaded{opacity:1}
 .slot .arena-art{width:100%;flex:1;min-height:0;object-fit:cover;object-position:center center;display:block;background:transparent;opacity:1}
 .slot.locked img,.slot.locked .arena-art{filter:grayscale(1) brightness(.38)}
@@ -279,66 +279,66 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #replayStageWrap #roundOv,
 #replayStageWrap #pauseOv,
 #replayStageWrap #endOv{display:none!important;}
+#replayStageWrap .fighter img[data-pose="loser"]{
+  width:auto !important;
+  height:100% !important;
+  max-height:68% !important;
+  max-width:70% !important;
+  object-fit:contain !important;
+  object-position:bottom center !important;
+}
+#replayStageWrap .fighter:has(img[data-pose="loser"]){
+  width:auto !important;
+  height:68% !important;
+  bottom:6% !important;
+  /* keep left/right from the normal fighter positioning */
+}
 #replayStageWrap #stage{
   position:absolute;
   left:0;right:0;
   top:-22%;
   height:145%;
-  transform:none;}
-.arena-img{display:block;width:100%;height:100%;object-fit:cover;object-position:center center;pointer-events:none;position:absolute;inset:0;z-index:1}
+  transform:none;
+}
+.arena-img{display:block;width:100%;height:100%;object-fit:fill;object-position:center center;pointer-events:none;position:absolute;inset:0;z-index:1}
 #fightU{display:block;width:100%;height:36px;min-height:36px;max-height:36px;margin:0;padding:0;background:#05070d;overflow:hidden;flex:none}
 #fightUBanner{display:block;width:100%;height:36px;margin:0;padding:0;pointer-events:none;object-fit:cover}
 #fightGap{display:none}
 #fightBanner{display:none}
-/* ===== FIGHTER SIZING — standing height-driven, loser/ko width-driven ===== */
-.fighter {
-  position: absolute;
-  bottom: 7.5%;
-  height: 78%;
-  width: auto;
-  max-width: 46%;
-  transform-origin: center bottom;
-  z-index: 4;
-  overflow: visible;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  pointer-events: none;
+.fighter{position:absolute;bottom:7.5%;width:auto;height:68%;transform-origin:center bottom;z-index:4;overflow:visible}
+.fighter-img{width:auto;height:100%;display:none;background:transparent!important;object-fit:contain;object-position:center bottom}
+
+/* Clean loser / KO rules — stay on the floor, inside the stage */
+.fighter img[data-pose="loser"],
+.fighter img[data-pose="ko"]{
+  position:relative !important;
+  width:auto !important;
+  height:auto !important;
+  max-width:42vw !important;
+  max-height:40vh !important;
+  object-fit:contain !important;
+  object-position:bottom center !important;
+  transform-origin:bottom center !important;
+  bottom:auto !important;
+  left:auto !important;
+  z-index:5 !important;
 }
-/* Relax the box when the image is a lying pose so it can use stage width */
-.fighter:has(img[data-pose="loser"]),
-.fighter:has(img[data-pose="ko"]) {
-  height: auto;
-  max-height: 42%;
-  width: 72%;
-  max-width: 78%;
+/* Preserve CPU facing */
+#cpu img[data-pose="loser"],
+#cpu img[data-pose="ko"]{
+  transform:scaleX(-1) !important;
 }
-.fighter-img {
-  height: 100%;
-  width: auto;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  object-position: center bottom;
-  display: none;
-  background: transparent !important;
-  pointer-events: none;
-  image-rendering: auto;
+#stage .fighter:has(img[data-pose="loser"]),
+#stage .fighter:has(img[data-pose="ko"]){
+  bottom:2% !important;
+  height:auto !important;
+  max-height:none !important;
+  width:auto !important;
+  min-width:100px;
 }
-/* Loser / KO: natural ratio, sized by the relaxed parent */
-.fighter-img[data-pose="loser"],
-.fighter-img[data-pose="ko"] {
-  width: 100%;
-  height: auto;
-  max-width: 100%;
-  max-height: none;
-  object-fit: contain;
-  object-position: center bottom;
-}
+#you{left:1%;z-index:4}
+#cpu{right:1%;z-index:4}
 #cpu .fighter-img{transform:scaleX(-1)}
-/* Title intro clip fighters — force same row */
-.tic-fighter{position:absolute;bottom:8%;width:auto;height:auto;display:flex;align-items:flex-end;justify-content:center;pointer-events:none;z-index:3}
-.tic-fighter img{width:auto;height:auto;max-height:62%;max-width:100%;object-fit:contain;object-position:center bottom;display:block;background:transparent}
 .fighter.hit{filter:none}
 #fight.paused .power-wrap,
 #fight.paused .fighter{
@@ -652,7 +652,7 @@ input[type=file].hidden-file{display:none}
 <p class="post-sub">Email: karin.wfudhr@gfy/urmom/geocities.com</p>
 </div>
 <div class="stat-card"><div class="stat-head"><div><b>CAST</b><span>FICTIONAL PIT</span></div></div>
-<p class="post-sub">1 Stonks 6-7<br>Arena - Street Fight<br>Song - Summon The FUD.mp3<br>Ammo - GOLDEN NUT<br>Bio - Chart gremlin who treats a red candle like a shove. He lives in the spread, talks in tickers, and will swing on anyone who calls a dip healthy.</p>
+<p class="post-sub">1 Stonks 6-7<br>Arena - Street Fight<br>Song - Summon The FUD.mp3<br>Ammo - NUDE PIX<br>Bio - Chart gremlin who treats a red candle like a shove. He lives in the spread, talks in tickers, and will swing on anyone who calls a dip healthy.</p>
 <p class="post-sub">2 Ventifa<br>Arena - Hospital Fight<br>Song - Crazy Dots.mp3<br>Ammo - EPT TEST<br>Bio - Night-shift closer. She patches strangers, then clocks out and settles rumors the ward started. Fast hands, no bedside manner once the gloves are off.</p>
 <p class="post-sub">3 Davinstigator<br>Arena - Airport Terminal<br>Song - Through The Noise.mp3<br>Ammo - PRISON SHOE<br>Bio - Boarding-line loudmouth. He misses flights on purpose if the argument is better. The terminal is his ring, and every delay is an invitation.</p>
 <p class="post-sub">4 Troll Bee<br>Arena - Gold Vault<br>Song - Fud Kingz [Arena 5150].mp3<br>Ammo - FUD RADIO<br>Bio - Small, loud, and always in the bullion. He stings the count, buzzes the cameras, and leaves the vault humming. Do not swat.</p>
@@ -726,16 +726,8 @@ input[type=file].hidden-file{display:none}
     <!-- cloned stage content will be injected here -->
   </div>
   <div style="margin-top:12px;display:flex;gap:12px;">
-<button class="btn btn-gold" id="replayRestartBtn" onclick="restartMatchReplay()">RESTART</button>
-<button class="btn btn-gold" onclick="closeMatchReplay()">CLOSE</button>
-  </div>
-  <div id="replayClock" style="margin-top:6px;font-family:Impact,sans-serif;color:#ffd54f;font-size:14px;">0:00</div>
-</div>
-<div id="replayOverlay" style="display:none;position:fixed;inset:0;z-index:200;background:#000;flex-direction:column;align-items:center;justify-content:center;">
-  <div id="replayStageWrap" style="position:relative;width:min(100%,500px);aspect-ratio:500/280;overflow:hidden;background:#12080c;border:2px solid #ffd54f;"></div>
-  <div style="margin-top:12px;display:flex;gap:12px;">
-<button class="btn btn-gold" onclick="restartMatchReplay()">RESTART</button>
-<button class="btn btn-gold" onclick="closeMatchReplay()">CLOSE</button>
+    <button class="btn btn-gold" onclick="closeMatchReplay()">CLOSE</button>
+    <button class="btn btn-dark" id="replayRestartBtn" onclick="restartMatchReplay()">RESTART</button>
   </div>
   <div id="replayClock" style="margin-top:6px;font-family:Impact,sans-serif;color:#ffd54f;font-size:14px;">0:00</div>
 </div>
@@ -747,7 +739,15 @@ input[type=file].hidden-file{display:none}
   </div>
   <div id="replayClock" style="margin-top:6px;font-family:Impact,sans-serif;color:#ffd54f;font-size:14px;">0:00</div>
 </div>
-<div class="fine-print"><span>BUILD:10.27~0851</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div id="replayOverlay" style="display:none;position:fixed;inset:0;z-index:200;background:#000;flex-direction:column;align-items:center;justify-content:center;">
+  <div id="replayStageWrap" style="position:relative;width:min(100%,500px);aspect-ratio:500/280;overflow:hidden;background:#12080c;border:2px solid #ffd54f;"></div>
+  <div style="margin-top:12px;display:flex;gap:12px;">
+    <button class="btn btn-gold" onclick="closeMatchReplay()">CLOSE</button>
+    <button class="btn btn-dark" onclick="restartMatchReplay()">RESTART</button>
+  </div>
+  <div id="replayClock" style="margin-top:6px;font-family:Impact,sans-serif;color:#ffd54f;font-size:14px;">0:00</div>
+</div>
+<div class="fine-print"><span>BUILD:10.25~2121</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 <div id="loadingOverlay"><div class="loading-spinner"></div><div class="loading-text">LOADING...</div></div>
 </div>
 <script>
@@ -785,12 +785,11 @@ else if(pose==="ko"){const kUrls=unique([dir+n+"_ko.gif",dir+"ko.gif",FIGHTER_DI
 else file=String(POSE_LABEL[pose]||"idle").toLowerCase()+".gif";const urls=unique([dir+n+" "+file,dir+file,FIGHTER_DIR+n+" "+file]);if(pose==="walk")return unique(urls.concat([dir+n+" idle.gif",dir+"idle.gif",FIGHTER_DIR+n+" idle.gif"]));return unique(urls.concat(selectUrls(name)));}
 function objectUrls(name){const n=String(name||"").trim().toLowerCase(),dir=fighterRoot(name);return unique([dir+n+" object.png",dir+"object.png",OBJECT_DIR+n+" object.png",FIGHTER_DIR+n+" object.png"].concat(THROW_OBJECTS.map(function(f){return OBJECT_DIR+String(f).toLowerCase();})));}
 function decorateFighter(f){f.select=selectUrls(f.name);f.idle=poseUrls(f.name,"idle");f.walk=poseUrls(f.name,"walk");f.punchL=poseUrls(f.name,"punchL");f.punchR=poseUrls(f.name,"punchR");f.kickL=poseUrls(f.name,"kickL");f.kickR=poseUrls(f.name,"kickR");f.throw=poseUrls(f.name,"throw");f.block=poseUrls(f.name,"block");f.victory=poseUrls(f.name,"victory");f.loser=poseUrls(f.name,"loser");f.ko=poseUrls(f.name,"ko");f.knee=poseUrls(f.name,"knee");f.summon=poseUrls(f.name,"summon");f.pushnwalk=poseUrls(f.name,"pushnwalk");f.taunt=poseUrls(f.name,"taunt");f.hit=poseUrls(f.name,"hit");f.liquidated=liquidatedUrls(f.name);f.objects=objectUrls(f.name);return f;}
-const FIGHTERS=[{name:"Stonks 6-7",handle:"@Stonks67",tint:"#1a2333",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"punch",bio:"Chart gremlin. Light, short reach, twitch. Walk in, punch-punch, back out. Weak to kicks. Throws GOLDEN NUT early."},{name:"Ventifa",handle:"@Ventifa",tint:"#0d7377",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hands",bio:"Night-shift closer. Fastest hands. LP then RP, block the return, then kick. EPT TEST interrupts, it does not finish."},{name:"Davinstigator",handle:"@Davinstigator",tint:"#37474f",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"bait",bio:"Boarding-line loudmouth. Close the gap, stall in block, late kick. Weak to throws while blocking. PRISON SHOE waits for the commit."},{name:"Troll Bee",handle:"@TrollBee",tint:"#f9a825",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Smallest box, highest step. Circle, sting, never stand in kick range. FUD RADIO is spent on the first full meter."},{name:"Jose Brownstein",handle:"@JoseBrownstein",tint:"#8d6e63",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"kick",bio:"Shop boss. Hold center, kick, block, kick. Weak to speed in and out. TOOL BOX is a mid-range check."},{name:"Captn Jack Hashtag",handle:"@CaptnJack",tint:"#e65100",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sloppy",bio:"Rail-braced and sloppy. Random side, high whiff. COCKTAIL is often thrown from too far. Weak to a patient block."},{name:"OFFICER SANCHEZ",handle:"@WhollyMac",tint:"#6d4c41",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"rush",bio:"Arrives first. Walk in, then a kick. Does not retreat. Weak to a block-heal loop. TOMBSTONE is the finisher."},{name:"Dev Root X",handle:"@DevRootX",tint:"#00bcd4",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"edge",bio:"Long reach, light body. Stay at the edge, kick, back up. Weak inside. FUSION REACTOR closes, then punches."},{name:"WHITE CASSEL",handle:"@WhiteCassel",tint:"#90a4ae",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"late",bio:"Diplomat until the cup is empty. Block early, then punch-kick. HOT DOG is the switch from peace to fight."},{name:"Fuzzled Raccoon",handle:"@FuzzledRacc",tint:"#4e342e",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"counter",bio:"Scavenger. Wait for a whiff, then punch. Does not open. SKULL & BONES is a counter throw."},{name:"Big Daddy Turk",handle:"@BigDaddyTurk",tint:"#1b5e20",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"plant",bio:"Heaviest stance, widest body. Plant, block, kick. Does not chase. OIL BARREL stops a walk-in."},{name:"Dragonfly Fairy",handle:"@DragonflyFairy",tint:"#e91e63",female:true,hidden:true,unlockCrowns:1,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hover",bio:"Hover. In, kick, out. Weak if pinned. MULLEN DRAGONFLY reopens space."},{name:"Bioweapon Bulldog",handle:"@BioBulldog",tint:"#6a1b9a",hidden:true,unlockCrowns:2,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"forward",bio:"Does not heel. Walk forward only, kick, no retreat. GLOBE is a shove at contact."},{name:"LIL OJ",handle:"@LilOJ",tint:"#ef6c00",hidden:true,unlockCrowns:3,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"question",bio:"Press room. Block, pause, punch. Weak to a kick during the pause. WFUD PODIUM is a setup throw."},{name:"Fud Daddy 420",handle:"@FudDaddy420",tint:"#2b6cb0",hidden:true,unlockCrowns:4,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"elder",bio:"Lets the player spend meter, blocks the throw, then kicks. Weak to a raw walk-in. MICROPHONE is the last word."},{name:"KING TROLL",handle:"@KingTroll",tint:"#b71c1c",hidden:true,unlockCrowns:5,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"boss",bio:"Boss. Punches a kicker, kicks a puncher, blocks a full meter. STREET BIKE punishes a whiff."},{name:"Platinum Meow",handle:"@PlatinumMeow",tint:"#c0c0c0",female:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Neon alley cat. Fast claws, precise shots. Circles then strikes. Weak if you hold block. BOW is the closer."},{name:"Grox",handle:"@Grox",tint:"#39ff14",exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hands",bio:"Dojo build. Not on the arcade board."},
+const FIGHTERS=[{name:"Stonks 6-7",handle:"@Stonks67",tint:"#1a2333",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"punch",bio:"Chart gremlin. Light, short reach, twitch. Walk in, punch-punch, back out. Weak to kicks. Throws NUDE PIX early."},{name:"Ventifa",handle:"@Ventifa",tint:"#0d7377",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hands",bio:"Night-shift closer. Fastest hands. LP then RP, block the return, then kick. EPT TEST interrupts, it does not finish."},{name:"Davinstigator",handle:"@Davinstigator",tint:"#37474f",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"bait",bio:"Boarding-line loudmouth. Close the gap, stall in block, late kick. Weak to throws while blocking. PRISON SHOE waits for the commit."},{name:"Troll Bee",handle:"@TrollBee",tint:"#f9a825",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Smallest box, highest step. Circle, sting, never stand in kick range. FUD RADIO is spent on the first full meter."},{name:"Jose Brownstein",handle:"@JoseBrownstein",tint:"#8d6e63",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"kick",bio:"Shop boss. Hold center, kick, block, kick. Weak to speed in and out. TOOL BOX is a mid-range check."},{name:"Captn Jack Hashtag",handle:"@CaptnJack",tint:"#e65100",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sloppy",bio:"Rail-braced and sloppy. Random side, high whiff. COCKTAIL is often thrown from too far. Weak to a patient block."},{name:"OFFICER SANCHEZ",handle:"@WhollyMac",tint:"#6d4c41",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"rush",bio:"Arrives first. Walk in, then a kick. Does not retreat. Weak to a block-heal loop. TOMBSTONE is the finisher."},{name:"Dev Root X",handle:"@DevRootX",tint:"#00bcd4",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"edge",bio:"Long reach, light body. Stay at the edge, kick, back up. Weak inside. FUSION REACTOR closes, then punches."},{name:"WHITE CASSEL",handle:"@WhiteCassel",tint:"#90a4ae",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"late",bio:"Diplomat until the cup is empty. Block early, then punch-kick. HOT DOG is the switch from peace to fight."},{name:"Fuzzled Raccoon",handle:"@FuzzledRacc",tint:"#4e342e",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"counter",bio:"Scavenger. Wait for a whiff, then punch. Does not open. SKULL & BONES is a counter throw."},{name:"Big Daddy Turk",handle:"@BigDaddyTurk",tint:"#1b5e20",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"plant",bio:"Heaviest stance, widest body. Plant, block, kick. Does not chase. OIL BARREL stops a walk-in."},{name:"Dragonfly Fairy",handle:"@DragonflyFairy",tint:"#e91e63",female:true,hidden:true,unlockCrowns:1,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hover",bio:"Hover. In, kick, out. Weak if pinned. MULLEN DRAGONFLY reopens space."},{name:"Bioweapon Bulldog",handle:"@BioBulldog",tint:"#6a1b9a",hidden:true,unlockCrowns:2,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"forward",bio:"Does not heel. Walk forward only, kick, no retreat. GLOBE is a shove at contact."},{name:"LIL OJ",handle:"@LilOJ",tint:"#ef6c00",hidden:true,unlockCrowns:3,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"question",bio:"Press room. Block, pause, punch. Weak to a kick during the pause. WFUD PODIUM is a setup throw."},{name:"Fud Daddy 420",handle:"@FudDaddy420",tint:"#2b6cb0",hidden:true,unlockCrowns:4,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"elder",bio:"Lets the player spend meter, blocks the throw, then kicks. Weak to a raw walk-in. MICROPHONE is the last word."},{name:"KING TROLL",handle:"@KingTroll",tint:"#b71c1c",hidden:true,unlockCrowns:5,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"boss",bio:"Boss. Punches a kicker, kicks a puncher, blocks a full meter. STREET BIKE punishes a whiff."},{name:"Platinum Meow",handle:"@PlatinumMeow",tint:"#c0c0c0",female:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Neon alley cat. Fast claws, precise shots. Circles then strikes. Weak if you hold block. BOW is the closer."},{name:"Grox",handle:"@Grox",tint:"#39ff14",exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"hands",bio:"Dojo build. Not on the arcade board."},
 {name:"Trashed Panda",handle:"@TrashedPanda",tint:"#5d4037",female:true,exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"counter",bio:"Dumpster-diving panda who treats the grooming table like a ring. Wait for the spray, then swipe. Weak if you stay clean. TRASH BAG is the counter."},
 {name:"That Girl Badger",handle:"@ThatBadgerGirl",tint:"#4e342e",female:true,exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Salon chair is her ring. She styles the hair, then styles the face. Weak if you stay still under the dryer. BADGER CLAW is the closer."},
 {name:"Dark Fud 420",handle:"@DarkFud420",tint:"#6b21a8",exhibitionOnly:true,spriteScale:1.3,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"sting",bio:"Wizard of the pit. Casts ENERGY SPELL from the tower. Weak if you close the gap and hold block."},
-{name:"Detective Macaroni",handle:"@DetectiveMacaroni",tint:"#4a3a28",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"counter",bio:"Interrogation-room closer. Asks the question, then swings. Weak if you stay quiet under the light. PASTA BOWL is the closer."},
-{name:"Overlordess",handle:"@Overlordess",tint:"#c2185b",female:true,exhibitionOnly:true,speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"boss",bio:"Downtown FintwiX ruler. Commands the streets, then the fight. Weak if you stay mobile. DOG is the closer."}].map(decorateFighter);
+{name:"Detective Macaroni",handle:"@DetectiveMacaroni",tint:"#4a3a28",speed:5,accuracy:5,strength:5,defense:5,mass:5,hit:5,contact:5,bias:"counter",bio:"Interrogation-room closer. Asks the question, then swings. Weak if you stay quiet under the light. PASTA BOWL is the closer."}].map(decorateFighter);
 function fighterStat(who,key){const f=FIGHTERS[who==="you"?selectedFighter:cpuFighter];const n=f&&f[key];return (n==null||n===""||isNaN(n))?5:Number(n);}
 const MAIN_COUNT=11,HIDDEN_INDEXES=[11,12,13,14,15],FINAL_INDEX=15;
 const MEMBERS=FIGHTERS.filter(function(f){return!f.hidden;}).map(function(f,i){return{handle:f.handle,name:f.name,fighter:i,color:f.tint};});
@@ -975,8 +974,8 @@ function arcadeArenaIndex(){
     "Trashed Panda":"Pet Salon",
     "That Girl Badger":"Hair Salon",
     "Platinum Meow":"Anime City",
-    "Detective Macaroni":"Interrogation Room",
-    "Overlordess":"Downtown FintwiX"
+    "Dark Fud 420":"Wizards Castle",
+    "Detective Macaroni":"Interrogation Room"
   };
   const who=FIGHTERS[(mode==="arcade"||mode==="pvc")?selectedOpponent:selectedFighter];
   const want=who&&homes[who.name];
@@ -1743,11 +1742,18 @@ function playPose(who,pose){
   img.dataset.pose=pose;
   bindSrcList(img,hold?list:list.concat(fighter.idle||[]));
   img.style.display="block";
-  // CSS controls sizing. Only clear inline overrides that could fight it.
-  img.style.maxWidth = "";
-  img.style.maxHeight = "";
-  img.style.width = "";
-  img.style.height = "";
+  // constrain wide loser.gif on live stage
+  if(pose==="loser" || pose==="ko"){
+    img.style.width="auto";
+    img.style.height="auto";
+    img.style.maxWidth="42vw";
+    img.style.maxHeight="40vh";
+    img.style.objectFit="contain";
+    img.style.objectPosition="bottom center";
+  }else{
+    img.style.maxWidth="";
+    img.style.maxHeight="";
+  }
   if(!hold)poseTimer[who]=setTimeout(function(){playPose(who,"idle");},POSE_MS);
   logReplayEvent("pose", {who: who, pose: pose});
 }
@@ -1800,15 +1806,14 @@ function makeFighterSlot(f,cls,idx,onClick){
   const homes={
     "Stonks 6-7":"Street Fight","Ventifa":"Hospital Fight","Davinstigator":"Airport Terminal",
     "Dr Davinstigator":"Airport Terminal","Troll Bee":"Gold Vault","Jose Brownstein":"Joses Work Shop",
-    "Captn Jack Hashtag":"Deck Of Ship","OFFICER SANCHEZ":"Crime Scene",
-    "Dev Root X":"WFUD Satellite","WHITE CASSEL":"Back Yard Party",
+    "Captn Jack Hashtag":"Deck Of Ship","Capt Jack Hashtag":"Deck Of Ship","OFFICER SANCHEZ":"Crime Scene",
+    "Wholly Mac":"Crime Scene","Dev Root X":"WFUD Satellite","WHITE CASSEL":"Back Yard Party",
     "White Cassel":"Back Yard Party","Fuzzled Raccoon":"Savage Reality Alley","Big Daddy Turk":"Hormuz Strait",
     "Dragonfly Fairy":"Mullen Car Lot","Bioweapon Bulldog":"Trailer Park","LIL OJ":"WFUD Press Room",
     "Lil OJ":"WFUD Press Room","Fud Daddy 420":"WFUD Studios Rooftop","KING TROLL":"Dumpster Fire",
     "King Troll":"Dumpster Fire","Grox":"Grox Dojo","Trashed Panda":"Pet Salon",
     "That Girl Badger":"Hair Salon","Platinum Meow":"Anime City","Dark Fud 420":"Wizards Castle",
-    "Detective Macaroni":"Interrogation Room",
-    "Overlordess":"Downtown FintwiX"
+    "Detective Macaroni":"Interrogation Room"
   };
   const arenaName=homes[f.name];
   const arena=arenaName?ARENAS.find(function(a){return a.name===arenaName;}):null;
@@ -1829,7 +1834,7 @@ function makeFighterSlot(f,cls,idx,onClick){
   return wrapEl;
 }
 function makeArenaSlot(a,cls,idx,onClick){const wrapEl=document.createElement("div");wrapEl.className="slot-wrap "+cls;const name=document.createElement("b");name.className="slot-name";name.textContent=a.name;wrapEl.appendChild(name);const el=document.createElement("div");el.className="slot "+cls;const art=document.createElement("div");art.className="arena-art";art.style.background=a.color;art.style.backgroundImage="url('"+a.file+"')";art.style.backgroundSize="contain";art.style.backgroundPosition="center center";art.style.backgroundRepeat="no-repeat";el.appendChild(art);decorateSlot(el,arenaLocked(idx));wrapEl.appendChild(el);if(onClick)wrapEl.onclick=onClick;return wrapEl;}
-const AMMO_NAMES=["GOLDEN NUT","EPT TEST","PRISON SHOE","FUD RADIO","TOOL BOX","COCKTAIL","TOMBSTONE","FUSION REACTOR","HOT DOG","SKULL & BONES","OIL BARREL","MULLEN DRAGONFLY","GLOBE","WFUD PODIUM","MICROPHONE","STREET BIKE","BOW","TABLET","TRASH BAG","HAIR DRYER","ENERGY SPELL","PASTA BOWL","DOG"];
+const AMMO_NAMES=["NUDE PIX","EPT TEST","PRISON SHOE","FUD RADIO","TOOL BOX","COCKTAIL","TOMBSTONE","FUSION REACTOR","HOT DOG","SKULL & BONES","OIL BARREL","MULLEN DRAGONFLY","GLOBE","WFUD PODIUM","MICROPHONE","STREET BIKE","BOW","TABLET","TRASH BAG","HAIR DRYER","ENERGY SPELL","PASTA BOWL"];
 const WHERE_NOW={
   "Stonks 6-7":"Took a night desk and now draws lines on other people’s candles. Still calls every dip healthy.",
   "Ventifa":"Clocked out of the ward and into a clinic that does not ask names. Still patches strangers. Still no bedside manner.",
@@ -1850,10 +1855,9 @@ const WHERE_NOW={
   "Grox":"The dojo lights stayed on. Went back to the mat. Never joined the arcade board.",
   "Trashed Panda":"The grooming table is still sticky. Left a mask in the drain and took the treats.",
   "That Girl Badger":"The salon lights stayed on. Left the chair spinning and the dryer running.",
-  "Platinum Meow":"The neon alleys still know the name. Left a bow string humming and the city lights on.",
+ "Platinum Meow":"The neon alleys still know the name. Left a bow string humming and the city lights on.",
   "Dark Fud 420":"The tower lights stayed on. Left the spellbook open and the ENERGY SPELL still humming in the air.",
-  "Detective Macaroni":"The interrogation light stayed on. Left the chair spinning and the pasta bowl on the table.",
-  "Overlordess":"The downtown lights stayed on. Left the DOG on the corner and the street still running."
+  "Detective Macaroni":"The interrogation light stayed on. Left the chair spinning and the pasta bowl on the table."
 };
 function paintAmmo(id,idx){const box=document.getElementById(id);if(!box)return;box.innerHTML="";const list=playableIndexes();if(!list.length)return;const at=Math.max(0,list.indexOf(idx)),n=list.length;[list[wrap(at-1,n)],list[at],list[wrap(at+1,n)]].forEach(function(i,slot){const cell=document.createElement("div");cell.style.cssText="display:flex;flex-direction:column;align-items:center;gap:3px;width:72px";const img=document.createElement("img");img.alt=AMMO_NAMES[i]||"";img.className=slot===1?"center":"side";bindSrcList(img,FIGHTERS[i].objects);cell.appendChild(img);if(slot===1){const cap=document.createElement("b");cap.textContent=AMMO_NAMES[i]||"";cap.style.cssText="font-size:7px;color:#ffd54f;text-align:center;line-height:1;white-space:nowrap;width:100%;margin:2px 0 0;padding:0";cell.style.width="104px";cell.appendChild(cap);}box.appendChild(cell);});}
 function renderFighterCarousel(){const box=document.getElementById("fighterCarousel"),dots=document.getElementById("fighterDots");box.innerHTML="";dots.innerHTML="";const list=playableIndexes();if(list.indexOf(selectedFighter)<0)selectedFighter=list[0]||0;const n=list.length,at=Math.max(0,list.indexOf(selectedFighter)),L=list[wrap(at-1,n)],R=list[wrap(at+1,n)];box.appendChild(makeFighterSlot(FIGHTERS[L],"side left",L,function(){shiftFighter(-1);}));box.appendChild(makeFighterSlot(FIGHTERS[selectedFighter],"center",selectedFighter));box.appendChild(makeFighterSlot(FIGHTERS[R],"side right",R,function(){shiftFighter(1);}));list.forEach(function(i){const d=document.createElement("i");if(i===selectedFighter)d.className="on";dots.appendChild(d);});paintAmmo("fighterAmmo",selectedFighter);const bioEl=document.getElementById("fighterBio");
@@ -2577,42 +2581,27 @@ function finishLiquidate(by){
   bgm.pause();
   const isDarkFud=FIGHTERS[by==="you"?selectedFighter:cpuFighter].name==="Dark Fud 420";
   playPose(by==="you"?"cpu":"you","loser");
-
   const stage=document.getElementById("stage");
   const ammo=document.createElement("img");
   ammo.className="toss liquid-pin";
   ammo.id="liquidPin";
-  ammo.style.cssText="position:absolute;width:120px;height:120px;left:0;top:-80px;z-index:9;pointer-events:none;object-fit:contain;opacity:0";
   const loser=by==="you"?"cpu":"you";
   const loserImg=document.getElementById(loser==="you"?"youFile":"cpuFile");
-  const liqName=String(FIGHTERS[by==="you"?selectedFighter:cpuFighter].name||"").trim().toLowerCase();
-  bindSrcList(ammo,[FIGHTER_DIR+liqName+"/"+liqName+"_l_object.png"]);
-  stage.appendChild(ammo);
-  if(isDarkFud)playPose(by,"summon");
-
-  function placeAndDrop(){
-    if(!loserImg || !stage) return;
+  requestAnimationFrame(function(){
     const stageBox=stage.getBoundingClientRect();
-    const imgRect=loserImg.getBoundingClientRect();
-    // Skip if the image has not yet produced a real size
-    if(imgRect.width < 20 || imgRect.height < 20) return false;
-
-    const pinSize=120;
-    const pinLeft=Math.max(0, imgRect.left - stageBox.left + (imgRect.width - pinSize) / 2);
-    // Center the pin on the visible character body (not the stage floor)
-    const pinTop=Math.max(0, imgRect.top - stageBox.top + (imgRect.height - pinSize) / 2);
-
-    ammo.style.left=pinLeft+"px";
-    ammo.style.opacity="1";
-    ammo.animate(
-      [{top:"-80px"},{top:pinTop+"px"}],
-      {duration:900, easing:"ease-in", fill:"forwards"}
-    ).onfinish=function(){
+    const imgRect=loserImg?loserImg.getBoundingClientRect():document.getElementById(loser).getBoundingClientRect();
+    const pinLeft=Math.max(0,imgRect.left-stageBox.left+(imgRect.width-120)/2);
+    const pinTop=Math.max(0,imgRect.top-stageBox.top+(imgRect.height*0.5)-60);
+    ammo.style.cssText="position:absolute;width:120px;height:120px;left:"+pinLeft+"px;top:-80px;z-index:9;pointer-events:none;object-fit:contain";
+    const liqName=String(FIGHTERS[by==="you"?selectedFighter:cpuFighter].name||"").trim().toLowerCase();
+    bindSrcList(ammo,[FIGHTER_DIR+liqName+"/"+liqName+"_l_object.png"]);
+    stage.appendChild(ammo);
+    if(isDarkFud)playPose(by,"summon");
+    ammo.animate([{top:"-80px"},{top:pinTop+"px"}],{duration:900,easing:"ease-in",fill:"forwards"}).onfinish=function(){
       ammo.style.top=pinTop+"px";
       ammo.style.left=pinLeft+"px";
       sfxWhistleCrash();
     };
-
     setTimeout(function(){
       ammo.style.top=pinTop+"px";
       ammo.style.left=pinLeft+"px";
@@ -2636,27 +2625,7 @@ function finishLiquidate(by){
         },8000);
       },1800);
     },1100);
-    return true;
-  }
-
-  // Wait for the loser.gif to finish loading and for layout to settle
-  function waitForLoserThenPlace(){
-    let attempts=0;
-    function check(){
-      attempts++;
-      if(loserImg && loserImg.classList.contains("loaded") && loserImg.complete && placeAndDrop()){
-        return;
-      }
-      if(attempts < 60){ // ~1s max at 60fps
-        requestAnimationFrame(check);
-      }else{
-        // Fallback: place with whatever rect we have
-        placeAndDrop();
-      }
-    }
-    requestAnimationFrame(check);
-  }
-  waitForLoserThenPlace();
+  });
 }
 function goTitle(){
   if(typeof stopTitleIntroclip==="function")stopTitleIntroclip();
@@ -2911,11 +2880,11 @@ function titleIntroclip(){
   const stage=document.createElement("div");
   stage.style.cssText="position:absolute;inset:0;background:transparent;overflow:hidden;";
   stage.innerHTML=`
-    <div id="ticYou" class="tic-fighter" style="left:8%">
-      <img id="ticYouImg">
+    <div id="ticYou" class="fighter" style="position:absolute;bottom:8%;left:12%;z-index:4;transform-origin:center bottom">
+      <img id="ticYouImg" style="width:auto;height:auto;max-height:70%;object-fit:contain;display:block">
     </div>
-    <div id="ticCpu" class="tic-fighter" style="right:8%">
-      <img id="ticCpuImg" style="transform:scaleX(-1)">
+    <div id="ticCpu" class="fighter" style="position:absolute;bottom:8%;right:12%;z-index:4;transform-origin:center bottom">
+      <img id="ticCpuImg" style="width:auto;height:auto;max-height:70%;object-fit:contain;display:block;transform:scaleX(-1)">
     </div>
   `;
   box.appendChild(stage);
@@ -2948,8 +2917,8 @@ function titleIntroclip(){
 
     setPose(youImg, fa, "idle");
     setPose(cpuImg, fb, "idle");
-    youEl.style.cssText="position:absolute;bottom:8%;left:14%;";
-    cpuEl.style.cssText="position:absolute;bottom:8%;right:14%;";
+    youEl.style.left="14%";
+    cpuEl.style.right="14%";
 
     titleClipStart=Date.now();
     titleClipScene=(titleClipScene+1)%TITLE_CLIP_SCENES;
