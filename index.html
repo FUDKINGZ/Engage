@@ -693,6 +693,7 @@ input[type=file].hidden-file{display:none}
     <div class="hud"><div class="meter p1"><label><span class="char-name" id="p1Name">YOU</span></label><div class="bar"><span id="p1Bar"></span><em class="bar-cash" id="p1Dollar">$100</em></div><div class="pip-row"><div class="round-pips" id="p1Pips"></div><span class="char-handle" id="p1Profile"></span></div></div><div class="clock-wrap"><span id="roundClock">2:00</span></div><div class="meter p2"><label><span class="char-name" id="p2Name">CPU</span></label><div class="bar"><span id="p2Bar"></span><em class="bar-cash" id="p2Dollar">$100</em></div><div class="pip-row"><span class="char-handle" id="p2Profile"></span><div class="round-pips" id="p2Pips"></div></div></div></div>
     <div class="fighter" id="you"><img class="fighter-img" id="youFile" alt=""></div>
     <div class="fighter" id="cpu"><img class="fighter-img" id="cpuFile" alt=""></div>
+    <img id="overlordDog" class="lil-doggie" alt="lil doggie" style="display:none;position:absolute;bottom:5%;width:52px;height:52px;object-fit:contain;z-index:5;pointer-events:none;transform-origin:center bottom;">
     <div class="power-wrap p1" id="p1PowerWrap"><div class="power-bar" id="p1Depth"><span class="side-long">LONG</span><span class="depth-long" id="p1Power"></span><span class="depth-short" id="p1Short"></span><span id="p1PowerTxt">MID</span><span class="side-short">SHORT</span><i class="depth-mid"></i></div><em class="squeeze-flash" id="p1Squeeze">SQUEEZE!!</em><b class="ammo-count" id="p1Ammo">0</b></div>
     <div class="power-wrap p2" id="p2PowerWrap"><b class="ammo-count" id="p2Ammo">0</b><div class="power-bar" id="p2Depth"><span class="side-long">LONG</span><span class="depth-long" id="p2Power"></span><span class="depth-short" id="p2Short"></span><span id="p2PowerTxt">MID</span><span class="side-short">SHORT</span><i class="depth-mid"></i></div><em class="squeeze-flash" id="p2Squeeze">SQUEEZE!!</em></div>
     <div class="overlay" id="pauseOv"><h2>PAUSED</h2><button class="btn btn-gold" onclick="togglePause()">RESUME</button><button class="btn btn-gold" id="pauseRestart" onclick="restartExhibition()" style="display:none">RESTART</button><button class="btn btn-gold" id="pauseSave" onclick="saveOrResumeArcade()" style="display:none">SAVE</button><button class="btn btn-gold" onclick="goTitle()">TITLE SCREEN</button></div>
@@ -747,7 +748,7 @@ input[type=file].hidden-file{display:none}
   </div>
   <div id="replayClock" style="margin-top:6px;font-family:Impact,sans-serif;color:#ffd54f;font-size:14px;">0:00</div>
 </div>
-<div class="fine-print"><span>BUILD:10.27~2332</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.28~0153</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 <div id="loadingOverlay"><div class="loading-spinner"></div><div class="loading-text">LOADING...</div></div>
 </div>
 <script>
@@ -856,6 +857,7 @@ let roundTimeLeft=ROUND_SECS,roundTimer=null,suddenDeath=false;
 let rosterData={activeId:"",players:[]},rosterFileHandle=null;
 let introTimer=null,introDone=false,introLocked="",introWanted=true,introStarted=false,introCanSkip=false;
 let youPos=YOU_HOME,cpuPos=CPU_HOME,tiltOn=false,tiltCenter=0,tiltReady=false,keysDown={},moveHold={left:false,right:false},pauseSaveLocked=false;
+let dogActive=false,dogTargetWho=null,dogRaf=null;
 let liquidateOn=false,liquidateTimer=null,liquidateLeft=15,liquidateSeq="",liquidateDone=null;
 let walkTimer=null,readyToFight=false,runHold={left:false,right:false},runTap={left:0,right:0};
 const bgm=document.getElementById("bgm"),introSfx=document.getElementById("introSfx");
@@ -1291,6 +1293,81 @@ function applyCpuPos(){
   const el=document.getElementById("cpu");
   if(el) el.style.right=Math.max(CPU_MIN,Math.min(CPU_MAX,cpuPos))+"%";logReplayEvent("pos", {you: youPos, cpu: cpuPos});
 }
+function setupOverlordDog(){
+  const dog=document.getElementById("overlordDog");
+  if(!dog)return;
+  const youIs=FIGHTERS[selectedFighter]&&FIGHTERS[selectedFighter].name==="Overlordess";
+  const cpuIs=FIGHTERS[cpuFighter]&&FIGHTERS[cpuFighter].name==="Overlordess";
+  if(youIs||cpuIs){
+    dogActive=true;
+    dogTargetWho=youIs?"you":"cpu";
+    const f=FIGHTERS[youIs?selectedFighter:cpuFighter];
+    const urls=(f&&f.objects)||[];
+    const dogUrl=urls.find(function(u){return /object\.png/i.test(u);})||urls[0]||"";
+    if(dogUrl){
+      dog.src=dogUrl;
+      dog.style.display="block";
+      dog.style.left="20%";
+    }
+    if(dogRaf)cancelAnimationFrame(dogRaf);
+    dogRaf=requestAnimationFrame(updateOverlordDog);
+  }else{
+    dogActive=false;
+    dog.style.display="none";
+    if(dogRaf){cancelAnimationFrame(dogRaf);dogRaf=null;}
+  }
+}
+function updateOverlordDog(){
+  if(!dogActive||lastScreen!=="fight"){
+    dogRaf=null;
+    return;
+  }
+  const dog=document.getElementById("overlordDog");
+  const stage=document.getElementById("stage");
+  const fighter=document.getElementById(dogTargetWho==="you"?"you":"cpu");
+  if(!dog||!stage||!fighter){
+    dogRaf=requestAnimationFrame(updateOverlordDog);
+    return;
+  }
+  const stageBox=stage.getBoundingClientRect();
+  const fBox=fighter.getBoundingClientRect();
+  let targetLeft=fBox.left-stageBox.left+(fBox.width*(dogTargetWho==="you"?0.18:0.52));
+  let cur=parseFloat(dog.style.left)||targetLeft;
+  cur+=(targetLeft-cur)*0.11;
+  const t=Date.now()/260;
+  const sway=Math.cos(t*0.65)*2.4;
+  const bob=Math.sin(t)*1.8;
+  dog.style.left=(cur+sway)+"px";
+  dog.style.bottom=(5+(bob*0.15))+"%";
+  dog.style.transform=dogTargetWho==="cpu"?"scaleX(-1)":"none";
+  dogRaf=requestAnimationFrame(updateOverlordDog);
+}
+function getOverlordDogUrl(){
+  const list=FIGHTERS||[];
+  const f=list.find(function(x){return x&&x.name==="Overlordess";});
+  if(!f||!f.objects)return "";
+  return f.objects.find(function(u){return /object\.png/i.test(u);})||f.objects[0]||"";
+}
+function makeOverlordDog(size){
+  const url=getOverlordDogUrl();
+  if(!url)return null;
+  const dog=document.createElement("img");
+  dog.className="lil-doggie-static";
+  dog.alt="lil doggie";
+  dog.src=url;
+  dog.style.cssText="position:absolute;bottom:2%;left:18%;width:"+size+"px;height:"+size+"px;object-fit:contain;z-index:6;pointer-events:none;transform-origin:center bottom;";
+  return dog;
+}
+function attachDogTo(container, size){
+  if(!container)return;
+  const existing=container.querySelector(".lil-doggie-static");
+  if(existing)existing.remove();
+  const dog=makeOverlordDog(size||48);
+  if(dog)container.appendChild(dog);
+}
+function clearStaticDogs(){
+  document.querySelectorAll(".lil-doggie-static").forEach(function(d){if(d.parentNode)d.parentNode.removeChild(d);});
+}
 function walkBackToHome(done, winner){
   const targetYou = YOU_HOME, targetCpu = CPU_HOME;
   const youEl = document.getElementById("you");
@@ -1695,7 +1772,7 @@ function resetPower(){power.you=power.cpu=50;throwAmmo.you=throwAmmo.cpu=0;combo
 function resetCombo(){comboCount.you=comboCount.cpu=0;comboAt.you=comboAt.cpu=0;lastSide.you=lastSide.cpu="";lastKind.you=lastKind.cpu="";}
 function attackSide(type){if(type==="punchL"||type==="kickL")return"L";if(type==="punchR"||type==="kickR")return"R";return"";}
 function attackKind(type){if(type==="punchL"||type==="punchR")return"P";if(type==="kickL"||type==="kickR")return"K";return"";}
-function addPower(who,base,type){if(throwAmmo[who]>0)return;const side=attackSide(type),kind=attackKind(type),now=Date.now();const inWin=(now-(comboAt[who]||0)<=COMBO_WINDOW);const alt=!!(side&&lastSide[who]&&side!==lastSide[who]&&inWin)||!!(kind&&lastKind[who]&&kind!==lastKind[who]&&inWin);lastSide[who]=side;lastKind[who]=kind;comboAt[who]=now;if(!alt){comboCount[who]=1;return;}comboCount[who]+=1;const before=power[who];power[who]=Math.min(POWER_MAX,power[who]+base+Math.max(0,comboCount[who]-1)*COMBO_BONUS);if(before<POWER_MAX&&power[who]>=POWER_MAX){throwAmmo[who]=THROWS_PER_POWER;power[who]=POWER_MAX;sfxPowerReady();floats(who==="you"?"you":"cpu","SQUEEZE!","combo");}updatePowerMeters();sfxGrunt(who);floats(who==="you"?"you":"cpu","COMBO x"+comboCount[who],"combo");}
+function addPower(who,base,type){if(throwAmmo[who]>0)return;const side=attackSide(type),kind=attackKind(type),now=Date.now();const inWin=(now-(comboAt[who]||0)<=COMBO_WINDOW);const alt=!!(side&&lastSide[who]&&side!==lastSide[who]&&inWin)||!!(kind&&lastKind[who]&&kind!==lastKind[who]&&inWin);lastSide[who]=side;lastKind[who]=kind;comboAt[who]=now;if(!alt){comboCount[who]=1;return;}comboCount[who]+=1;flyMoney(who==="you"?"cpu":"you",3);const before=power[who];power[who]=Math.min(POWER_MAX,power[who]+base+Math.max(0,comboCount[who]-1)*COMBO_BONUS);if(before<POWER_MAX&&power[who]>=POWER_MAX){throwAmmo[who]=THROWS_PER_POWER;power[who]=POWER_MAX;sfxPowerReady();floats(who==="you"?"you":"cpu","SQUEEZE!","combo");}updatePowerMeters();sfxGrunt(who);floats(who==="you"?"you":"cpu","COMBO x"+comboCount[who],"combo");}
 function losePower(who,amount){if((throwAmmo[who]||0)>0)return;power[who]=Math.max(0,power[who]-(amount||8));updatePowerMeters();}
 function breakCombo(who){comboCount[who]=0;comboAt[who]=0;lastSide[who]="";lastKind[who]="";}
 function spendThrow(who){throwAmmo[who]=Math.max(0,(throwAmmo[who]||0)-1);if(throwAmmo[who]<=0){power[who]=0;comboCount[who]=0;comboAt[who]=0;lastSide[who]="";lastKind[who]="";}else power[who]=Math.round(POWER_MAX*throwAmmo[who]/THROWS_PER_POWER);updatePowerMeters();}
@@ -2187,7 +2264,7 @@ function applyArena(){
   playArenaMusic(true);
 }
 
-function startFight(freshMatch){ensureAudio();clearReadyTimer();clearRoundTimer();if(winFlashTimer){clearTimeout(winFlashTimer);winFlashTimer=null;}clearLiquidate();const oldPin=document.getElementById("liquidPin");if(oldPin&&oldPin.parentNode)oldPin.parentNode.removeChild(oldPin);if(typeof clearEruptMoney==="function")clearEruptMoney();document.getElementById("winFlash").classList.remove("show","top","liq-mode");document.getElementById("winFlashSub").textContent="";youPos=YOU_HOME;cpuPos=CPU_HOME;applyYouPos();applyCpuPos();if(mode==="pvc"||mode==="arcade")cpuFighter=selectedOpponent;if(mode==="one"&&invitedMember){cpuFighter=invitedMember.fighter;selectedOpponent=cpuFighter;}if(mode==="arcade")selectedArena=arcadeArenaIndex();if(freshMatch){currentRound=1;roundWins={you:0,cpu:0};matchScore=0;matchXp=0;resetPower();}showLoading(true);preloadMatchPair();setTimeout(function(){showLoading(false);applyFighterArt();applyArena();if(currentRound===maxRounds())preloadLiquidation();resetRoundState();show("fight");resetReplayLog();announceRound();},180);}
+function startFight(freshMatch){ensureAudio();clearReadyTimer();clearRoundTimer();if(winFlashTimer){clearTimeout(winFlashTimer);winFlashTimer=null;}clearLiquidate();const oldPin=document.getElementById("liquidPin");if(oldPin&&oldPin.parentNode)oldPin.parentNode.removeChild(oldPin);if(typeof clearEruptMoney==="function")clearEruptMoney();document.getElementById("winFlash").classList.remove("show","top","liq-mode");document.getElementById("winFlashSub").textContent="";youPos=YOU_HOME;cpuPos=CPU_HOME;applyYouPos();applyCpuPos();if(mode==="pvc"||mode==="arcade")cpuFighter=selectedOpponent;if(mode==="one"&&invitedMember){cpuFighter=invitedMember.fighter;selectedOpponent=cpuFighter;}if(mode==="arcade")selectedArena=arcadeArenaIndex();if(freshMatch){currentRound=1;roundWins={you:0,cpu:0};matchScore=0;matchXp=0;resetPower();}showLoading(true);preloadMatchPair();setTimeout(function(){showLoading(false);applyFighterArt();setupOverlordDog();applyArena();if(currentRound===maxRounds())preloadLiquidation();resetRoundState();show("fight");resetReplayLog();announceRound();},180);}
 function startNextRound(){currentRound=Math.min(maxRounds(),currentRound+1);resetRoundState();announceRound();}
 function holdFinalKo(done,winnerName){
   announcing=true;
@@ -2346,7 +2423,7 @@ function pushBack(who,px){
   startDragSfx(who);
   setTimeout(function(){if(dragWho===who)stopDragSfx();},420);
 }
-function applyDamage(from,to,dmg,type){dmg=dmg*(fighterStat(from,"strength")/5)*Math.max(0.25,2-fighterStat(to,"defense")/5);hp[to]=Math.max(0,hp[to]-dmg);if(to === "cpu") noteCpuPressure();if(fighterStat(to,"mass")!==5){const push=(5-fighterStat(to,"mass"))*0.12;if(to==="you")nudgeYou(push>0?-push:push);else nudgeCpu(push>0?-push:push);}breakCombo(to);if(type!=="throw")addPower(from,dmg>=KICK_DMG?POWER_KICK:POWER_PUNCH,type);flyMoney(to,moneyCountFor(dmg));updateMeters();if(hp[to]<=0||suddenDeath)finish(from);}
+function applyDamage(from,to,dmg,type){dmg=dmg*(fighterStat(from,"strength")/5)*Math.max(0.25,2-fighterStat(to,"defense")/5);hp[to]=Math.max(0,hp[to]-dmg);if(to === "cpu") noteCpuPressure();if(fighterStat(to,"mass")!==5){const push=(5-fighterStat(to,"mass"))*0.12;if(to==="you")nudgeYou(push>0?-push:push);else nudgeCpu(push>0?-push:push);}breakCombo(to);if(type!=="throw")addPower(from,dmg>=KICK_DMG?POWER_KICK:POWER_PUNCH,type);updateMeters();if(hp[to]<=0||suddenDeath)finish(from);}
 function resolveHit(from,to,dmg,type){const defenderblocking=to==="you"?youBlocking:cpuBlocking;if(defenderblocking){breakCombo(from);losePower(from,12);sfxBlock();floats(to,"BLOCK","miss");floats(from,"SHORT","miss");return;}applyDamage(from,to,dmg,type);}
 function attack(from,to,type){
   if(!liquidateOn&&(over||paused||announcing))return;
@@ -2604,6 +2681,10 @@ function finishLiquidate(by){
   stopWalkLoop();
   liquidateOn=false;
   liquidateSeq="";
+  dogActive=false;
+  const dog=document.getElementById("overlordDog");
+  if(dog){dog.style.display="none";dog.src="";}
+  if(dogRaf){cancelAnimationFrame(dogRaf);dogRaf=null;}
   if(liquidateTimer){clearInterval(liquidateTimer);liquidateTimer=null;}
   bgm.pause();
   const isDarkFud=FIGHTERS[by==="you"?selectedFighter:cpuFighter].name==="Dark Fud 420";
