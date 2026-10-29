@@ -280,26 +280,66 @@ label{text-align:center;font-size:10px;font-weight:900;letter-spacing:2px;color:
 #replayStageWrap #roundOv,
 #replayStageWrap #pauseOv,
 #replayStageWrap #endOv{display:none!important;}
-#replayStageWrap .fighter img[data-pose="loser"]{
+#replayStageWrap .fighter,
+#replayStageWrap #you,
+#replayStageWrap #cpu{
+  width:auto !important;
+  height:64% !important;
+  bottom:9% !important;
+}
+#replayStageWrap .fighter img,
+#replayStageWrap .fighter-img,
+#replayStageWrap #you img,
+#replayStageWrap #cpu img{
   width:auto !important;
   height:100% !important;
-  max-height:68% !important;
-  max-width:70% !important;
+  max-height:100% !important;
+  max-width:none !important;
   object-fit:contain !important;
   object-position:bottom center !important;
 }
-#replayStageWrap .fighter:has(img[data-pose="loser"]){
+/* Replay loser / KO — override the general replay image sizing so the wide GIF stays on the floor */
+#replayStageWrap .fighter img[data-pose="loser"],
+#replayStageWrap .fighter img[data-pose="ko"],
+#replayStageWrap #you img[data-pose="loser"],
+#replayStageWrap #you img[data-pose="ko"],
+#replayStageWrap #cpu img[data-pose="loser"],
+#replayStageWrap #cpu img[data-pose="ko"]{
   width:auto !important;
-  height:68% !important;
-  bottom:6% !important;
-  /* keep left/right from the normal fighter positioning */
+  height:auto !important;
+  max-width:42vw !important;
+  max-height:40vh !important;
+  object-fit:contain !important;
+  object-position:bottom center !important;
 }
-#replayStageWrap #stage{
-  position:absolute;
-  left:0;right:0;
-  top:-22%;
-  height:145%;
-  transform:none;
+#replayStageWrap .fighter:has(img[data-pose="loser"]),
+#replayStageWrap .fighter:has(img[data-pose="ko"]),
+#replayStageWrap #you:has(img[data-pose="loser"]),
+#replayStageWrap #you:has(img[data-pose="ko"]),
+#replayStageWrap #cpu:has(img[data-pose="loser"]),
+#replayStageWrap #cpu:has(img[data-pose="ko"]){
+  bottom:2% !important;
+  height:auto !important;
+  max-height:none !important;
+  width:auto !important;
+  min-width:100px;
+}
+#replayStageWrap #cpu img[data-pose="loser"],
+#replayStageWrap #cpu img[data-pose="ko"]{
+  transform:scaleX(-1) !important;
+}
+#replayStageWrap {
+  display: flex;
+  align-items: center;        /* vertical center */
+  justify-content: center;
+  overflow: hidden;
+}
+#replayStageWrap #stage {
+  position: relative !important;   /* or absolute if you must keep it */
+  top: auto !important;
+  height: 100% !important;         /* preserve original stage height → fighter size unchanged */
+  transform: none !important;
+  margin: auto;
 }
 .arena-img{display:block;width:100%;height:100%;object-fit:fill;object-position:center center;pointer-events:none;position:absolute;inset:0;z-index:1}
 #fightU{display:block;width:100%;height:36px;min-height:36px;max-height:36px;margin:0;padding:0;background:#05070d;overflow:hidden;flex:none}
@@ -726,8 +766,13 @@ input[type=file].hidden-file{display:none}
    </div>
      </section>
 <div id="replayOverlay" style="display:none;position:fixed;inset:0;z-index:200;background:#000;flex-direction:column;align-items:center;justify-content:center;">
-  <div id="replayStageWrap" style="position:relative;width:min(100%,500px);aspect-ratio:500/280;overflow:hidden;background:#12080c;border:2px solid #ffd54f;">
+  <div id="replayStageWrap" style="position:relative;width:min(100%,500px);aspect-ratio:500/362;overflow:hidden;background:#12080c;border:2px solid #ffd54f;">
     <!-- cloned stage content will be injected here -->
+  </div>
+  <div id="replayFlash" style="position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:50px;pointer-events:none;z-index:10;font-family:Impact,'Arial Black',system-ui,sans-serif;text-align:center;">
+    <div id="replayFlashKo" style="font-size:clamp(22px,6vw,36px);font-weight:900;color:#ff1744;-webkit-text-stroke:2px #000;paint-order:stroke fill;text-shadow:2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000,0 0 20px #f00;letter-spacing:2.5px;text-transform:uppercase;margin:0;"></div>
+    <div id="replayFlashSub" style="font-size:clamp(22px,7vw,36px);font-weight:900;color:#ffd54f;-webkit-text-stroke:2px #000;paint-order:stroke fill;text-shadow:2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000,0 0 8px #ffb300;letter-spacing:2px;text-transform:uppercase;margin:6px 0 0;line-height:1;"></div>
+    <div id="replayFlashName" style="font-size:clamp(18px,5.4vw,31px);font-weight:900;color:#ffd54f;text-shadow:0 0 18px #ffb300,0 0 8px #ffb300;letter-spacing:2.5px;text-transform:uppercase;margin:10px 0 0;"></div>
   </div>
   <div style="margin-top:12px;display:flex;gap:12px;">
     <button class="btn btn-gold" onclick="closeMatchReplay()">CLOSE</button>
@@ -735,23 +780,7 @@ input[type=file].hidden-file{display:none}
   </div>
   <div id="replayClock" style="margin-top:6px;font-family:Impact,sans-serif;color:#ffd54f;font-size:14px;">0:00</div>
 </div>
-<div id="replayOverlay" style="display:none;position:fixed;inset:0;z-index:200;background:#000;flex-direction:column;align-items:center;justify-content:center;">
-  <div id="replayStageWrap" style="position:relative;width:min(100%,500px);aspect-ratio:500/280;overflow:hidden;background:#12080c;border:2px solid #ffd54f;"></div>
-  <div style="margin-top:12px;display:flex;gap:12px;">
-    <button class="btn btn-gold" onclick="closeMatchReplay()">CLOSE</button>
-    <button class="btn btn-dark" onclick="restartMatchReplay()">RESTART</button>
-  </div>
-  <div id="replayClock" style="margin-top:6px;font-family:Impact,sans-serif;color:#ffd54f;font-size:14px;">0:00</div>
-</div>
-<div id="replayOverlay" style="display:none;position:fixed;inset:0;z-index:200;background:#000;flex-direction:column;align-items:center;justify-content:center;">
-  <div id="replayStageWrap" style="position:relative;width:min(100%,500px);aspect-ratio:500/280;overflow:hidden;background:#12080c;border:2px solid #ffd54f;"></div>
-  <div style="margin-top:12px;display:flex;gap:12px;">
-    <button class="btn btn-gold" onclick="closeMatchReplay()">CLOSE</button>
-    <button class="btn btn-dark" onclick="restartMatchReplay()">RESTART</button>
-  </div>
-  <div id="replayClock" style="margin-top:6px;font-family:Impact,sans-serif;color:#ffd54f;font-size:14px;">0:00</div>
-</div>
-<div class="fine-print"><span>BUILD:10.28~1735</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.29~1241</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 <div id="loadingOverlay"><div class="loading-spinner"></div><div class="loading-text">LOADING...</div></div>
 </div>
 <script>
@@ -769,9 +798,9 @@ const KEEP_ARENA_MUSIC={fight:1};
 const POSE_LABEL={punchL:"left punch",punchR:"right punch",kickL:"left kick",kickR:"right kick",throw:"throw",block:"block",victory:"victory",loser:"loser",walk:"walk",taunt:"taunt",hit:"hit"};
 const THROW_OBJECTS=["phone.png","laptop.png","coffee.png","chart.png","newspaper.png","megaphone.png","bag.png","keyboard.png","coin.png","contract.png"];
 const sfxAmmoHitEl=document.getElementById("sfxAmmoHit");
-function sfxAmmoHit(){playFile(sfxAmmoHitEl);}
+function sfxAmmoHit(){playFile(sfxAmmoHitEl);logReplaySfx("ammoHit");}
 const sfxAmmoMissEl=document.getElementById("sfxAmmoMiss");
-function sfxAmmoMiss(){playFile(sfxAmmoMissEl);}
+function sfxAmmoMiss(){playFile(sfxAmmoMissEl);logReplaySfx("ammoMiss");}
 const INTRO_PAGES=["W.F.U.D. STUDIOS","PRESENTS","FUD KINGZ OF FINTWITS"],LOAD_HOLD_MS=3000;
 function unique(list){const seen={};return(list||[]).filter(function(u){if(!u||seen[u])return false;seen[u]=true;return true;});}
 const MONEY_URLS=unique([OBJECT_DIR+"money.png",ROOT+"./images/money.png"]);
@@ -1231,9 +1260,9 @@ function creditLines(){const mine=FIGHTERS[selectedFighter],tag=activePlayer()?a
 function showCredits(){const box=document.getElementById("creditsRoll");if(box){box.style.animation="none";void box.offsetWidth;box.style.animation="";box.innerHTML=creditLines().map(function(p){return"<h3>"+p[0]+"</h3><p>"+p[1]+"</p>";}).join("");}show("credits");}
 function afterCredits(){arcadeKing=false;readyToFight=false;arcadeQueue=[];arcadeIndex=0;arcadeBeaten={};renderFighterCarousel();show("fighters");}
 function playFile(el){if(mutedFx||!el)return;try{el.currentTime=0;}catch(e){}el.play().catch(function(){});}
-function sfxPunch(){playFile(sfxPunchEl);}
-function sfxKick(){playFile(sfxKickEl);}
-function sfxThrow(){playFile(sfxThrowEl);}
+function sfxPunch(){playFile(sfxPunchEl);logReplaySfx("punch");}
+function sfxKick(){playFile(sfxKickEl);logReplaySfx("kick");}
+function sfxThrow(){playFile(sfxThrowEl);logReplaySfx("throw");}
 function fighterIsFemale(who){const f=FIGHTERS[who==="you"?selectedFighter:cpuFighter];return !!(f&&f.female);}
 function sfxGrunt(who){if(who==="cpu")playFile(fighterIsFemale("cpu")?sfxGrunt2FEl:sfxGrunt2El);else playFile(fighterIsFemale("you")?sfxGruntFEl:sfxGruntEl);}
 function sfxP2UghFor(who){playFile(fighterIsFemale(who)?sfxP2UghFEl:sfxP2UghEl);}
@@ -1262,9 +1291,9 @@ function playTone(freq,dur,type,gainVal){const ctx=ensureAudio();if(!ctx||mutedF
 function sfxCall(word){if(word==="FIGHT!!"||word==="FIGHT!"){playTone(220,0.18,"sawtooth",0.12);playTone(440,0.16,"square",0.08);return;}if(word==="READY"){playTone(520,0.12,"triangle",0.1);return;}playTone(340,0.08,"square",0.08);}
 function sfxMiss(){playTone(160,0.07,"square",0.05);}
 function sfxBlock(){playTone(740,0.06,"triangle",0.1);playTone(1180,0.05,"square",0.05);}
-function sfxPowerReady(){playFile(sfxPowerChimeEl);playTone(620,0.1,"triangle",0.1);playTone(880,0.12,"square",0.07);}
-function sfxWhistleCrash(){playFile(sfxWhistleCrashEl);}
-function sfxRoundBell(){playFile(sfxRoundBellEl);}
+function sfxPowerReady(){playFile(sfxPowerChimeEl);playTone(620,0.1,"triangle",0.1);playTone(880,0.12,"square",0.07);logReplaySfx("power");}
+function sfxWhistleCrash(){playFile(sfxWhistleCrashEl);logReplaySfx("whistle");}
+function sfxRoundBell(){playFile(sfxRoundBellEl);logReplaySfx("bell");}
 function sfxP2Ugh(){sfxP2UghFor("cpu");}
 function setIntroText(t){document.getElementById("introText").innerHTML=t+'<span class="cursor"> </span>';}
 function stopTitleSong(){bgm.pause();}
@@ -2206,7 +2235,7 @@ function setAnnounceCall(word){
 function resetRoundState(){hp.you=MAX;hp.cpu=MAX;paused=over=false;announcing=false;youBlocking=cpuBlocking=false;suddenDeath=false;roundTimeLeft=ROUND_SECS;resetCombo();updatePowerMeters();document.getElementById("pauseOv").classList.remove("show");document.getElementById("roundOv").classList.remove("show");document.getElementById("winFlash").classList.remove("show");document.getElementById("endOv").classList.remove("show");updateMeters();updateRoundHud();}
 function fightLive(){
   announcing=false;paused=false;over=false;
-  window._fightStart = Date.now(); // start of live round for replay timing
+  if(!window._fightStart) window._fightStart = Date.now(); // once per match
   document.getElementById("roundOv").classList.remove("show");
   document.getElementById("winFlash").classList.remove("show");
   tiltReady=false;
@@ -2498,11 +2527,7 @@ logReplayEvent("throw", {
   }
   resolveHit(from,to,dmg,"throw");
   if(!blocked)pushBack(to,dmg>=3?24:(dmg>=2?16:8));if(from==="you"){const img=document.getElementById("youFile");if(img&&img.dataset.pose==="throw"){if(isMoving()&&!youBlocking)playPose("you","walk");else if(youBlocking)playPose("you","block");else playPose("you","idle");}}},THROW_MS);}
-let cpuLastStrike=0;
 function cpuStrike(tune){
-  const now=Date.now();
-  if(now-cpuLastStrike<POSE_MS*2)return;
-  cpuLastStrike=now;
   setBlock("cpu",false);
   const t=tune||skillTune();
   if(canThrow("cpu")&&Math.random()<t.throwChance){throwObject("cpu","you");return;}
@@ -2677,7 +2702,12 @@ function startLiquidate(done,by){
   const youImg2=document.getElementById("youFile"),cpuImg2=document.getElementById("cpuFile");
   if(youImg2){youImg2.dataset.pose="";youImg2.dataset.list="";}
   if(cpuImg2){cpuImg2.dataset.pose="";cpuImg2.dataset.list="";}
-  stopWalkLoop();playPose(by,"idle");playPose(by==="you"?"cpu":"you","loser");bgm.pause();if(sfxLiquidateEl){sfxLiquidateEl.loop=false;try{sfxLiquidateEl.currentTime=0;}catch(e){}if(!mutedFx)sfxLiquidateEl.play().catch(function(){});}
+  stopWalkLoop();playPose(by,"idle");playPose(by==="you"?"cpu":"you","loser");
+  logReplayEvent("pose", {who: by, pose: "idle"}, true);
+  logReplayEvent("pose", {who: by==="you"?"cpu":"you", pose: "loser"}, true);
+  logReplaySfx("liquidate");
+  logReplayEvent("liqFlash", {mode: "start", text: "LIQUIDATE THEM", sub: liquidateLeft}, true);
+  bgm.pause();if(sfxLiquidateEl){sfxLiquidateEl.loop=false;try{sfxLiquidateEl.currentTime=0;}catch(e){}if(!mutedFx)sfxLiquidateEl.play().catch(function(){});}
   cueLiquidateThem();
   if(by==="cpu"){setTimeout(function(){if(liquidateOn)finishLiquidate("cpu");},900);return;}
   if(winFlashTimer){clearTimeout(winFlashTimer);winFlashTimer=null;}
@@ -2689,11 +2719,14 @@ function startLiquidate(done,by){
   liquidateTimer=setInterval(function(){
     liquidateLeft-=1;
     document.getElementById("winFlashSub").textContent=Math.max(0,liquidateLeft);
+    logReplayEvent("liqFlash", {mode: "tick", sub: Math.max(0,liquidateLeft)}, true);
     if(liquidateLeft>0)return;
     const doneFn=liquidateDone;
     playPose(by,"victory");
+    logReplayEvent("pose", {who: by, pose: "victory"}, true);
     clearLiquidate();
     document.getElementById("winFlash").classList.remove("show","liq-mode");
+    logReplayEvent("liqFlash", {mode: "clear"}, true);
     holdFinalKo(doneFn,playerLabel());
   },1000);
 }
@@ -2708,6 +2741,7 @@ function finishLiquidate(by){
   const dog=document.getElementById("overlordDog");
   if(dog){dog.style.display="none";dog.src="";}
   if(dogRaf){cancelAnimationFrame(dogRaf);dogRaf=null;}
+  logReplayEvent("dogHide", {}, true);
   if(liquidateTimer){clearInterval(liquidateTimer);liquidateTimer=null;}
   bgm.pause();
   const isDarkFud=FIGHTERS[by==="you"?selectedFighter:cpuFighter].name==="Dark Fud 420";
@@ -2718,21 +2752,20 @@ function finishLiquidate(by){
   ammo.id="liquidPin";
   const loser=by==="you"?"cpu":"you";
   const loserImg=document.getElementById(loser==="you"?"youFile":"cpuFile");
-  function dropPin(){
-    requestAnimationFrame(function(){
+  requestAnimationFrame(function(){
     const stageBox=stage.getBoundingClientRect();
-    const target=loserImg||document.getElementById(loser);
-    const imgRect=target.getBoundingClientRect();
+    const imgRect=loserImg?loserImg.getBoundingClientRect():document.getElementById(loser).getBoundingClientRect();
     const pinLeft=Math.max(0,imgRect.left-stageBox.left+(imgRect.width-120)/2);
-    let pinTop=imgRect.top-stageBox.top+(imgRect.height*0.42)-60;
-    const floorLimit=stageBox.height*0.62;
-    if(pinTop>floorLimit)pinTop=floorLimit;
-    pinTop=Math.max(stageBox.height*0.28,pinTop);
+    const pinTop=Math.max(0,imgRect.top-stageBox.top+(imgRect.height*0.5)-60);
     ammo.style.cssText="position:absolute;width:120px;height:120px;left:"+pinLeft+"px;top:-80px;z-index:9;pointer-events:none;object-fit:contain";
     const liqName=String(FIGHTERS[by==="you"?selectedFighter:cpuFighter].name||"").trim().toLowerCase();
     bindSrcList(ammo,[FIGHTER_DIR+liqName+"/"+liqName+"_l_object.png"]);
     stage.appendChild(ammo);
-    if(isDarkFud)playPose(by,"summon");
+    logReplayEvent("liqPin", {src: FIGHTER_DIR+liqName+"/"+liqName+"_l_object.png", left: pinLeft, top: pinTop}, true);
+    if(isDarkFud){
+      playPose(by,"summon");
+      logReplayEvent("pose", {who: by, pose: "summon"}, true);
+    }
     ammo.animate([{top:"-80px"},{top:pinTop+"px"}],{duration:900,easing:"ease-in",fill:"forwards"}).onfinish=function(){
       ammo.style.top=pinTop+"px";
       ammo.style.left=pinLeft+"px";
@@ -2742,8 +2775,10 @@ function finishLiquidate(by){
       ammo.style.top=pinTop+"px";
       ammo.style.left=pinLeft+"px";
       eruptMoney(loser);
+      logReplayEvent("liqErupt", {to: loser}, true);
       setTimeout(function(){
         playPose(by,"victory");
+        logReplayEvent("pose", {who: by, pose: "victory"}, true);
         document.getElementById("winFlashKo").textContent="WINNER";
         const nameEl=document.getElementById("winFlashName");
         nameEl.textContent=by==="you"?playerLabel():opponentLabel();
@@ -2751,6 +2786,7 @@ function finishLiquidate(by){
         document.getElementById("winFlashSub").textContent="";
         document.getElementById("winFlash").classList.remove("top","liq-mode");
         document.getElementById("winFlash").classList.add("show","center");
+        logReplayEvent("liqFlash", {mode: "winner", name: by==="you"?playerLabel():opponentLabel()}, true);
         setTimeout(function(){
           document.getElementById("winFlash").classList.remove("show","center","top");
           if(sfxLiquidateEl){sfxLiquidateEl.pause();try{sfxLiquidateEl.currentTime=0;}catch(e){}}
@@ -2761,11 +2797,7 @@ function finishLiquidate(by){
         },8000);
       },1800);
     },1100);
-    });
-  }
-  if(loserImg&&loserImg.complete&&loserImg.naturalHeight)setTimeout(dropPin,60);
-  else if(loserImg)loserImg.addEventListener("load",function(){setTimeout(dropPin,60);},{once:true});
-  else setTimeout(dropPin,120);
+  });
 }
 function goTitle(){
   if(typeof stopTitleIntroclip==="function")stopTitleIntroclip();
@@ -2898,8 +2930,10 @@ let matchReplayLog = [];
 let replayPlaying = false;
 let replayTimer = null;
 
-function logReplayEvent(type, data){
-  if(lastScreen !== "fight" || over || announcing) return;
+function logReplayEvent(type, data, force){
+  // Allow logging during the liquidation sequence even though announcing is true
+  if(lastScreen !== "fight") return;
+  if(announcing && !force && !liquidateOn) return;
   if(!window._fightStart) window._fightStart = Date.now();
   matchReplayLog.push({
     t: Date.now() - window._fightStart,
@@ -2927,18 +2961,37 @@ function openMatchReplay(){
   const stage = document.getElementById("stage");
   const clone = stage.cloneNode(true);
   clone.querySelectorAll(".hud, .power-wrap, .overlay, #fightU, #controls, #fightUtil").forEach(function(n){ n.remove(); });
-  clone.style.position = "absolute";
-clone.style.top = "-18%";
-clone.style.height = "140%";
-clone.style.width = "100%";
-wrap.appendChild(clone);
+  clone.style.position = "relative";
+  clone.style.width = "100%";
+  clone.style.height = "100%";
+  clone.style.top = "auto";
+  clone.style.transform = "none";
+  clone.style.left = "auto";
+  clone.style.right = "auto";
+  wrap.appendChild(clone);
   ov.style.display = "flex";
+  try{ if(bgm) bgm.pause(); }catch(e){}
+  try{ if(typeof stopTitleIntroclip === "function") stopTitleIntroclip(); }catch(e){}
   replayPlaying = true;
   restartMatchReplay();
 }
 
 function restartMatchReplay(){
-  if(replayTimer) clearTimeout(replayTimer);
+  if(replayTimer){
+    cancelAnimationFrame(replayTimer);
+    replayTimer = null;
+  }
+  // clear any leftover liquidation flash
+  const flash = document.getElementById("replayFlash");
+  if(flash){
+    flash.style.display = "none";
+    const ko = document.getElementById("replayFlashKo");
+    const sub = document.getElementById("replayFlashSub");
+    const name = document.getElementById("replayFlashName");
+    if(ko) ko.textContent = "";
+    if(sub) sub.textContent = "";
+    if(name){ name.textContent = ""; name.classList.remove("pulse-win"); }
+  }
   const wrap = document.getElementById("replayStageWrap");
   const you = wrap.querySelector("#you");
   const cpu = wrap.querySelector("#cpu");
@@ -2946,30 +2999,84 @@ function restartMatchReplay(){
   const cpuImg = wrap.querySelector("#cpuFile");
   if(you) you.style.left = YOU_HOME + "%";
   if(cpu) cpu.style.right = CPU_HOME + "%";
-  if(youImg) youImg.dataset.pose = "";
-  if(cpuImg) cpuImg.dataset.pose = "";
+  if(youImg){
+    youImg.dataset.pose = "";
+    youImg.removeAttribute("data-pose");
+    const fy = FIGHTERS[selectedFighter];
+    if(fy && fy.idle && fy.idle.length) bindSrcList(youImg, fy.idle);
+  }
+  if(cpuImg){
+    cpuImg.dataset.pose = "";
+    cpuImg.removeAttribute("data-pose");
+    const fc = FIGHTERS[cpuFighter];
+    if(fc && fc.idle && fc.idle.length) bindSrcList(cpuImg, fc.idle);
+  }
+  // Overlordess lil' dog for replay
+  const youIsOver = FIGHTERS[selectedFighter] && FIGHTERS[selectedFighter].name === "Overlordess";
+  const cpuIsOver = FIGHTERS[cpuFighter] && FIGHTERS[cpuFighter].name === "Overlordess";
+  let replayDog = wrap.querySelector(".replay-lil-doggie");
+  if(replayDog && replayDog.parentNode) replayDog.parentNode.removeChild(replayDog);
+  if(youIsOver || cpuIsOver){
+    const stage = wrap.querySelector("#stage");
+    if(stage){
+      const f = FIGHTERS[youIsOver ? selectedFighter : cpuFighter];
+      const urls = (f && f.objects) || [];
+      const dogUrl = urls.find(function(u){ return /object\.png/i.test(u); }) || urls[0] || "";
+      replayDog = document.createElement("img");
+      replayDog.className = "replay-lil-doggie";
+      replayDog.alt = "lil doggie";
+      if(dogUrl) replayDog.src = dogUrl;
+      replayDog.style.cssText = "position:absolute;bottom:5%;width:52px;height:52px;object-fit:contain;z-index:5;pointer-events:none;transform-origin:center bottom;display:block;";
+      stage.appendChild(replayDog);
+      replayDog.dataset.target = youIsOver ? "you" : "cpu";
+    }
+  } else {
+    replayDog = null;
+  }
   let idx = 0;
   const start = performance.now();
+  function updateReplayDog(){
+    if(!replayDog || !replayPlaying) return;
+    const stage = wrap.querySelector("#stage");
+    const targetWho = replayDog.dataset.target;
+    const fighter = wrap.querySelector(targetWho === "you" ? "#you" : "#cpu");
+    if(!stage || !fighter) return;
+    const stageBox = stage.getBoundingClientRect();
+    const fBox = fighter.getBoundingClientRect();
+    let targetLeft = fBox.left - stageBox.left + (fBox.width * (targetWho === "you" ? 0.18 : 0.52));
+    let cur = parseFloat(replayDog.style.left) || targetLeft;
+    cur += (targetLeft - cur) * 0.11;
+    const t = Date.now() / 260;
+    const sway = Math.cos(t * 0.65) * 2.4;
+    const bob = Math.sin(t) * 1.8;
+    replayDog.style.left = (cur + sway) + "px";
+    replayDog.style.bottom = (5 + (bob * 0.15)) + "%";
+    replayDog.style.transform = targetWho === "cpu" ? "scaleX(-1)" : "none";
+  }
   function step(){
     if(!replayPlaying || idx >= matchReplayLog.length){
       const clock = document.getElementById("replayClock");
       if(clock) clock.textContent = "END";
+      replayTimer = null;
       return;
     }
-    const ev = matchReplayLog[idx];
     const elapsed = performance.now() - start;
-    if(elapsed >= ev.t){
-      applyReplayEvent(ev, you, cpu, youImg, cpuImg);
+    while(idx < matchReplayLog.length && elapsed >= matchReplayLog[idx].t){
+      applyReplayEvent(matchReplayLog[idx], you, cpu, youImg, cpuImg);
       idx++;
     }
+    updateReplayDog();
     const clock = document.getElementById("replayClock");
     if(clock) clock.textContent = formatClock(Math.floor(elapsed / 1000));
-    replayTimer = setTimeout(step, 16);
+    replayTimer = requestAnimationFrame(step);
   }
-  step();
+  replayTimer = requestAnimationFrame(step);
 }
 
 function applyReplayEvent(ev, you, cpu, youImg, cpuImg){
+  const wrap = document.getElementById("replayStageWrap");
+  const stage = wrap ? wrap.querySelector("#stage") : null;
+
   if(ev.type === "pose"){
     const img = ev.data.who === "you" ? youImg : cpuImg;
     if(!img) return;
@@ -2977,6 +3084,17 @@ function applyReplayEvent(ev, you, cpu, youImg, cpuImg){
     const list = (f && f[ev.data.pose]) || (f && f.select);
     if(list) bindSrcList(img, list);
     img.dataset.pose = ev.data.pose;
+    if(ev.data.pose === "loser" || ev.data.pose === "ko"){
+      img.style.width = "auto";
+      img.style.height = "auto";
+      img.style.maxWidth = "42vw";
+      img.style.maxHeight = "40vh";
+      img.style.objectFit = "contain";
+      img.style.objectPosition = "bottom center";
+    } else {
+      img.style.maxWidth = "";
+      img.style.maxHeight = "";
+    }
   } else if(ev.type === "pos"){
     if(you) you.style.left = ev.data.you + "%";
     if(cpu) cpu.style.right = ev.data.cpu + "%";
@@ -2989,17 +3107,119 @@ function applyReplayEvent(ev, you, cpu, youImg, cpuImg){
     };
     const fn = map[ev.data.name];
     if(fn && !mutedFx) fn();
-  } else if(ev.type === "throw" || ev.type === "hitfx"){
-    // keep your existing throw / hitfx spawn + animate code here
-  } else if(ev.type === "liqPin"){
-    // keep existing pin code
-  } else if(ev.type === "liqErupt"){
-    // keep existing erupt code
+  } else if(ev.type === "throw" && stage){
+    const img = document.createElement("img");
+    img.className = "toss";
+    img.style.cssText = "position:absolute;width:"+TOSS_SIZE+"px;height:"+TOSS_SIZE+"px;max-width:"+TOSS_SIZE+"px;max-height:"+TOSS_SIZE+"px;object-fit:contain;left:"+ev.data.startLeft+";top:"+ev.data.startTop+";z-index:8;pointer-events:none";
+    if(ev.data.src) bindSrcList(img, [ev.data.src]);
+    else img.classList.add("loaded");
+    stage.appendChild(img);
+    const dx = parseFloat(ev.data.endX) - parseFloat(ev.data.startLeft);
+    const dy = parseFloat(ev.data.endY) - parseFloat(ev.data.startTop);
+    img.animate([
+      {transform:"translate(0,0) rotate(0deg)"},
+      {transform:"translate("+dx+"px,"+dy+"px) rotate(320deg)"}
+    ], {duration: ev.data.duration || THROW_MS, easing:"ease-in"});
+    setTimeout(function(){ if(img.parentNode) img.parentNode.removeChild(img); }, (ev.data.duration || THROW_MS) + 50);
+  } else if(ev.type === "hitfx" && stage){
+    const fx = document.createElement("img");
+    fx.className = "hit-fx";
+    fx.src = HIT_FX_URL;
+    fx.style.cssText = "position:absolute;width:"+HIT_FX_SIZE+"px;height:"+HIT_FX_SIZE+"px;left:"+ev.data.left+";top:"+ev.data.top+";z-index:11;pointer-events:none;object-fit:contain";
+    stage.appendChild(fx);
+    setTimeout(function(){ if(fx.parentNode) fx.parentNode.removeChild(fx); }, HIT_FX_MS);
+  } else if(ev.type === "dogHide"){
+    const wrap = document.getElementById("replayStageWrap");
+    if(wrap){
+      const d = wrap.querySelector(".replay-lil-doggie");
+      if(d) d.style.display = "none";
+    }
+  } else if(ev.type === "liqPin" && stage){
+    const pin = document.createElement("img");
+    pin.className = "toss liquid-pin";
+    pin.style.cssText = "position:absolute;width:120px;height:120px;left:"+ev.data.left+"px;top:-80px;z-index:9;pointer-events:none;object-fit:contain";
+    if(ev.data.src) bindSrcList(pin, [ev.data.src]);
+    stage.appendChild(pin);
+    pin.animate([{top:"-80px"},{top:ev.data.top+"px"}],{duration:900,easing:"ease-in",fill:"forwards"});
+    // hold the pin through the victory flash (matches live ~8s+ hold)
+    setTimeout(function(){ if(pin.parentNode) pin.parentNode.removeChild(pin); }, 11000);
+  } else if(ev.type === "liqErupt" && stage){
+    const stageBox = stage.getBoundingClientRect();
+    const ground = Math.max(80, stageBox.height - 46);
+    const floorW = Math.max(180, stageBox.width - 28);
+    const pin = stage.querySelector(".liquid-pin");
+    let originX = stageBox.width / 2, originY = stageBox.height * 0.55;
+    if(pin){
+      originX = pin.offsetLeft + 60;
+      originY = pin.offsetTop + 40;
+    }
+    const urls = (typeof MONEY_URLS !== "undefined" && MONEY_URLS.length) ? MONEY_URLS : ["./images/money.png"];
+    for(let i=0;i<48;i++){
+      const bill = document.createElement("img");
+      bill.className = "cash erupt";
+      bill.src = urls[i % urls.length];
+      const landX = 8 + Math.random() * (floorW - 8);
+      const spread = landX - (originX - 21);
+      const peak = 4 + Math.random() * 5;
+      const rise = peak - originY;
+      const landY = ground - Math.random() * 30;
+      const rot = Math.random() * 720 - 360;
+      bill.style.cssText = "position:absolute;width:42px;height:36px;left:"+(originX-21)+"px;top:"+originY+"px;z-index:6;pointer-events:none;object-fit:contain;opacity:1";
+      stage.appendChild(bill);
+      bill.animate([
+        { transform: "translate(0,0) scale(.3) rotate(0deg)", offset: 0 },
+        { transform: "translate(" + (spread * 0.4) + "px," + rise + "px) scale(1.25) rotate(" + (rot * 0.4) + "deg)", offset: 0.38 },
+        { transform: "translate(" + spread + "px," + (landY - originY) + "px) scale(1) rotate(" + rot + "deg)", offset: 1 }
+      ], {
+        duration: 1100 + Math.random() * 500,
+        easing: "cubic-bezier(.15,.75,.3,1)",
+        delay: i * 14,
+        fill: "forwards"
+      });
+      setTimeout(function(){ if(bill.parentNode) bill.parentNode.removeChild(bill); }, 2800 + i * 20);
+    }
+  } else if(ev.type === "liqFlash"){
+    const flash = document.getElementById("replayFlash");
+    const ko = document.getElementById("replayFlashKo");
+    const sub = document.getElementById("replayFlashSub");
+    const name = document.getElementById("replayFlashName");
+    if(!flash || !ko || !sub || !name) return;
+    const d = ev.data || {};
+    if(d.mode === "start"){
+      flash.style.display = "flex";
+      flash.style.justifyContent = "flex-start";
+      flash.style.paddingTop = "50px";
+      ko.textContent = d.text || "LIQUIDATE THEM";
+      sub.textContent = d.sub != null ? d.sub : "";
+      name.textContent = "";
+      ko.style.color = "#ff1744";
+    } else if(d.mode === "tick"){
+      sub.textContent = d.sub != null ? d.sub : "";
+    } else if(d.mode === "winner"){
+      flash.style.display = "flex";
+      flash.style.justifyContent = "center";
+      flash.style.alignItems = "center";
+      flash.style.paddingTop = "0";
+      ko.textContent = "WINNER";
+      ko.style.color = "#ffd54f";
+      sub.textContent = "";
+      name.textContent = d.name || "";
+      name.classList.add("pulse-win");
+    } else if(d.mode === "clear"){
+      flash.style.display = "none";
+      ko.textContent = "";
+      sub.textContent = "";
+      name.textContent = "";
+      name.classList.remove("pulse-win");
+    }
   }
 }
 function closeMatchReplay(){
   replayPlaying = false;
-  if(replayTimer) clearTimeout(replayTimer);
+  if(replayTimer){
+    cancelAnimationFrame(replayTimer);
+    replayTimer = null;
+  }
   const ov = document.getElementById("replayOverlay");
   if(ov) ov.style.display = "none";
 }
