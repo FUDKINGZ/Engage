@@ -845,7 +845,7 @@ input[type=file].hidden-file{display:none}
     <div id="replayClock" style="font-family:Impact,sans-serif;color:#ffd54f;font-size:14px;min-width:48px;">0:00</div>
   </div>
 </div>
-<div class="fine-print"><span>BUILD:10.29~1824</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
+<div class="fine-print"><span>BUILD:10.29~1837</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
 <div id="loadingOverlay"><div class="loading-spinner"></div><div class="loading-text">LOADING...</div></div>
 </div>
 <script>
@@ -858,7 +858,7 @@ const TITLE_TRACK=AUDIO+"title/maintitle.mp3",INTRO_BED=AUDIO+"intro/intro-boot.
 const ROSTER=ROOT+"title screen.jpg",ROSTER_FILE=ROOT+"roster.json";
 const MAX=100,PUNCH_DMG=1,KICK_DMG=1.5,THROW_DMG=2.5,BLOCK_HEAL=0.5;
 const HS_STORE="ft_gains",SKILL_STORE="ft_skill",ARCADE_SKILL_STORE="ft_arcade_skill",ROSTER_STORE="ft_roster",ROUNDS_STORE="ft_rounds";
-const POSE_MS=140,HS_LIMIT=10,ANNOUNCE_MS=800,WIN_FLASH_MS=4200,ROUND_WIN_HOLD_MS=4000,FINAL_KO_HOLD_MS=4000;
+const POSE_MS=240,HS_LIMIT=10,ANNOUNCE_MS=800,WIN_FLASH_MS=4200,ROUND_WIN_HOLD_MS=4000,FINAL_KO_HOLD_MS=4000;
 const THROW_MS=640,POWER_MAX=100,POWER_PUNCH=22,POWER_KICK=28,COMBO_WINDOW=900,COMBO_BONUS=12,THROWS_PER_POWER=3;
 const ROUND_SECS=90,YOU_HOME=1,YOU_MIN=1,YOU_MAX=98,CPU_HOME=1,CPU_MIN=1,CPU_MAX=98,TILT_DEAD=7,TILT_SCALE=28,ARCADE_ROUNDS=2,CASH_W=29,CASH_H=26,TOSS_SIZE=55,HIT_FX_SIZE=75,HIT_FX_MS=500;
 const HIT_FX_URL="./images/ammo_x.gif";
@@ -1726,7 +1726,7 @@ function knockLoserHome(who, done){
 }
 let boxCache=null,boxAt=0;
 // Sprite Proximity one gap stop matched to visible sprite mass (~42% max-width)
-const BODY_STOP = 50; // lower = closer allowed; tuned so visible masses can touch
+const BODY_STOP = 54; // higher = more separation; tuned for visual mass
 function meetLimit(){return 100-BODY_STOP;}
 function resolveOverlap(){
   const lim=meetLimit();
@@ -1778,7 +1778,10 @@ function nudgeCpu(dir){
   applyCpuPos();
   applyYouPos();
   const cpuImg=document.getElementById("cpuFile");
-  if(cpuImg&&cpuImg.dataset.pose!=="block"&&cpuImg.dataset.pose!=="punchL"&&cpuImg.dataset.pose!=="punchR"&&cpuImg.dataset.pose!=="kickL"&&cpuImg.dataset.pose!=="kickR"&&cpuImg.dataset.pose!=="throw"&&cpuImg.dataset.pose!=="pushnwalk"){
+  const pose = cpuImg && cpuImg.dataset.pose;
+  // Never override an active attack/throw pose (prevents invisible hits)
+  if(pose === "punchL" || pose === "punchR" || pose === "kickL" || pose === "kickR" || pose === "throw") return;
+  if(cpuImg&&pose!=="block"&&pose!=="pushnwalk"){
     playPose("cpu","walk");
   }
 }
@@ -1857,20 +1860,24 @@ function bodyBox(who){
 function inMeleeRange(){
   const youEl = document.getElementById("you");
   const cpuEl = document.getElementById("cpu");
-  if(!youEl || !cpuEl) return (youPos + cpuPos) >= (meetLimit() - 4);
+  if(!youEl || !cpuEl) return false;
   const you = youEl.getBoundingClientRect();
   const cpu = cpuEl.getBoundingClientRect();
-  if(you.width < 10 || cpu.width < 10) return (youPos + cpuPos) >= (meetLimit() - 4);
-  const youInset = you.width * 0.18;
-  const cpuInset = cpu.width * 0.18;
-  const youLeft = you.left + youInset;
+  if(you.width < 10 || cpu.width < 10) return false;
+
+  // Tighter body insets (hurtbox ~56% of visual width)
+  const youInset = you.width * 0.28;
+  const cpuInset = cpu.width * 0.28;
+  const youLeft  = you.left  + youInset;
   const youRight = you.right - youInset;
-  const cpuLeft = cpu.left + cpuInset;
+  const cpuLeft  = cpu.left  + cpuInset;
   const cpuRight = cpu.right - cpuInset;
+
   const gap = youRight < cpuLeft ? cpuLeft - youRight
             : (cpuRight < youLeft ? youLeft - cpuRight : 0);
-  // Slightly more forgiving so limbs can connect; still tight
-  return gap <= 18 || (youPos + cpuPos) >= (meetLimit() - 2);
+
+  // Pure visual contact only — no percentage fallback (fixes phantom hits)
+  return gap <= 8;
 }
 function pushingNow(){
   return youBlocking&&(moveHold.right||keysDown.ArrowRight||keysDown.KeyL||keysDown.KeyR);
@@ -1901,6 +1908,32 @@ function playerPush(scale){
   applyCpuPos();
 }
 function resolveBodyContact(){resolveOverlap();}
+function attackConnects(from, type){
+  const fromEl = document.getElementById(from === "you" ? "you" : "cpu");
+  const toEl   = document.getElementById(from === "you" ? "cpu" : "you");
+  if(!fromEl || !toEl) return false;
+
+  const fr = fromEl.getBoundingClientRect();
+  const tr = toEl.getBoundingClientRect();
+
+  // Rough limb reach in front of the fighter
+  const reach = (type && (type.startsWith("kick"))) ? fr.width * 0.42 : fr.width * 0.30;
+  let hitLeft, hitRight;
+  if(from === "you"){
+    hitLeft  = fr.right - 10;
+    hitRight = fr.right + reach;
+  }else{
+    hitLeft  = fr.left - reach;
+    hitRight = fr.left + 10;
+  }
+
+  // Opponent hurtbox (center ~56%)
+  const hurtLeft  = tr.left  + tr.width * 0.22;
+  const hurtRight = tr.right - tr.width * 0.22;
+
+  return hitRight > hurtLeft && hitLeft < hurtRight;
+}
+
 
 function tiltAxis(e){const type=(screen.orientation&&screen.orientation.type)||"";if(type.indexOf("landscape")===0){const b=e.beta;if(b==null||isNaN(b))return null;return type.indexOf("secondary")>=0?-b:b;}const g=e.gamma;if(g==null||isNaN(g))return null;return g;}
 function onTilt(e){if(paused||over||announcing||lastScreen!=="fight")return;const axis=tiltAxis(e);if(axis==null)return;if(!tiltReady){tiltCenter=axis;tiltReady=true;return;}const delta=axis-tiltCenter;if(Math.abs(delta)<TILT_DEAD)return;nudgeYou(Math.max(-1.15,Math.min(1.15,(delta-Math.sign(delta)*TILT_DEAD)/TILT_SCALE)));}
@@ -2701,11 +2734,13 @@ function attack(from,to,type){
   setTimeout(function(){
     el.classList.remove(type);
     el.style.zIndex = "4";
-  },160);
+  },220);
   const isKick=type==="kickL"||type==="kickR";
   setTimeout(function(){
     if(!liquidateOn&&(over||paused||announcing))return;
-    if(!inMeleeRange()){
+    // Prefer precise limb hitbox; fall back to tightened melee range
+    const connects = (typeof attackConnects === "function") ? attackConnects(from, type) : inMeleeRange();
+    if(!connects){
       breakCombo(from);
       losePower(from,8);
       sfxMiss();
@@ -2718,7 +2753,7 @@ function attack(from,to,type){
     }
     if(isKick)sfxKick();else sfxPunch();
     resolveHit(from,to,isKick?KICK_DMG:PUNCH_DMG,type);
-  },90);
+  },150);
 }
 function throwObject(from,to){if((!liquidateOn||from!=="you")&&(over||paused||announcing))return;if(!canThrow(from))return;spendThrow(from);const el=document.getElementById(from==="you"?"you":"cpu");el.classList.add("throw");playPose(from,"throw");setTimeout(function(){el.classList.remove("throw");},180);sfxThrow();const fighter=FIGHTERS[from==="you"?selectedFighter:cpuFighter];const stage=document.getElementById("stage"),img=document.createElement("img");img.className="toss";img.style.width=TOSS_SIZE+"px";img.style.height=TOSS_SIZE+"px";img.style.maxWidth=TOSS_SIZE+"px";img.style.maxHeight=TOSS_SIZE+"px";img.style.objectFit="contain";bindSrcList(img,fighter.objects);const start=bodyBox(from),dest=bodyBox(to),stageBox=stage.getBoundingClientRect(),half=TOSS_SIZE/2;img.style.left=(start.mid-stageBox.left-half)+"px";img.style.top=(start.top-stageBox.top-8)+"px";stage.appendChild(img);const endX=dest.mid-stageBox.left-half,endY=dest.top-stageBox.top+8;
 logReplayEvent("throw", {
