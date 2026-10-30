@@ -839,10 +839,14 @@ input[type=file].hidden-file{display:none}
     <div id="replayFlashSub" style="font-size:clamp(22px,7vw,36px);font-weight:900;color:#ffd54f;-webkit-text-stroke:2px #000;paint-order:stroke fill;text-shadow:2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000,0 0 8px #ffb300;letter-spacing:2px;text-transform:uppercase;margin:6px 0 0;line-height:1;"></div>
     <div id="replayFlashName" style="font-size:clamp(18px,5.4vw,31px);font-weight:900;color:#ffd54f;text-shadow:0 0 18px #ffb300,0 0 8px #ffb300;letter-spacing:2.5px;text-transform:uppercase;margin:10px 0 0;"></div>
   </div>
-  <div style="margin-top:12px;display:flex;gap:12px;align-items:center;">
-    <button class="btn btn-gold" onclick="closeMatchReplay()">CLOSE</button>
-    <button class="btn btn-dark" id="replayRestartBtn" onclick="restartMatchReplay()">RESTART</button>
-    <div id="replayClock" style="font-family:Impact,sans-serif;color:#ffd54f;font-size:14px;min-width:48px;">0:00</div>
+  <div class="menu-btns tok-row" style="width:100%;max-width:500px;margin:12px auto 0;padding:6px 12px calc(30px + env(safe-area-inset-bottom));box-sizing:border-box;justify-content:space-between;align-items:center;">
+    <button type="button" class="tok-btn gold" id="replayRestartBtn" onclick="restartMatchReplay()" aria-label="Restart replay">
+      <svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#3a2200" font-size="16" font-weight="900" letter-spacing="1.2" stroke="#fff3bf" stroke-width=".5">RESTART</text></svg>
+    </button>
+    <div id="replayClock" style="font-family:Impact,sans-serif;color:#ffd54f;font-size:14px;min-width:48px;text-align:center;">0:00</div>
+    <button type="button" class="tok-btn silver" onclick="closeMatchReplay()" aria-label="Close replay">
+      <svg viewBox="0 0 100 100"><text x="50" y="58" text-anchor="middle" fill="#2a3140" font-size="16" font-weight="900" letter-spacing="1.2">CLOSE</text></svg>
+    </button>
   </div>
 </div>
 <div class="fine-print"><span>BUILD:10.29~1824</span><span class="mid"><a href="https://x.com/WFUD_Radio" target="_blank" rel="noopener">WFUD STUDIOS</a> | <a href="https://x.com/DarkFud420" target="_blank" rel="noopener">Dark Fud 420</a></span><span class="end">2026</span></div>
@@ -1758,17 +1762,10 @@ function nudgeCpu(dir){
   const step=dir*(fighterStat("cpu","speed")/5)*(dir>0?1.35:1);
   if(!step)return;
   if(step>0){
+    // Walking forward stops at the meet limit. Does not push Player 1.
     const maxCpu=Math.max(CPU_MIN,meetLimit()-youPos);
-    if(cpuPos+step<=maxCpu){
-      cpuPos=Math.max(CPU_MIN,Math.min(CPU_MAX,cpuPos+step));
-      if(dragWho)stopDragSfx();
-    }else{
-      const before=youPos;
-      cpuPos=Math.max(CPU_MIN,Math.min(CPU_MAX,maxCpu));
-      youPos=Math.max(YOU_MIN,youPos-Math.min(Math.abs(step),0.35));
-      if(youPos<before-0.01)startDragSfx("you");
-      else if(dragWho)stopDragSfx();
-    }
+    cpuPos=Math.max(CPU_MIN,Math.min(CPU_MAX,Math.min(cpuPos+step,maxCpu)));
+    if(dragWho)stopDragSfx();
   }else{
     cpuPos=Math.max(CPU_MIN,Math.min(CPU_MAX,cpuPos+step));
     if(dragWho)stopDragSfx();
